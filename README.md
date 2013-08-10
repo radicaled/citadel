@@ -14,6 +14,11 @@ A shitty SS13 clone.
 	-- Alternatives
 	* melonJS has built-in TMX parser: https://github.com/melonjs/melonJS/tree/master/src/level
 	* TMXjs exists: https://github.com/cdmckay/tmxjs
+	
+	= Initial Plan
+	* straight port of inflate.txt to Dart
+	* parse TMX tilesets into raw xml
+	* be able to deflate layer information	
 * Render TMX files on canvas
 
 

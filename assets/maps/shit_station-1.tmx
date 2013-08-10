@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Humans" tilewidth="32" tileheight="32">
+  <image source="../icons/mob/human.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="Alien Queen" tilewidth="64" tileheight="64">
+  <image source="../icons/mob/alienqueen.png" width="192" height="192"/>
+ </tileset>
+ <tileset firstgid="266" name="Floors" tilewidth="32" tileheight="32">
+  <image source="../icons/turf/floors.png" width="896" height="864"/>
+ </tileset>
+ <tileset firstgid="1022" name="Walls" tilewidth="32" tileheight="32">
+  <image source="../icons/turf/walls.png" width="608" height="576"/>
+ </tileset>
+ <tileset firstgid="1364" name="Closets" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/closet.png" width="576" height="576"/>
+ </tileset>
+ <tileset firstgid="1688" name="Computers" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/computer.png" width="704" height="704"/>
+ </tileset>
+ <tileset firstgid="2172" name="Devices" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/device.png" width="416" height="416"/>
+ </tileset>
+ <tileset firstgid="2341" name="Food" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/food.png" width="512" height="480"/>
+ </tileset>
+ <tileset firstgid="2581" name="Kitchen" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/kitchen.png" width="224" height="224"/>
+ </tileset>
+ <tileset firstgid="2630" name="Monitors" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/monitors.png" width="672" height="640"/>
+ </tileset>
+ <tileset firstgid="3050" name="Misc Objects" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/objects.png" width="512" height="480"/>
+ </tileset>
+ <tileset firstgid="3290" name="Structures" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/structures.png" width="512" height="480"/>
+ </tileset>
+ <layer name="Floor Layer" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0bEJACAAwDBd/f9gb3AQKibQCzoGAAAA8LI1z+MeP1r8aPGjxY8WP1r8aPGjxQ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfrEBqZ0FCA==
+  </data>
+ </layer>
+ <layer name="Wall Layer" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt17kNADAMxLAU2X/mzJAPUEECt4BVeQwAAADYMC/Ge6d31eMPPVr0aNGjRY8WPVr0aNGjRY8W/zkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAVwsqawDB
+  </data>
+ </layer>
+ <layer name="Structures" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1LsJgEAQBNBNNBAtz+I08FOB2JkleHCp8Z3oe7BMOjCwEQAAAMCX7EPE2ed8Mndl+/zdlna42pzUt6QdpnSrPYo7/J7XG5vaDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN7jBtoTCB4=
+  </data>
+ </layer>
+ <layer name="Items" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6AXsH8cqxnD6SABCQAAAPBJ1/YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG4bdbMAzQ==
+  </data>
+ </layer>
+</map>

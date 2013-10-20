@@ -26,7 +26,13 @@ class Parser {
     return new Tileset(int.parse(attrs['firstgid']))
       ..name = attrs['name']
       ..width = int.parse(attrs['tilewidth'])
-      ..height = int.parse(attrs['tileheight']);
+      ..height = int.parse(attrs['tileheight'])
+      ..images.addAll(node.query('image').map((XmlElement node)=> _parseImage(node)));
 
+  }
+
+  static Image _parseImage(XmlElement node) {
+    var attrs = node.attributes;
+    return new Image(attrs['source'], int.parse(attrs['width']), int.parse(attrs['height']));
   }
 }

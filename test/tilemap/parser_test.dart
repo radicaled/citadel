@@ -25,7 +25,7 @@ main() {
         <?xml version="1.0" encoding="UTF-8"?>
         <map>
         <tileset firstgid="1" name="Humans" tilewidth="64" tileheight="32">
-          <image source="../icons/mob/human.png" width="512" height="512"/>
+          <image source="../icons/mob/human.png" width="1024" height="512"/>
         </tileset>
     </map>
     ''';
@@ -44,6 +44,16 @@ main() {
       test('has its name = "Humans"', ()=> expect(tileset.name, equals('Humans')));
       test('has its tilewidth = 64', ()=> expect(tileset.width, equals(64)));
       test('has its tileheight = 32', ()=> expect(tileset.height, equals(32)));
+      test('has its images.length = 1', ()=> expect(tileset.images.length, equals(1)));
+
+      group('populates image correctly', () {
+        var image;
+        setUp( ()=> image = tileset.images[0]);
+
+        test('has its width = 1024', ()=> expect(image.width, equals(1024)));
+        test('has its height = 512', ()=> expect(image.height, equals(512)));
+        test('has its source = "../icons/mob/human.png"', ()=> expect(image.source, equals('../icons/mob/human.png')));
+      });
     });
 
 

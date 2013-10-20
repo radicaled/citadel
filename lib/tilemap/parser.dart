@@ -8,6 +8,20 @@ class Parser {
       throw 'XML is not in TMX format';
     }
 
-    return new Map();
+    var map = new Map();
+
+    xmlElement.children.forEach( (XmlElement node) {
+      switch(node.name) {
+        case 'tileset':
+          map.tilesets.add(_parseTileset(node));
+          break;
+      }
+    });
+
+    return map;
+  }
+
+  static Tileset _parseTileset(XmlElement node) {
+    return new Tileset();
   }
 }

@@ -1,6 +1,8 @@
 library tilemap;
+import 'package:xml/xml.dart';
 
-import 'tilemap/parser.dart';
+part 'tilemap/parser.dart';
+part 'tilemap/map.dart';
 
 class Tilemap {
   loadMap(xml) {

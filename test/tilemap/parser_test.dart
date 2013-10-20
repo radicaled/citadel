@@ -46,7 +46,7 @@ main() {
       test('has its tileheight = 32', ()=> expect(tileset.height, equals(32)));
       test('has its images.length = 1', ()=> expect(tileset.images.length, equals(1)));
 
-      group('populates image correctly', () {
+      group('populates its first image correctly and', () {
         var image;
         setUp( ()=> image = tileset.images[0]);
 

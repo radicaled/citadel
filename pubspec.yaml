@@ -1,5 +1,8 @@
 name: citadel
+author: Arron Washington
 description: A sample web application
 dependencies:
   browser: any
   stagexl: any
+  unittest: any
+  xml: any

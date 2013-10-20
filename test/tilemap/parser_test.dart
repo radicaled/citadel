@@ -24,7 +24,7 @@ main() {
     var xml = '''
         <?xml version="1.0" encoding="UTF-8"?>
         <map>
-        <tileset firstgid="1" name="Humans" tilewidth="32" tileheight="32">
+        <tileset firstgid="1" name="Humans" tilewidth="64" tileheight="32">
           <image source="../icons/mob/human.png" width="512" height="512"/>
         </tileset>
     </map>
@@ -41,6 +41,9 @@ main() {
       setUp( ()=> tileset = map.tilesets[0] );
 
       test('has its firstgid = 1', ()=> expect(tileset.gid, equals(1)) );
+      test('has its name = "Humans"', ()=> expect(tileset.name, equals('Humans')));
+      test('has its tilewidth = 64', ()=> expect(tileset.width, equals(64)));
+      test('has its tileheight = 32', ()=> expect(tileset.height, equals(32)));
     });
 
 

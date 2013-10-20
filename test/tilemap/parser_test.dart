@@ -36,6 +36,13 @@ main() {
       expect(map.tilesets.length, equals(1));
     });
 
+    group('and the first tileset', () {
+      var tileset;
+      setUp( ()=> tileset = map.tilesets[0] );
+
+      test('has its firstgid = 1', ()=> expect(tileset.gid, equals(1)) );
+    });
+
 
   });
 }

@@ -22,6 +22,7 @@ class Parser {
   }
 
   static Tileset _parseTileset(XmlElement node) {
-    return new Tileset();
+    return new Tileset(int.parse(node.attributes['firstgid']));
+
   }
 }

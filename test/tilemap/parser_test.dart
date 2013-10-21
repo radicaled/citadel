@@ -56,7 +56,24 @@ main() {
       });
     });
 
+  });
 
+  group('Parser.parse populates Map with layers', () {
+    var xml = '''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <map>
+         <layer name="Floor Layer" width="100" height="100">
+          <data encoding="base64" compression="zlib">
+           eJzt0bEJACAAwDBd/f9gb3AQKibQCzoGAAAA8LI1z+MeP1r8aPGjxY8WP1r8aPGjxQ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfrEBqZ0FCA==
+          </data>
+        </layer>
+      </map>
+    ''';
+
+    var map;
+    setUp(() { map = Parser.parse(xml); });
+
+    test('and Map.layers is the correct length', ()=> expect(map.layers.length, equals(1)));
   });
 }
 

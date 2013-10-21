@@ -15,6 +15,9 @@ class Parser {
         case 'tileset':
           map.tilesets.add(_parseTileset(node));
           break;
+        case 'layer':
+          map.layers.add(_parseLayer(node));
+          break;
       }
     });
 
@@ -34,5 +37,10 @@ class Parser {
   static Image _parseImage(XmlElement node) {
     var attrs = node.attributes;
     return new Image(attrs['source'], int.parse(attrs['width']), int.parse(attrs['height']));
+  }
+
+  static Layer _parseLayer(XmlElement node) {
+    var attrs = node.attributes;
+    return new Layer();
   }
 }

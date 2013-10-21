@@ -62,7 +62,7 @@ main() {
     var xml = '''
       <?xml version="1.0" encoding="UTF-8"?>
       <map>
-         <layer name="Floor Layer" width="100" height="100">
+         <layer name="Floor Layer" width="100" height="200">
           <data encoding="base64" compression="zlib">
            eJzt0bEJACAAwDBd/f9gb3AQKibQCzoGAAAA8LI1z+MeP1r8aPGjxY8WP1r8aPGjxQ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfrEBqZ0FCA==
           </data>
@@ -74,6 +74,15 @@ main() {
     setUp(() { map = Parser.parse(xml); });
 
     test('and Map.layers is the correct length', ()=> expect(map.layers.length, equals(1)));
+
+    group('and the first layer', () {
+      var layer;
+      setUp( ()=> layer = map.layers[0] );
+
+      test('has its name = "Floor Layer"', ()=> expect(layer.name, equals('Floor Layer')));
+      test('has its width  = 100', ()=> expect(layer.width, equals(100)));
+      test('has its height = 200', ()=> expect(layer.height, equals(200)));
+    });
   });
 }
 

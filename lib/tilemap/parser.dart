@@ -41,6 +41,8 @@ class Parser {
 
   static Layer _parseLayer(XmlElement node) {
     var attrs = node.attributes;
-    return new Layer();
+    return new Layer(attrs['name'])
+      ..width = int.parse(attrs['width'])
+      ..height = int.parse(attrs['height']);
   }
 }

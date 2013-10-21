@@ -62,9 +62,9 @@ main() {
     var xml = '''
       <?xml version="1.0" encoding="UTF-8"?>
       <map>
-         <layer name="Floor Layer" width="100" height="200">
+         <layer name="Floor Layer" width="10" height="10">
           <data encoding="base64" compression="zlib">
-           eJzt0bEJACAAwDBd/f9gb3AQKibQCzoGAAAA8LI1z+MeP1r8aPGjxY8WP1r8aPGjxQ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfrEBqZ0FCA==
+            eJxjZCAeMI6qpblaAAl0AAs=
           </data>
         </layer>
       </map>
@@ -80,8 +80,24 @@ main() {
       setUp( ()=> layer = map.layers[0] );
 
       test('has its name = "Floor Layer"', ()=> expect(layer.name, equals('Floor Layer')));
-      test('has its width  = 100', ()=> expect(layer.width, equals(100)));
-      test('has its height = 200', ()=> expect(layer.height, equals(200)));
+      test('has its width  = 10', ()=> expect(layer.width, equals(10)));
+      test('has its height = 10', ()=> expect(layer.height, equals(10)));
+
+      // This test is very simple. Theoretically, if this case works, they should all work.
+      // It's a 10x10 matrix because anything smaller seems to default to gzip in Tiled (bug?).
+      test('populates its tile matrix', () {
+        expect(layer.tileMatrix[0], equals([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+        expect(layer.tileMatrix[1], equals([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]));
+        expect(layer.tileMatrix[2], equals([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]));
+        expect(layer.tileMatrix[3], equals([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]));
+        expect(layer.tileMatrix[4], equals([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]));
+        expect(layer.tileMatrix[5], equals([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]));
+        expect(layer.tileMatrix[6], equals([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]));
+        expect(layer.tileMatrix[7], equals([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]));
+        expect(layer.tileMatrix[8], equals([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]));
+        expect(layer.tileMatrix[9], equals([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]));
+      });
+
     });
   });
 }

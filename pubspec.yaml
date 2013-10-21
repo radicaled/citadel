@@ -3,6 +3,7 @@ author: Arron Washington
 description: A sample web application
 dependencies:
   browser: any
+  crypto: any
   stagexl: any
   unittest: any
   xml: any

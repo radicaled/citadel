@@ -41,8 +41,33 @@ class Parser {
 
   static Layer _parseLayer(XmlElement node) {
     var attrs = node.attributes;
-    return new Layer(attrs['name'])
-      ..width = int.parse(attrs['width'])
-      ..height = int.parse(attrs['height']);
+    var layer = new Layer(attrs['name'], int.parse(attrs['width']), int.parse(attrs['height']));
+
+    var dataElement = node.query('data')[0];
+    if (dataElement is XmlElement) {
+      if (dataElement.attributes['encoding'] != 'base64' || dataElement.attributes['compression'] != 'zlib') {
+        throw 'Incompatible data node found';
+      }
+      var decodedString = _decodeBase64(dataElement.text);
+      var inflatedString = _inflateZlib(decodedString);
+
+      layer.assembleTileMatrix(inflatedString);
+    }
+    return layer;
+  }
+
+  // The following helpers are a bit ham-handed; they're extracted into separate methods, even though they call
+  // 3rd party packages, so that I can swap out replacement implementations as they grow and mature.
+
+  // Manual test: CryptoUtils.base65StringToBytes has the same output as
+  // Ruby's Base64.decode64. This function is working as expected.
+  // Can't be tested; Dart won't let you test private methods (LOL)
+  static List<int> _decodeBase64(var input) {
+    return CryptoUtils.base64StringToBytes(input);
+  }
+
+  // Can't be tested; Dart won't let you test private methods (LOL)
+  static List<int> _inflateZlib(List<int> bytes) {
+    return new ZLibDecoder().convert(bytes);
   }
 }

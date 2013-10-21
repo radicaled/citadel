@@ -12,9 +12,10 @@ Not a serious effort. Just using it to explore Dart.
 	* Uncompressing zlib in the browser: https://github.com/imaya/zlib.js || https://github.com/dankogai/js-deflate (?)
 	* Uncompressing zlib on the server (?): http://api.dartlang.org/docs/bleeding_edge/dart_io/ZLibDeflater.html
 
-	* Port https://github.com/dankogai/js-deflate ?
-		* js-deflate being a port of http://www.onicos.com/staff/iz/amuse/javascript/expert/inflate.txt
-		* js-inflate being an almost copy of the source: https://github.com/augustl/js-inflate
+	* Port https://github.com/imaya/zlib.js ?
+		* Really just need rawdeflate.js
+		* MIT license, goddamn i hate dealing with licenses
+
 	-- Alternatives
 	* melonJS has built-in TMX parser: https://github.com/melonjs/melonJS/tree/master/src/level
 	* TMXjs exists: https://github.com/cdmckay/tmxjs

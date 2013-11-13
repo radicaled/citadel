@@ -4,6 +4,7 @@ description: A sample web application
 dependencies:
   browser: any
   crypto: any
+  js: any
   stagexl: any
   unittest: any
   xml: any

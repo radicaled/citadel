@@ -9,6 +9,10 @@ packages:
     description: crypto
     source: hosted
     version: "0.8.10+3"
+  js:
+    description: js
+    source: hosted
+    version: "0.2.0"
   meta:
     description: meta
     source: hosted

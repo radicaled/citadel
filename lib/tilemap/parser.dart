@@ -1,7 +1,10 @@
 part of tilemap;
 
 class Parser {
-  static Map parse(String xml) {
+  var decompressor;
+  Parser(this.decompressor);
+  
+  Map parse(String xml) {
     var xmlElement = XML.parse(xml);
 
     if (xmlElement.name != 'map') {
@@ -16,7 +19,7 @@ class Parser {
           map.tilesets.add(_parseTileset(node));
           break;
         case 'layer':
-          map.layers.add(_parseLayer(node));
+          map.layers.add(_parseLayer(node, decompressor));
           break;
       }
     });
@@ -39,7 +42,7 @@ class Parser {
     return new Image(attrs['source'], int.parse(attrs['width']), int.parse(attrs['height']));
   }
 
-  static Layer _parseLayer(XmlElement node) {
+  static Layer _parseLayer(XmlElement node, decompressor) {
     var attrs = node.attributes;
     var layer = new Layer(attrs['name'], int.parse(attrs['width']), int.parse(attrs['height']));
 
@@ -49,7 +52,7 @@ class Parser {
         throw 'Incompatible data node found';
       }
       var decodedString = _decodeBase64(dataElement.text);
-      var inflatedString = _inflateZlib(decodedString);
+      var inflatedString = decompressor(decodedString);
 
       layer.assembleTileMatrix(inflatedString);
     }
@@ -64,10 +67,5 @@ class Parser {
   // Can't be tested; Dart won't let you test private methods (LOL)
   static List<int> _decodeBase64(var input) {
     return CryptoUtils.base64StringToBytes(input);
-  }
-
-  // Can't be tested; Dart won't let you test private methods (LOL)
-  static List<int> _inflateZlib(List<int> bytes) {
-    return new ZLibDecoder().convert(bytes);
   }
 }

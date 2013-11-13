@@ -1,11 +1,15 @@
 import 'package:unittest/unittest.dart';
 import 'package:citadel/tilemap.dart';
+import 'dart:io';
 
 main() {
+  var inflateZlib = (List<int> bytes) => new ZLibDecoder().convert(bytes);
+  var parser = new Parser(inflateZlib);
+  
   test('Parser.parse raises an error when the XML is not in TMX format', () {
     var wrongXml = '<xml></xml>';
 
-    expect( ()=> Parser.parse(wrongXml),
+    expect( ()=> parser.parse(wrongXml),
         throwsA('XML is not in TMX format'));
   });
 
@@ -15,7 +19,7 @@ main() {
       <map>
       </map>      
     ''';
-    var map = Parser.parse(xml);
+    var map = parser.parse(xml);
 
     expect(map, new isInstanceOf<Map>());
   });
@@ -30,7 +34,7 @@ main() {
     </map>
     ''';
     var map;
-    setUp(() { map = Parser.parse(xml); });
+    setUp(() { map = parser.parse(xml); });
 
     test('and Map.tilesets is the correct size', () {
       expect(map.tilesets.length, equals(1));
@@ -71,7 +75,7 @@ main() {
     ''';
 
     var map;
-    setUp(() { map = Parser.parse(xml); });
+    setUp(() { map = parser.parse(xml); });
 
     test('and Map.layers is the correct length', ()=> expect(map.layers.length, equals(1)));
 

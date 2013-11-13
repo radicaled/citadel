@@ -2,7 +2,6 @@ library tilemap;
 
 import 'package:crypto/crypto.dart';
 import 'package:xml/xml.dart';
-import 'dart:io';
 
 part 'tilemap/parser.dart';
 part 'tilemap/map.dart';
@@ -11,7 +10,10 @@ part 'tilemap/image.dart';
 part 'tilemap/layer.dart';
 
 class Tilemap {
+  var decompressor;
+  Tilemap(this.decompressor);
+  
   loadMap(xml) {
-    Parser.parse(xml);
+    new Parser(decompressor).parse(xml);
   }
 }

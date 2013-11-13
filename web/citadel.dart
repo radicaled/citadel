@@ -1,21 +1,20 @@
 import 'dart:html';
-import 'package:citadel/tilemap.dart';
+import 'package:citadel/tilemap.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
 
 
-Tilemap tilemap;
-var map;
-
+tmx.Tilemap tilemap;
+Stage stage;
 void main() {
   var canvas = querySelector('#stage');
-  var stage = new Stage('Test Stage', canvas);
+  stage = new Stage('Test Stage', canvas);
   
   var renderLoop = new RenderLoop();
   
   renderLoop.addStage(stage);
   
-  tilemap = new Tilemap(_inflateZlib);
+  tilemap = new tmx.Tilemap(_inflateZlib);
   
   var url = "http://127.0.0.1:3030/citadel/test/fixtures/test.tmx";
 
@@ -29,5 +28,26 @@ List<int> _inflateZlib(List<int> bytes) {
 }
 
 parseMap(String xml) {
-  map = tilemap.loadMap(xml);
+  var map = tilemap.loadMap(xml);
+  renderMap(map);
+}
+
+renderMap(tmx.Map map) {
+  var resourceManager = new ResourceManager();
+  
+  map.tilesets.forEach( (tileset) {
+    var image = tileset.images.first;
+    
+    // Welcome to 2013: where they still make languages without RegExp literals.
+    var pattern = new RegExp(r"^\.\.");
+    var imagePath = image.source.splitMapJoin(pattern, onMatch: (m) => "../assets");
+    
+    resourceManager.addBitmapData(tileset.name, imagePath);
+  });
+  
+  //resourceManager.load();
+  resourceManager.load().then( (_) {
+    var basketball = new Bitmap(resourceManager.getBitmapData('basketball'));
+    stage.addChild(basketball);
+  });
 }

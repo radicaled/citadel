@@ -13,7 +13,7 @@ class Tilemap {
   var decompressor;
   Tilemap(this.decompressor);
   
-  loadMap(xml) {
-    new Parser(decompressor).parse(xml);
+  Map loadMap(xml) {
+    return new Parser(decompressor).parse(xml);
   }
 }

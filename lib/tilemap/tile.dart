@@ -11,6 +11,9 @@ class Tile {
   int width;
   int height;
 
+  // Optional X / Y locations for the tile.
+  int x, y;
+
   Tile(this.tileId, this.tileSet) {
     width = tileSet.width;
     height = tileSet.height;

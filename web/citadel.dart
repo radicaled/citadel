@@ -47,9 +47,18 @@ renderMap(tmx.Map map) {
 
   resourceManager.load().then( (_) {
     map.layers.forEach( (layer) {
-      layer.tileMatrix.forEach( (List<int> row) {
-
-      });
+      var i = false;
+      if (i) {
+        layer.forEachTile( (tile) {
+          var bd = resourceManager.getBitmapData(tile.tileset.name);
+          var ss = new SpriteSheet(bd, tile.width, tile.height);
+          var sbd = ss.frameAt(tile.tileId - 1);
+          var bitmap = new Bitmap(sbd);
+          bitmap.x = tile.x;
+          bitmap.y = tile.y;
+          stage.addChild(bitmap);
+        });
+      }
     });
     var bd = resourceManager.getBitmapData('Humans');
     var frames = bd.sliceIntoFrames(32, 32);

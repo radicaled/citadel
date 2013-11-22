@@ -5,7 +5,7 @@ import 'dart:io';
 main() {
   var inflateZlib = (List<int> bytes) => new ZLibDecoder().convert(bytes);
   var parser = new Parser(inflateZlib);
-  
+
   test('Parser.parse raises an error when the XML is not in TMX format', () {
     var wrongXml = '<xml></xml>';
 
@@ -48,6 +48,7 @@ main() {
       test('has its name = "Humans"', ()=> expect(tileset.name, equals('Humans')));
       test('has its tilewidth = 64', ()=> expect(tileset.width, equals(64)));
       test('has its tileheight = 32', ()=> expect(tileset.height, equals(32)));
+      test('has its map = map', ()=> expect(tileset.map, equals(map)));
       test('has its images.length = 1', ()=> expect(tileset.images.length, equals(1)));
 
       group('populates its first image correctly and', () {
@@ -86,6 +87,7 @@ main() {
       test('has its name = "Floor Layer"', ()=> expect(layer.name, equals('Floor Layer')));
       test('has its width  = 10', ()=> expect(layer.width, equals(10)));
       test('has its height = 10', ()=> expect(layer.height, equals(10)));
+      test('has its map = parent map', ()=> expect(layer.map, equals(map)));
 
       // This test is very simple. Theoretically, if this case works, they should all work.
       // It's a 10x10 matrix because anything smaller seems to default to gzip in Tiled (bug?).

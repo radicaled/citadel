@@ -6,6 +6,8 @@ class Tileset {
   int height;
   String name;
 
+  Map map;
+
   List<Image> images = new List<Image>();
 
   Tileset(this.gid);

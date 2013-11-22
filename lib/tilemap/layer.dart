@@ -6,8 +6,10 @@ class Layer {
   static const int FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
   String name;
-  num width;
-  num height;
+  int width;
+  int height;
+
+  Map map;
   List<List<int>> tileMatrix;
 
   Layer(this.name, this.width, this.height);

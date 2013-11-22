@@ -3,7 +3,7 @@ part of tilemap;
 class Parser {
   var decompressor;
   Parser(this.decompressor);
-  
+
   Map parse(String xml) {
     var xmlElement = XML.parse(xml);
 
@@ -16,10 +16,10 @@ class Parser {
     xmlElement.children.forEach( (XmlElement node) {
       switch(node.name) {
         case 'tileset':
-          map.tilesets.add(_parseTileset(node));
+          map.tilesets.add(_parseTileset(node)..map = map);
           break;
         case 'layer':
-          map.layers.add(_parseLayer(node, decompressor));
+          map.layers.add(_parseLayer(node, decompressor)..map = map);
           break;
       }
     });

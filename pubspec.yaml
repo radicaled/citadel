@@ -5,6 +5,9 @@ dependencies:
   browser: any
   crypto: any
   js: any
-  stagexl: any
+  stagexl:
+    git:
+      ref: master
+      url: https://github.com/bp74/StageXL.git
   unittest: any
   xml: any

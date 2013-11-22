@@ -4,7 +4,7 @@ packages:
   browser:
     description: browser
     source: hosted
-    version: "0.8.10+3"
+    version: "0.9.0"
   crypto:
     description: crypto
     source: hosted
@@ -26,9 +26,12 @@ packages:
     source: hosted
     version: "0.8.10+3"
   stagexl:
-    description: stagexl
-    source: hosted
-    version: "0.8.7"
+    description:
+      ref: master
+      resolved-ref: b60ec2ffef710928f777003a050f783719588745
+      url: "https://github.com/bp74/StageXL.git"
+    source: git
+    version: "0.8.8"
   unittest:
     description: unittest
     source: hosted

@@ -8,11 +8,12 @@ part 'tilemap/map.dart';
 part 'tilemap/tileset.dart';
 part 'tilemap/image.dart';
 part 'tilemap/layer.dart';
+part 'tilemap/tile.dart';
 
 class Tilemap {
   var decompressor;
   Tilemap(this.decompressor);
-  
+
   Map loadMap(xml) {
     return new Parser(decompressor).parse(xml);
   }

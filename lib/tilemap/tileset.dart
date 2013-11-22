@@ -1,9 +1,9 @@
 part of tilemap;
 
 class Tileset {
-  num gid;
-  num width;
-  num height;
+  int gid;
+  int width;
+  int height;
   String name;
 
   List<Image> images = new List<Image>();

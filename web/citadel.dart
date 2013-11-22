@@ -9,14 +9,14 @@ Stage stage;
 void main() {
   var canvas = querySelector('#stage');
   stage = new Stage('Test Stage', canvas);
-  
+
   var renderLoop = new RenderLoop();
-  
+
   renderLoop.addStage(stage);
-  
+
   tilemap = new tmx.Tilemap(_inflateZlib);
-  
-  var url = "http://127.0.0.1:3030/citadel/test/fixtures/test.tmx";
+
+  var url = "http://127.0.0.1:3030/citadel/assets/maps/shit_station-1.tmx";
 
   // call the web server asynchronously
   var request = HttpRequest.getString(url).then(parseMap);
@@ -34,20 +34,28 @@ parseMap(String xml) {
 
 renderMap(tmx.Map map) {
   var resourceManager = new ResourceManager();
-  
+
   map.tilesets.forEach( (tileset) {
     var image = tileset.images.first;
-    
+
     // Welcome to 2013: where they still make languages without RegExp literals.
     var pattern = new RegExp(r"^\.\.");
     var imagePath = image.source.splitMapJoin(pattern, onMatch: (m) => "../assets");
-    
+
     resourceManager.addBitmapData(tileset.name, imagePath);
   });
-  
-  //resourceManager.load();
+
   resourceManager.load().then( (_) {
-    var basketball = new Bitmap(resourceManager.getBitmapData('basketball'));
-    stage.addChild(basketball);
+    map.layers.forEach( (layer) {
+      layer.tileMatrix.forEach( (List<int> row) {
+
+      });
+    });
+    var bd = resourceManager.getBitmapData('Humans');
+    var frames = bd.sliceIntoFrames(32, 32);
+    var first = new Bitmap(frames[4]);
+    first.x = 12;
+    first.y = 12;
+    stage.addChild(first);
   });
 }

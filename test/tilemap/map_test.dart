@@ -32,9 +32,12 @@ main() {
         expect(tile.height, equals(64));
       });
 
-      test('has globalId = 4', () {
+      test('with globalId = 4', () {
         expect(tile.gid, equals(4));
       });
+
+      test('with x = null', ()=> expect(tile.x, isNull));
+      test('with y = null', ()=> expect(tile.y, isNull));
     });
   });
 }

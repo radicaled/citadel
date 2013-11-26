@@ -14,6 +14,23 @@ class Layer {
 
   Layer(this.name, this.width, this.height);
 
+  forEachTile(void f(Tile tile)) {
+    var x, y = 0;
+
+    tileMatrix.forEach( (List<int> row) {
+      x = 0;
+      row.forEach((int tileId) {
+        var tile = map.getTileByGID(tileId)
+            ..x = x
+            ..y = y;
+        f(tile);
+
+        x += map.tileWidth;
+      });
+      y += map.tileHeight;
+    });
+  }
+
   // TMX data format documented here: https://github.com/bjorn/tiled/wiki/TMX-Map-Format#data
   assembleTileMatrix(var bytes) {
     tileMatrix = new List<List<int>>(height);

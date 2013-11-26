@@ -5,6 +5,13 @@ import 'dart:io';
 main() {
   var inflateZlib = (List<int> bytes) => new ZLibDecoder().convert(bytes);
   var parser = new Parser(inflateZlib);
+  var map;
+  // Urgh. var xml = File.read(/* ... */); >:/
+  setUp( () {
+    return new File('../fixtures/test.tmx').readAsString().then((xml) {
+      map = parser.parse(xml);
+    });
+  });
 
   test('Parser.parse raises an error when the XML is not in TMX format', () {
     var wrongXml = '<xml></xml>';
@@ -14,41 +21,15 @@ main() {
   });
 
   test('Parser.parse returns a Map object', () {
-    var xml = '''
-      <?xml version="1.0" encoding="UTF-8"?>
-      <map tilewidth='32' tileheight='64'>
-      </map>      
-    ''';
-    var map = parser.parse(xml);
-
     expect(map, new isInstanceOf<Map>());
   });
 
   group('Parser.parse returns a populated Map that', () {
-    var xml = '''
-      <?xml version="1.0" encoding="UTF-8"?>
-      <map tilewidth='32' tileheight='64'>
-      </map>      
-    ''';
-    var map;
-    setUp(() => map = parser.parse(xml));
-
     test('has its tileWidth = 32', () => expect(map.tileWidth, equals(32)));
-    test('has its tileHeight = 64', () => expect(map.tileHeight, equals(64)));
+    test('has its tileHeight = 32', () => expect(map.tileHeight, equals(32)));
   });
 
   group('Parser.parse populates Map with tilesets', () {
-    var xml = '''
-        <?xml version="1.0" encoding="UTF-8"?>
-        <map tilewidth='32' tileheight='64'>
-        <tileset firstgid="1" name="Humans" tilewidth="64" tileheight="32">
-          <image source="../icons/mob/human.png" width="1024" height="512"/>
-        </tileset>
-    </map>
-    ''';
-    var map;
-    setUp(() { map = parser.parse(xml); });
-
     test('and Map.tilesets is the correct size', () {
       expect(map.tilesets.length, equals(1));
     });
@@ -58,8 +39,8 @@ main() {
       setUp( ()=> tileset = map.tilesets[0] );
 
       test('has its firstgid = 1', ()=> expect(tileset.gid, equals(1)) );
-      test('has its name = "Humans"', ()=> expect(tileset.name, equals('Humans')));
-      test('has its tilewidth = 64', ()=> expect(tileset.width, equals(64)));
+      test('has its name = "basketball"', ()=> expect(tileset.name, equals('basketball')));
+      test('has its tilewidth = 32', ()=> expect(tileset.width, equals(32)));
       test('has its tileheight = 32', ()=> expect(tileset.height, equals(32)));
       test('has its map = map', ()=> expect(tileset.map, equals(map)));
       test('has its images.length = 1', ()=> expect(tileset.images.length, equals(1)));
@@ -68,36 +49,22 @@ main() {
         var image;
         setUp( ()=> image = tileset.images[0]);
 
-        test('has its width = 1024', ()=> expect(image.width, equals(1024)));
-        test('has its height = 512', ()=> expect(image.height, equals(512)));
-        test('has its source = "../icons/mob/human.png"', ()=> expect(image.source, equals('../icons/mob/human.png')));
+        test('has its width = 96', ()=> expect(image.width, equals(96)));
+        test('has its height = 64', ()=> expect(image.height, equals(64)));
+        test('has its source = "../icons/obj/basketball.png"', ()=> expect(image.source, equals('../icons/obj/basketball.png')));
       });
     });
 
   });
 
   group('Parser.parse populates Map with layers', () {
-    var xml = '''
-      <?xml version="1.0" encoding="UTF-8"?>
-      <map tilewidth='32' tileheight='64'>
-         <layer name="Floor Layer" width="10" height="10">
-          <data encoding="base64" compression="zlib">
-            eJxjZCAeMI6qpblaAAl0AAs=
-          </data>
-        </layer>
-      </map>
-    ''';
-
-    var map;
-    setUp(() { map = parser.parse(xml); });
-
     test('and Map.layers is the correct length', ()=> expect(map.layers.length, equals(1)));
 
     group('and the first layer', () {
       var layer;
       setUp( ()=> layer = map.layers[0] );
 
-      test('has its name = "Floor Layer"', ()=> expect(layer.name, equals('Floor Layer')));
+      test('has its name = "Tile Layer 1"', ()=> expect(layer.name, equals('Tile Layer 1')));
       test('has its width  = 10', ()=> expect(layer.width, equals(10)));
       test('has its height = 10', ()=> expect(layer.height, equals(10)));
       test('has its map = parent map', ()=> expect(layer.map, equals(map)));

@@ -38,27 +38,27 @@
  </tileset>
  <layer name="Floor Layer" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt0bEJACAAwDBd/f9gb3AQKibQCzoGAAAA8LI1z+MeP1r8aPGjxY8WP1r8aPGjxQ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfrEBqZ0FCA==
+   eJzt0bEJACAAwDBd/f9gTxAHsUMCvaBjACdr3sc7frT40eJHix8tfrT40eJHix8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8N8GikkFCA==
   </data>
  </layer>
  <layer name="Wall Layer" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt17kNADAMxLAU2X/mzJAPUEECt4BVeQwAAADYMC/Ge6d31eMPPVr0aNGjRY8WPVr0aNGjRY8W/zkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAVwsqawDB
+   eJzt18kJACAQBEEf5h+zOXhAg1UwCWy/dgxy5sG4b/eueryhR4seLXq06NGiR4seLXq06NHiPwcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD41gKx8gDB
   </data>
  </layer>
  <layer name="Structures" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1LsJgEAQBNBNNBAtz+I08FOB2JkleHCp8Z3oe7BMOjCwEQAAAMCX7EPE2ed8Mndl+/zdlna42pzUt6QdpnSrPYo7/J7XG5vaDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN7jBtoTCB4=
+   eJzt1LsJgEAQBNBNNBAtz+I08FOB2JkleHCpgSan4HuwTDowsBHAU2sXsbc5r4xN2T5/t6Qdjjon75vSDkO62R7FbX7P5/XV2w0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC44wTwgAge
   </data>
  </layer>
  <layer name="Items" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztzgENAAAIA6AXsH8cqxnD6SABCQAAAPBJ1/YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG4bdbMAzQ==
+   eJztzjERAAAIBKAvYP84VjODg+cCCUiAra7vAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwZQCVuQDN
   </data>
  </layer>
  <layer name="People" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztzgENAAAIAyDzWNqqttDtgwRUAQAAAGnmOwAAEKa/AwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnFpDswDK
+   eJztzjENAAAIACDzWNqqPibwcXOQgAhgo64DAADP5HUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGAz2dAMo=
   </data>
  </layer>
  <objectgroup name="Spawns" width="100" height="100">

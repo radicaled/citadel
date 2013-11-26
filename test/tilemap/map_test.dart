@@ -19,6 +19,11 @@ main() {
       tile =  map.getTileByGID(4);
     });
 
+    test('returns an empty Tile if GID is 0', () {
+      tile = map.getTileByGID(0);
+      expect(tile.isEmpty, isTrue);
+    });
+
     group('returns a valid Tile for GID 4', () {
       test('with tileId = 3', () {
         expect(tile.tileId, equals(3));

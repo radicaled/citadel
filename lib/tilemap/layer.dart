@@ -12,24 +12,14 @@ class Layer {
   Map map;
   List<List<int>> tileMatrix;
 
-  Layer(this.name, this.width, this.height);
+  List<Tile> _tiles;
+  List<Tile> get tiles {
+    if (_tiles == null) { _recalculateTiles(); }
+    return _tiles;
 
-  forEachTile(void f(Tile tile)) {
-    var x, y = 0;
-
-    tileMatrix.forEach( (List<int> row) {
-      x = 0;
-      row.forEach((int tileId) {
-        var tile = map.getTileByGID(tileId)
-            ..x = x
-            ..y = y;
-        f(tile);
-
-        x += map.tileWidth;
-      });
-      y += map.tileHeight;
-    });
   }
+
+  Layer(this.name, this.width, this.height);
 
   // TMX data format documented here: https://github.com/bjorn/tiled/wiki/TMX-Map-Format#data
   assembleTileMatrix(var bytes) {
@@ -62,5 +52,22 @@ class Layer {
         tileMatrix[y][x] = globalTileId;
       }
     }
+  }
+
+  _recalculateTiles() {
+    var x, y = 0;
+    _tiles = new List<Tile>();
+    tileMatrix.forEach( (List<int> row) {
+      x = 0;
+      row.forEach((int tileId) {
+        var tile = map.getTileByGID(tileId)
+            ..x = x
+            ..y = y;
+        _tiles.add(tile);
+
+        x += map.tileWidth;
+      });
+      y += map.tileHeight;
+    });
   }
 }

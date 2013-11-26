@@ -1,6 +1,9 @@
 part of tilemap;
 
 class Map {
+  int tileWidth;
+  int tileHeight;
+
   List<Tileset> tilesets = new List<Tileset>();
   List<Layer> layers = new List<Layer>();
 

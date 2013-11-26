@@ -12,6 +12,8 @@ class Parser {
     }
 
     var map = new Map();
+    map.tileWidth = int.parse(xmlElement.attributes['tilewidth']);
+    map.tileHeight = int.parse(xmlElement.attributes['tileheight']);
 
     xmlElement.children.forEach( (XmlElement node) {
       switch(node.name) {

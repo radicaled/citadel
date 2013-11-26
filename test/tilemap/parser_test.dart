@@ -16,7 +16,7 @@ main() {
   test('Parser.parse returns a Map object', () {
     var xml = '''
       <?xml version="1.0" encoding="UTF-8"?>
-      <map>
+      <map tilewidth='32' tileheight='64'>
       </map>      
     ''';
     var map = parser.parse(xml);
@@ -24,10 +24,23 @@ main() {
     expect(map, new isInstanceOf<Map>());
   });
 
+  group('Parser.parse returns a populated Map that', () {
+    var xml = '''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <map tilewidth='32' tileheight='64'>
+      </map>      
+    ''';
+    var map;
+    setUp(() => map = parser.parse(xml));
+
+    test('has its tileWidth = 32', () => expect(map.tileWidth, equals(32)));
+    test('has its tileHeight = 64', () => expect(map.tileHeight, equals(64)));
+  });
+
   group('Parser.parse populates Map with tilesets', () {
     var xml = '''
         <?xml version="1.0" encoding="UTF-8"?>
-        <map>
+        <map tilewidth='32' tileheight='64'>
         <tileset firstgid="1" name="Humans" tilewidth="64" tileheight="32">
           <image source="../icons/mob/human.png" width="1024" height="512"/>
         </tileset>
@@ -66,7 +79,7 @@ main() {
   group('Parser.parse populates Map with layers', () {
     var xml = '''
       <?xml version="1.0" encoding="UTF-8"?>
-      <map>
+      <map tilewidth='32' tileheight='64'>
          <layer name="Floor Layer" width="10" height="10">
           <data encoding="base64" compression="zlib">
             eJxjZCAeMI6qpblaAAl0AAs=

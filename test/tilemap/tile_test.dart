@@ -10,7 +10,7 @@ main() {
 
     test('creates a tile with a null tileset', () {
       var tile = new Tile.emptyTile();
-      expect(tile.tileSet, isNull);
+      expect(tile.tileset, isNull);
     });
   });
 

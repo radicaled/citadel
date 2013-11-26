@@ -3,7 +3,7 @@ part of tilemap;
 class Tile {
   // Tile IDs are 1-based
   int tileId;
-  Tileset tileSet;
+  Tileset tileset;
 
   // Tile global IDs are 1-based
   int gid;
@@ -16,10 +16,10 @@ class Tile {
 
   bool get isEmpty { return gid == 0; }
 
-  Tile(this.tileId, this.tileSet) {
-    width = tileSet.width;
-    height = tileSet.height;
-    gid = tileId + (tileSet.gid - 1);
+  Tile(this.tileId, this.tileset) {
+    width = tileset.width;
+    height = tileset.height;
+    gid = tileId + (tileset.gid - 1);
   }
 
   Tile.emptyTile() {

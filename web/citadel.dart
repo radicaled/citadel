@@ -49,7 +49,7 @@ renderMap(tmx.Map map) {
     map.layers.forEach( (layer) {
       var i = false;
       if (i) {
-        layer.forEachTile( (tile) {s
+        layer.forEachTile( (tile) {
           var bd = resourceManager.getBitmapData(tile.tileset.name);
           var ss = new SpriteSheet(bd, tile.width, tile.height);
           var sbd = ss.frameAt(tile.tileId - 1);

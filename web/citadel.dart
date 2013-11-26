@@ -47,9 +47,9 @@ renderMap(tmx.Map map) {
 
   resourceManager.load().then( (_) {
     map.layers.forEach( (layer) {
-      var i = false;
+      var i = true;
       if (i) {
-        layer.forEachTile( (tile) {
+        layer.tiles.where( (tile) => !tile.isEmpty).forEach( (tile) {
           var bd = resourceManager.getBitmapData(tile.tileset.name);
           var ss = new SpriteSheet(bd, tile.width, tile.height);
           var sbd = ss.frameAt(tile.tileId - 1);
@@ -60,11 +60,5 @@ renderMap(tmx.Map map) {
         });
       }
     });
-    var bd = resourceManager.getBitmapData('Humans');
-    var frames = bd.sliceIntoFrames(32, 32);
-    var first = new Bitmap(frames[4]);
-    first.x = 12;
-    first.y = 12;
-    stage.addChild(first);
   });
 }

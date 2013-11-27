@@ -6,9 +6,43 @@ import 'package:js/js.dart' as js;
 
 tmx.Tilemap tilemap;
 Stage stage;
+Sprite guy = new Sprite();
+
 void main() {
   var canvas = querySelector('#stage');
+  canvas.focus();
   stage = new Stage('Test Stage', canvas);
+
+  stage.onKeyDown.listen( (key) {
+    print('key event?');
+  });
+
+  stage.onMouseClick.listen( (click) {
+    print('mouse clicked?');
+  });
+
+  canvas.onKeyPress.listen( (ke) {
+    print("got ${ke.keyCode}");
+    // a = 97
+    // d = 100
+    // s = 115
+    // w = 119
+    switch(ke.keyCode){
+      case 97:
+        guy.x -= 32;
+        break;
+      case 100:
+        guy.x += 32;
+        break;
+      case 115:
+        guy.y += 32;
+        break;
+      case 119:
+        guy.y -= 32;
+        break;
+    }
+
+  });
 
   var renderLoop = new RenderLoop();
 
@@ -60,5 +94,8 @@ renderMap(tmx.Map map) {
         });
       }
     });
+    var ss = new SpriteSheet(resourceManager.getBitmapData('Humans'), 32, 32);
+    guy.addChild(new Bitmap(ss.frameAt(1)));
+    stage.addChild(guy);
   });
 }

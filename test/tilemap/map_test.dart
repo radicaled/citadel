@@ -45,4 +45,22 @@ main() {
       test('with y = null', ()=> expect(tile.y, isNull));
     });
   });
+
+  group('Map.getTileset', () {
+    tmx.Map map;
+    tmx.Tileset tileset = new tmx.Tileset(1)..name = 'Humans';
+    setUp(() {
+      map = new tmx.Map();
+      map.tilesets.add(tileset);
+    });
+
+    test('raises an exception if tileset is not present', () {
+      expect( () => map.getTileset('Quackers'),
+          throwsA(new isInstanceOf<StateError>()));
+    });
+
+    test('returns the expected tileset', () {
+      expect(map.getTileset('Humans'), equals(tileset));
+    });
+  });
 }

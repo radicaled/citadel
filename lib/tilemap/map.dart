@@ -18,6 +18,10 @@ class Map {
     if (gid == 0) { return new Tile.emptyTile(); }
     var ts = tilesets.lastWhere((tileset) => tileset.gid <= gid);
     return new Tile(gid - (ts.gid - 1), ts);
+  }
 
+  // Returns a tileset based on its name
+  Tileset getTileset(String name) {
+    return tilesets.firstWhere((tileset) => tileset.name == name);
   }
 }

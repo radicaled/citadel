@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:citadel/tilemap.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
-
+import 'package:json/json.dart' as json;
 
 tmx.Tilemap tilemap;
 Stage stage;
@@ -33,15 +33,19 @@ void main() {
     switch(ke.keyCode){
       case 97:
         guy.x -= 32;
+        movePlayer('W');
         break;
       case 100:
         guy.x += 32;
+        movePlayer('E');
         break;
       case 115:
         guy.y += 32;
+        movePlayer('S');
         break;
       case 119:
         guy.y -= 32;
+        movePlayer('N');
         break;
     }
 
@@ -60,6 +64,13 @@ void main() {
   initWebSocket();
 }
 
+void movePlayer(direction) {
+  send('move', { 'direction': direction });
+}
+
+void send(type, payload) {
+  ws.send(json.stringify({ 'type': type, 'payload': payload }));
+}
 void initWebSocket([int retrySeconds = 2]) {
   var reconnectScheduled = false;
   ws = new WebSocket('ws://127.0.0.1:8000/ws');
@@ -76,7 +87,7 @@ void initWebSocket([int retrySeconds = 2]) {
 
   ws.onOpen.listen((e) {
     print('Connected');
-    ws.send('Hello from Dart!');
+    //ws.send('Hello from Dart!');
   });
 
   ws.onClose.listen((e) {

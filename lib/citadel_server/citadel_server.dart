@@ -1,9 +1,13 @@
 library citaldel_server;
 
 import 'package:game_loop/game_loop_isolate.dart';
+import 'package:json/json.dart' as json;
 import 'dart:io';
 
 class CitadelServer {
+  var x = 0;
+  var y = 0;
+  WebSocket websocket;
 
   void start() {
     _startLoop();
@@ -26,7 +30,8 @@ class CitadelServer {
 
         server.listen((HttpRequest request) {
            if (request.uri.path == '/ws') {
-             WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
+             WebSocketTransformer.upgrade(request).then((WebSocket ws) {
+               websocket = ws;
                websocket.listen(_handleWebSocketMessage);
              });
            }
@@ -35,6 +40,36 @@ class CitadelServer {
   }
 
   void _handleWebSocketMessage(message) {
+    var request = json.parse(message);
+
+    switch (request['type']) {
+      case 'move':
+        _doMovement(request['payload']);
+        break;
+    }
     print("Received: $message");
+  }
+
+  void _doMovement(Map payload) {
+    switch (payload['direction']) {
+      case 'N':
+        y -= 1;
+        break;
+      case 'W':
+        x -= 1;
+        break;
+      case 'S':
+        y += 1;
+        break;
+      case 'E':
+        x += 1;
+        break;
+    }
+    _send('moveTo', { 'x': x, 'y': y });
+  }
+
+  void _send(type, payload) {
+    var msg = json.stringify({ 'type': type, 'payload': payload });
+    websocket.add(msg);
   }
 }

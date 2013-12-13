@@ -6,6 +6,7 @@ dependencies:
   crypto: any
   game_loop: any
   js: any
+  json: any
   stagexl:
     git:
       ref: master

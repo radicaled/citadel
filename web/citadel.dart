@@ -12,6 +12,7 @@ void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
   stage = new Stage('Test Stage', canvas);
+  stage.focus = stage;
 
   stage.onKeyDown.listen( (key) {
     print('key event?');

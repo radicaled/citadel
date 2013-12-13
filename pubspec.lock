@@ -9,6 +9,10 @@ packages:
     description: crypto
     source: hosted
     version: "0.8.10+3"
+  game_loop:
+    description: game_loop
+    source: hosted
+    version: "0.9.3"
   js:
     description: js
     source: hosted

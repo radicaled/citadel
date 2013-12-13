@@ -12,17 +12,10 @@ Not a serious effort. Just using it to explore Dart.
         * https://github.com/imaya/zlib.js on client
         * dart:convert on server
 
-= TODO
+= Server
 
-* Deal with spritesheets -- stagexl pushes textureatlas like its crack, but that
-  doesn't help with pre-existing spritesheets, does it?
-  Ultimately, here's how the textureatlas frames are broken down and converted into
-  seperate bitmap images for each sprite in the textureatlas:
-  https://github.com/bp74/StageXL/blob/master/lib/src/display/BitmapData.dart#L83
-  
-* Render TMX files on canvas
-
-
+Using a dumb client model with no prediction for now.
+Example of style: http://www.gabrielgambetta.com/fpm1.html
 
 
 Assets in /assets/icon contributed by https://github.com/tgstation/-tg-station and inherit its CC BY-SA 3.0 license (http://creativecommons.org/licenses/by-sa/3.0/)

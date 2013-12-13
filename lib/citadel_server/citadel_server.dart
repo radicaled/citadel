@@ -35,6 +35,6 @@ class CitadelServer {
   }
 
   void _handleWebSocketMessage(message) {
-
+    print("Received: $message");
   }
 }

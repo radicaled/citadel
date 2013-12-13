@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:async';
 import 'package:citadel/tilemap.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
@@ -7,6 +8,7 @@ import 'package:js/js.dart' as js;
 tmx.Tilemap tilemap;
 Stage stage;
 Sprite guy = new Sprite();
+WebSocket ws;
 
 void main() {
   var canvas = querySelector('#stage');
@@ -55,7 +57,44 @@ void main() {
 
   // call the web server asynchronously
   var request = HttpRequest.getString(url).then(parseMap);
+  initWebSocket();
 }
+
+void initWebSocket([int retrySeconds = 2]) {
+  var reconnectScheduled = false;
+  ws = new WebSocket('ws://127.0.0.1:8000/ws');
+
+  print("Connecting to websocket");
+
+
+  void scheduleReconnect() {
+    if (!reconnectScheduled) {
+      new Timer(new Duration(milliseconds: 1000 * retrySeconds), () => initWebSocket(retrySeconds * 2));
+    }
+    reconnectScheduled = true;
+  }
+
+  ws.onOpen.listen((e) {
+    print('Connected');
+    ws.send('Hello from Dart!');
+  });
+
+  ws.onClose.listen((e) {
+    print('Websocket closed, retrying in $retrySeconds seconds');
+    scheduleReconnect();
+  });
+
+  ws.onError.listen((e) {
+    print("Error connecting to ws");
+    scheduleReconnect();
+  });
+
+  ws.onMessage.listen((MessageEvent e) {
+    print('Received message: ${e.data}');
+  });
+
+}
+
 // TODO: I forgot what the Uint8 type is in JS. Uint8?
 List<int> _inflateZlib(List<int> bytes) {
   var zlib = new js.Proxy(js.context.Zlib.Inflate, js.array(bytes));

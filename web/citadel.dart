@@ -32,19 +32,15 @@ void main() {
     // w = 119
     switch(ke.keyCode){
       case 97:
-        guy.x -= 32;
         movePlayer('W');
         break;
       case 100:
-        guy.x += 32;
         movePlayer('E');
         break;
       case 115:
-        guy.y += 32;
         movePlayer('S');
         break;
       case 119:
-        guy.y -= 32;
         movePlayer('N');
         break;
     }
@@ -102,6 +98,7 @@ void initWebSocket([int retrySeconds = 2]) {
 
   ws.onMessage.listen((MessageEvent e) {
     print('Received message: ${e.data}');
+    handleMessage(e.data);
   });
 
 }
@@ -149,4 +146,17 @@ renderMap(tmx.Map map) {
     guy.addChild(new Bitmap(ss.frameAt(1)));
     stage.addChild(guy);
   });
+}
+
+
+void handleMessage(jsonString) {
+  var msg = json.parse(jsonString);
+  var payload = msg['payload'];
+
+  switch (msg['type']) {
+    case 'moveTo':
+      guy.x = payload['x'] * 32;
+      guy.y = payload['y'] * 32;
+      break;
+  }
 }

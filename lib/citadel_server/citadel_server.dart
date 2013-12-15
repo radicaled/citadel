@@ -1,8 +1,23 @@
-library citaldel_server;
+library citadel_server;
 
 import 'package:game_loop/game_loop_isolate.dart';
 import 'package:json/json.dart' as json;
+import 'package:logging/logging.dart' as logging;
 import 'dart:io';
+
+part 'src/entity.dart';
+part 'src/components/component.dart';
+part 'src/systems/collision_system.dart';
+part 'src/systems/movement_system.dart';
+part 'src/builders/build_player.dart';
+
+List<Entity> liveEntities = new List<Entity>();
+
+final logging.Logger log = new logging.Logger('CitadelServer')
+  ..level = logging.Level.ALL
+  ..onRecord.listen((logging.LogRecord rec) {
+    print('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
 
 class CitadelServer {
   var x = 0;

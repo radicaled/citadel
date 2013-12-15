@@ -7,6 +7,7 @@ dependencies:
   game_loop: any
   js: any
   json: any
+  logging: any
   stagexl:
     git:
       ref: master

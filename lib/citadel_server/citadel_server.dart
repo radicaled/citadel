@@ -13,18 +13,18 @@ part 'src/builders/build_player.dart';
 
 List<Entity> liveEntities = new List<Entity>();
 
+
 final logging.Logger log = new logging.Logger('CitadelServer')
-  ..level = logging.Level.ALL
   ..onRecord.listen((logging.LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
+var player = buildPlayer();
 class CitadelServer {
-  var x = 0;
-  var y = 0;
   WebSocket websocket;
 
   void start() {
+    log.info('starting server');
     _startLoop();
     _startServer();
   }
@@ -66,21 +66,24 @@ class CitadelServer {
   }
 
   void _doMovement(Map payload) {
+    var pos = player['position'];
+    var velocity = player['velocity'];
     switch (payload['direction']) {
       case 'N':
-        y -= 1;
+        velocity['y'] -= 1;
         break;
       case 'W':
-        x -= 1;
+        velocity['x'] -= 1;
         break;
       case 'S':
-        y += 1;
+        velocity['y'] += 1;
         break;
       case 'E':
-        x += 1;
+        velocity['x'] += 1;
         break;
     }
-    _send('moveTo', { 'x': x, 'y': y });
+    movementSystem(liveEntities);
+    _send('moveTo', { 'x': pos['x'], 'y': pos['y'] });
   }
 
   void _send(type, payload) {

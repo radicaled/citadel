@@ -6,4 +6,12 @@ class Component {
   Map attributes = new Map();
 
   Component(this.name, this.attributes);
+
+  dynamic operator [](attributeName) {
+    return attributes[attributeName];
+  }
+
+  void operator[]=(attributeName, value) {
+    attributes[attributeName] = value;
+  }
 }

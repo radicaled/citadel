@@ -92,7 +92,7 @@ class CitadelServer {
   }
 
   _executeSystems() {
-    movementSystem(liveEntities);
+    movementSystem();
   }
 
   _processCommands() {

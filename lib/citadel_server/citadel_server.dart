@@ -11,15 +11,16 @@ part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/builders/build_player.dart';
 
-List<Entity> liveEntities = new List<Entity>();
-
-
 final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
+List<Entity> liveEntities = new List<Entity>();
+List<Map> commandQueue = new List<Map>();
+
 var player = buildPlayer();
+
 class CitadelServer {
   WebSocket websocket;
 
@@ -33,7 +34,13 @@ class CitadelServer {
     var gl = new GameLoopIsolate();
 
     gl.onUpdate = (gameLoop) {
+      movementSystem(liveEntities);
 
+      commandQueue.forEach( (Map cmd) {
+        _send(cmd['name'], cmd['payload']);
+      });
+
+      commandQueue.clear();
     };
 
     gl.start();
@@ -82,8 +89,6 @@ class CitadelServer {
         velocity['x'] += 1;
         break;
     }
-    movementSystem(liveEntities);
-    _send('moveTo', { 'x': pos['x'], 'y': pos['y'] });
   }
 
   void _send(type, payload) {

@@ -8,11 +8,16 @@ void movementSystem(List<Entity> entities) {
     var pos = entity['position'];
     var vel = entity['velocity'];
 
-    pos['x'] += vel['x'];
-    pos['y'] += vel['y'];
+    if (vel['x'] != 0 || vel['y'] != 0) {
 
-    vel['x'] = 0;
-    vel['y'] = 0;
+      pos['x'] += vel['x'];
+      pos['y'] += vel['y'];
+
+      vel['x'] = 0;
+      vel['y'] = 0;
+
+      commandQueue.add({'name': 'moveTo', 'payload': { 'x': pos['x'], 'y': pos['y'] } });
+    }
   });
 
 }

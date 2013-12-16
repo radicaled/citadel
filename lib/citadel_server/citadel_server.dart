@@ -36,11 +36,7 @@ class CitadelServer {
     gl.onUpdate = (gameLoop) {
       movementSystem(liveEntities);
 
-      commandQueue.forEach( (Map cmd) {
-        _send(cmd['name'], cmd['payload']);
-      });
-
-      commandQueue.clear();
+      _processCommands();
     };
 
     gl.start();
@@ -94,5 +90,13 @@ class CitadelServer {
   void _send(type, payload) {
     var msg = json.stringify({ 'type': type, 'payload': payload });
     websocket.add(msg);
+  }
+
+  _processCommands() {
+    commandQueue.forEach((Map cmd) {
+      _send(cmd['name'], cmd['payload']);
+    });
+
+    commandQueue.clear();
   }
 }

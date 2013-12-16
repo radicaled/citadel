@@ -34,8 +34,7 @@ class CitadelServer {
     var gl = new GameLoopIsolate();
 
     gl.onUpdate = (gameLoop) {
-      movementSystem(liveEntities);
-
+      _executeSystems();
       _processCommands();
     };
 
@@ -90,6 +89,10 @@ class CitadelServer {
   void _send(type, payload) {
     var msg = json.stringify({ 'type': type, 'payload': payload });
     websocket.add(msg);
+  }
+
+  _executeSystems() {
+    movementSystem(liveEntities);
   }
 
   _processCommands() {

@@ -10,6 +10,7 @@ part 'src/components/component.dart';
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/builders/build_player.dart';
+part 'src/entity_utils.dart';
 
 final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
@@ -28,6 +29,11 @@ class CitadelServer {
     log.info('starting server');
     _startLoop();
     _startServer();
+
+    var ee = new Entity();
+    ee.attach(new Component('position', { 'x': 1, 'y': 1}));
+    ee.attach(new Component('solid'));
+    liveEntities.add(ee);
   }
 
   void _startLoop() {
@@ -92,6 +98,7 @@ class CitadelServer {
   }
 
   _executeSystems() {
+    collisionSystem();
     movementSystem();
   }
 

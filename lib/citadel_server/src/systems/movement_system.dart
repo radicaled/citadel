@@ -1,8 +1,7 @@
 part of citadel_server;
 
 void movementSystem() {
-  var matching = liveEntities.where( (entity) => entity.has(['position', 'velocity']) );
-  log.info('Found matching entities: $matching');
+  var matching = entitiesWithComponents(['position', 'velocity']);
 
   matching.forEach( (entity) {
     var pos = entity['position'];

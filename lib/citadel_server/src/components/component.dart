@@ -5,7 +5,7 @@ class Component {
 
   Map attributes = new Map();
 
-  Component(this.name, this.attributes);
+  Component(this.name, [this.attributes]);
 
   dynamic operator [](attributeName) {
     return attributes[attributeName];

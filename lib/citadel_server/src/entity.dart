@@ -7,6 +7,14 @@ class Entity {
     components[component.name] = component;
   }
 
+  // Returns an attribute using the following format:
+  // 'componentName.attributeName', EG: 'position.x'
+  // No caching, so best used in map / reduce / filters.
+  dynamic getAttr(String namespace) {
+    var parts = namespace.split('.');
+    return components[parts.first][parts.last];
+  }
+
   // TODO: can optimize this.
   bool has(List<String> componentNames) {
     if (components.length == 0) { return false; }

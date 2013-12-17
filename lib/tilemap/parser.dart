@@ -35,13 +35,24 @@ class Parser {
       ..name = attrs['name']
       ..width = int.parse(attrs['tilewidth'])
       ..height = int.parse(attrs['tileheight'])
-      ..images.addAll(node.query('image').map((XmlElement node)=> _parseImage(node)));
+      ..images.addAll(node.query('image').map((XmlElement node)=> _parseImage(node)))
+      ..properties = _parseProperties(node.query('properties').first);
 
   }
 
   static Image _parseImage(XmlElement node) {
     var attrs = node.attributes;
     return new Image(attrs['source'], int.parse(attrs['width']), int.parse(attrs['height']));
+  }
+
+  static Map<String, String> _parseProperties(XmlElement node) {
+    var map = new Map();
+    node.query('property').forEach( (property) {
+      var attrs = property.attributes;
+      map[attrs['name']] = attrs['value'];
+    });
+
+    return map;
   }
 
   static Layer _parseLayer(XmlElement node, decompressor) {

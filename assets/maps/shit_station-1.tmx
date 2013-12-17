@@ -10,6 +10,9 @@
   <image source="../icons/turf/floors.png" width="896" height="864"/>
  </tileset>
  <tileset firstgid="1022" name="Walls" tilewidth="32" tileheight="32">
+  <properties>
+   <property name="entity" value="wall"/>
+  </properties>
   <image source="../icons/turf/walls.png" width="608" height="576"/>
  </tileset>
  <tileset firstgid="1364" name="Closets" tilewidth="32" tileheight="32">

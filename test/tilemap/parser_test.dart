@@ -53,6 +53,14 @@ main() {
         test('has its height = 64', ()=> expect(image.height, equals(64)));
         test('has its source = "../icons/obj/basketball.png"', ()=> expect(image.source, equals('../icons/obj/basketball.png')));
       });
+
+      group('populates its properties correctly and', () {
+        var properties;
+        setUp( () => properties = tileset.properties);
+        test('has a key of "test_property" = "test_value"', () {
+          expect(properties, equals({ 'test_property': 'test_value'}));
+        });
+      });
     });
 
   });

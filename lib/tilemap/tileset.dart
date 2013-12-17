@@ -9,6 +9,6 @@ class Tileset {
   TiledMap map;
 
   List<Image> images = new List<Image>();
-
+  Map<String, String> properties = new Map<String, String>();
   Tileset(this.gid);
 }

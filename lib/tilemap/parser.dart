@@ -4,14 +4,14 @@ class Parser {
   var decompressor;
   Parser(this.decompressor);
 
-  Map parse(String xml) {
+  TiledMap parse(String xml) {
     var xmlElement = XML.parse(xml);
 
     if (xmlElement.name != 'map') {
       throw 'XML is not in TMX format';
     }
 
-    var map = new Map();
+    var map = new TiledMap();
     map.tileWidth = int.parse(xmlElement.attributes['tilewidth']);
     map.tileHeight = int.parse(xmlElement.attributes['tileheight']);
 

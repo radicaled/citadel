@@ -1,6 +1,6 @@
 part of tilemap;
 
-class Map {
+class TiledMap {
   int tileWidth;
   int tileHeight;
 

@@ -6,7 +6,7 @@ class Tileset {
   int height;
   String name;
 
-  Map map;
+  TiledMap map;
 
   List<Image> images = new List<Image>();
 

@@ -5,9 +5,9 @@ main() {
   // GID is 1-based
   group('Map.getTileByGID', () {
     tmx.Tile tile;
-    tmx.Map map;
+    tmx.TiledMap map;
     setUp(() {
-      map = new tmx.Map();
+      map = new tmx.TiledMap();
       // 2 tilesets:
       // 1 tileset with 1 tile
       // 1 tileset with 3 tiles
@@ -47,10 +47,10 @@ main() {
   });
 
   group('Map.getTileset', () {
-    tmx.Map map;
+    tmx.TiledMap map;
     tmx.Tileset tileset = new tmx.Tileset(1)..name = 'Humans';
     setUp(() {
-      map = new tmx.Map();
+      map = new tmx.TiledMap();
       map.tilesets.add(tileset);
     });
 

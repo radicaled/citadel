@@ -21,7 +21,7 @@ main() {
   });
 
   test('Parser.parse returns a Map object', () {
-    expect(map, new isInstanceOf<Map>());
+    expect(map, new isInstanceOf<TiledMap>());
   });
 
   group('Parser.parse returns a populated Map that', () {

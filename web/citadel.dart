@@ -114,7 +114,7 @@ parseMap(String xml) {
   renderMap(map);
 }
 
-renderMap(tmx.Map map) {
+renderMap(tmx.TiledMap map) {
   var resourceManager = new ResourceManager();
 
   map.tilesets.forEach( (tileset) {

@@ -1,4 +1,5 @@
-* Very basic collision detection
+* Track sockets, 'multiplayer'
+* More entities?
 * Refactor CitadelServer?
 * Game loop with fixed time steps:
 

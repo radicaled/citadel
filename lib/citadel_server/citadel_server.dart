@@ -29,7 +29,7 @@ final logging.Logger log = new logging.Logger('CitadelServer')
 List<Entity> liveEntities = new List<Entity>();
 List<Map> commandQueue = new List<Map>();
 
-var player = buildPlayer();
+Entity player = buildPlayer();
 
 class CitadelServer {
   WebSocket websocket;
@@ -47,20 +47,27 @@ class CitadelServer {
     log.info('loading map');
     _loadMap();
 
+    Position pos = player.components[Position];
+    pos.x = 5;
+    pos.y = 8;
+
     log.info('starting server');
     _startLoop();
     _startServer();
-
-    var ee = new Entity();
-    ee.attach(new Position(1, 1));
-    ee.attach(new Collidable());
-    liveEntities.add(ee);
   }
 
   _loadMap() {
     var tilemap = new tmx.Tilemap((List<int> bytes) => new ZLibDecoder().convert(bytes));
     new File('./assets/maps/shit_station-1.tmx').readAsString().then((xml) {
       map = tilemap.loadMap(xml);
+
+      map.layers.forEach( (tmx.Layer layer) {
+        layer.tiles.forEach( (tmx.Tile tile) {
+          if (!tile.isEmpty && tile.tileset.properties['entity'] == 'wall') {
+            buildWall(tile.x / 32, tile.y / 32);
+          }
+        });
+      });
     });
   }
 
@@ -122,6 +129,7 @@ class CitadelServer {
   void _send(type, payload) {
     var msg = json.stringify({ 'type': type, 'payload': payload });
     websocket.add(msg);
+    log.info('Sent: $msg');
   }
 
   _executeSystems() {

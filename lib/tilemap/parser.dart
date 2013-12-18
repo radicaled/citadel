@@ -1,7 +1,7 @@
 part of tilemap;
 
 class Parser {
-  var decompressor;
+  DecompressionFunction decompressor;
   Parser(this.decompressor);
 
   TiledMap parse(String xml) {

@@ -6,7 +6,13 @@ import 'package:logging/logging.dart' as logging;
 import 'dart:io';
 
 part 'src/entity.dart';
+
+// Components
 part 'src/components/component.dart';
+part 'src/components/position.dart';
+part 'src/components/velocity.dart';
+part 'src/components/collidable.dart';
+
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/builders/build_player.dart';
@@ -25,14 +31,21 @@ var player = buildPlayer();
 class CitadelServer {
   WebSocket websocket;
 
+  void test() {
+    // GODDAMN IT NO REPL THE DEBUGGER DOESN'T COUNT
+    var pos = new Position(0, 0);
+    print(pos.runtimeType);
+    print(Position == pos.runtimeType);
+  }
+
   void start() {
     log.info('starting server');
     _startLoop();
     _startServer();
 
     var ee = new Entity();
-    ee.attach(new Component('position', { 'x': 1, 'y': 1}));
-    ee.attach(new Component('solid'));
+    ee.attach(new Position(1, 1));
+    ee.attach(new Collidable());
     liveEntities.add(ee);
   }
 
@@ -74,20 +87,19 @@ class CitadelServer {
   }
 
   void _doMovement(Map payload) {
-    var pos = player['position'];
-    var velocity = player['velocity'];
+    var velocity = player[Velocity];
     switch (payload['direction']) {
       case 'N':
-        velocity['y'] -= 1;
+        velocity.y -= 1;
         break;
       case 'W':
-        velocity['x'] -= 1;
+        velocity.x -= 1;
         break;
       case 'S':
-        velocity['y'] += 1;
+        velocity.y += 1;
         break;
       case 'E':
-        velocity['x'] += 1;
+        velocity.x += 1;
         break;
     }
   }

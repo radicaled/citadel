@@ -4,4 +4,5 @@ void main() {
   var citadelServer = new CitadelServer();
 
   citadelServer.start();
+  //citadelServer.test();
 }

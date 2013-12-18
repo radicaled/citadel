@@ -1,27 +1,20 @@
 part of citadel_server;
 
 class Entity {
-  Map<String, Component> components = new Map<String, Component>();
+  Map<Type, Component> components = new Map<Type, Component>();
 
   void attach(Component component) {
-    components[component.name] = component;
-  }
-
-  // Returns an attribute using the following format:
-  // 'componentName.attributeName', EG: 'position.x'
-  // No caching, so best used in map / reduce / filters.
-  dynamic getAttr(String namespace) {
-    var parts = namespace.split('.');
-    return components[parts.first][parts.last];
+    component.entity = this;
+    components[component.runtimeType] = component;
   }
 
   // TODO: can optimize this.
-  bool has(List<String> componentNames) {
+  bool has(List<Type> types) {
     if (components.length == 0) { return false; }
-    return componentNames.every( (name) => components.containsKey(name) );
+    return types.every( (type) => components.containsKey(type) );
   }
 
-  Component operator [](String componentName) {
-    return components[componentName];
+  Component operator [](Type componentType) {
+    return components[componentType];
   }
 }

@@ -36,7 +36,7 @@ class Parser {
       ..width = int.parse(attrs['tilewidth'])
       ..height = int.parse(attrs['tileheight'])
       ..images.addAll(node.query('image').map((XmlElement node)=> _parseImage(node)))
-      ..properties = _parseProperties(node.query('properties').first);
+      ..properties = _parseProperties(node.queryAll('property'));
 
   }
 
@@ -45,9 +45,9 @@ class Parser {
     return new Image(attrs['source'], int.parse(attrs['width']), int.parse(attrs['height']));
   }
 
-  static Map<String, String> _parseProperties(XmlElement node) {
+  static Map<String, String> _parseProperties(nodes) {
     var map = new Map();
-    node.query('property').forEach( (property) {
+    nodes.forEach( (property) {
       var attrs = property.attributes;
       map[attrs['name']] = attrs['value'];
     });

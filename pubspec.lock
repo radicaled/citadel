@@ -37,6 +37,10 @@ packages:
     description: path
     source: hosted
     version: "0.8.10+3"
+  route:
+    description: route
+    source: hosted
+    version: "0.4.6"
   stack_trace:
     description: stack_trace
     source: hosted

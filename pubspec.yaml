@@ -8,6 +8,7 @@ dependencies:
   js: any
   json: any
   logging: any
+  route: any
   stagexl:
     git:
       ref: master

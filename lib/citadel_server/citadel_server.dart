@@ -4,6 +4,7 @@ import 'package:game_loop/game_loop_isolate.dart';
 import 'package:json/json.dart' as json;
 import 'package:logging/logging.dart' as logging;
 import 'package:citadel/tilemap.dart' as tmx;
+import 'package:route/server.dart';
 import 'dart:io';
 
 part 'src/entity.dart';
@@ -29,7 +30,9 @@ final logging.Logger log = new logging.Logger('CitadelServer')
 List<Entity> liveEntities = new List<Entity>();
 List<Map> commandQueue = new List<Map>();
 
-Entity player = buildPlayer();
+final loginUrl = '/login';
+final wsGameUrl = '/ws/game';
+int currentPlayerId = 1;
 
 class CitadelServer {
   WebSocket websocket;
@@ -46,10 +49,6 @@ class CitadelServer {
     // TODO: make sure these run in order.
     log.info('loading map');
     _loadMap();
-
-    Position pos = player.components[Position];
-    pos.x = 5;
-    pos.y = 8;
 
     log.info('starting server');
     _startLoop();
@@ -86,18 +85,45 @@ class CitadelServer {
     HttpServer.bind('127.0.0.1', 8000)
       .then((HttpServer server) {
 
-        server.listen((HttpRequest request) {
-           if (request.uri.path == '/ws') {
-             WebSocketTransformer.upgrade(request).then((WebSocket ws) {
-               websocket = ws;
-               websocket.listen(_handleWebSocketMessage);
-             });
-           }
-        });
+        var router = new Router(server)
+          ..serve(loginUrl).listen(_loginUser)
+          ..serve(wsGameUrl).listen(_gameConnection);
     });
   }
 
-  void _handleWebSocketMessage(message) {
+  void _gameConnection(HttpRequest req) {
+    log.info('New game connection');
+    WebSocketTransformer.upgrade(req).then((WebSocket ws) {
+      websocket = ws;
+      websocket.listen((data) => _handleWebSocketMessage(data, ws)); // onDone here.
+    });
+  }
+
+  void _loginUser(HttpRequest req) {
+    // TODO: security
+    var newPlayerId = currentPlayerId++;
+    var cookie = new Cookie('playerId', (newPlayerId).toString());
+    log.info('Logged in new user');
+
+    var res = req.response;
+    res.headers.contentType = new ContentType('text', 'text');
+    res.headers.add('Access-Control-Allow-Origin', '*');
+    res.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+    res.cookies.add(cookie);
+    res.statusCode = 200;
+    res.write(json.stringify({ 'id': newPlayerId }));
+    res.close();
+
+    Entity player = buildPlayer();
+    player.id = newPlayerId;
+
+    // TODO: generics.
+    (player.components[Position] as Position)
+      ..x = 8
+      ..y = 8;
+  }
+
+  void _handleWebSocketMessage(message, [WebSocket ws]) {
     var request = json.parse(message);
 
     switch (request['type']) {
@@ -108,7 +134,11 @@ class CitadelServer {
     print("Received: $message");
   }
 
-  void _doMovement(Map payload) {
+  void _doMovement(int entityId, Map payload) {
+    print('Looking for ID of $entityId');
+    var player = liveEntities.firstWhere( (entity) => entity.id == entityId );
+    var comps = player.components;
+    print('Found player $player with components: $comps');
     var velocity = player[Velocity];
     switch (payload['direction']) {
       case 'N':

@@ -15,7 +15,7 @@ void movementSystem() {
       vel.x = 0;
       vel.y = 0;
 
-      commandQueue.add({'name': 'moveTo', 'payload': { 'x': pos.x, 'y': pos.y } });
+      commandQueue.add({'type': 'moveTo', 'payload': { 'x': pos.x, 'y': pos.y }, 'id': entity.id });
     }
   });
 

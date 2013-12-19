@@ -156,8 +156,8 @@ class CitadelServer {
     }
   }
 
-  void _send(type, payload) {
-    var msg = json.stringify({ 'type': type, 'payload': payload });
+  void _send(cmd) {
+    var msg = json.stringify(cmd);
     websocket.add(msg);
     log.info('Sent: $msg');
   }
@@ -169,7 +169,7 @@ class CitadelServer {
 
   _processCommands() {
     commandQueue.forEach((Map cmd) {
-      _send(cmd['name'], cmd['payload']);
+      _send(cmd);
     });
 
     commandQueue.clear();

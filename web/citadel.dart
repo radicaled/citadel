@@ -9,7 +9,7 @@ tmx.Tilemap tilemap;
 Stage stage;
 Sprite guy = new Sprite();
 WebSocket ws;
-
+int currentPlayerId;
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -17,15 +17,12 @@ void main() {
   stage.focus = stage;
 
   stage.onKeyDown.listen( (key) {
-    print('key event?');
   });
 
   stage.onMouseClick.listen( (click) {
-    print('mouse clicked?');
   });
 
   canvas.onKeyPress.listen( (ke) {
-    print("got ${ke.keyCode}");
     // a = 97
     // d = 100
     // s = 115
@@ -56,8 +53,17 @@ void main() {
   var url = "http://127.0.0.1:3030/citadel/assets/maps/shit_station-1.tmx";
 
   // call the web server asynchronously
-  var request = HttpRequest.getString(url).then(parseMap);
-  initWebSocket();
+  //HttpRequest.getString(url).then((xml) {
+  //  parseMap(xml);
+  //  login().then((_) => initWebSocket());
+  //});
+  HttpRequest.getString(url)
+    .then(parseMap)
+    .then((_) => login())
+    .then((_) => initWebSocket());
+
+  //login().then((_) => initWebSocket());
+  //initWebSocket();
 }
 
 void movePlayer(direction) {
@@ -65,11 +71,18 @@ void movePlayer(direction) {
 }
 
 void send(type, payload) {
-  ws.send(json.stringify({ 'type': type, 'payload': payload }));
+  ws.send(json.stringify({ 'type': type, 'payload': payload, 'id': currentPlayerId }));
 }
+
+Future login() {
+  return HttpRequest.getString('http://127.0.0.1:8000/login')
+      .then((data) =>  currentPlayerId = json.parse(data)['id']);
+}
+
 void initWebSocket([int retrySeconds = 2]) {
   var reconnectScheduled = false;
-  ws = new WebSocket('ws://127.0.0.1:8000/ws');
+  print('Current Player ID: $currentPlayerId');
+  ws = new WebSocket('ws://127.0.0.1:8000/ws/game');
 
   print("Connecting to websocket");
 
@@ -83,6 +96,7 @@ void initWebSocket([int retrySeconds = 2]) {
 
   ws.onOpen.listen((e) {
     print('Connected');
+    ws.send(json.stringify({ 'type': 'set_user', 'payload': currentPlayerId}));
     //ws.send('Hello from Dart!');
   });
 

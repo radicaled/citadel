@@ -36,6 +36,7 @@ int currentPlayerId = 1;
 
 class CitadelServer {
   WebSocket websocket;
+  Map<int, WebSocket> webSockets = new Map<int, WebSocket>();
   tmx.TiledMap map;
 
   void test() {
@@ -128,8 +129,11 @@ class CitadelServer {
 
     switch (request['type']) {
       case 'move':
-        _doMovement(request['payload']);
+        _doMovement(request['id'], request['payload']);
         break;
+      case 'set_user':
+        webSockets[request['payload']] = ws;
+
     }
     print("Received: $message");
   }

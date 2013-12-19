@@ -1,3 +1,8 @@
+* Multiplayer
+    * Associate player with a connection
+    * Add 'TILE' component to represent player visually.
+    * On connection, send a series of PAINT commands to client for player positions (for now)
+    * movementSystem queues up commands with entity ID that has changed position
 * Track sockets, 'multiplayer'
 * More entities?
 * Refactor CitadelServer?

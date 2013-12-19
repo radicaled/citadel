@@ -2,7 +2,7 @@ part of citadel_server;
 
 class Entity {
   Map<Type, Component> components = new Map<Type, Component>();
-
+  int id;
   void attach(Component component) {
     component.entity = this;
     components[component.runtimeType] = component;

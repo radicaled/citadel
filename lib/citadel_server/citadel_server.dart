@@ -14,7 +14,9 @@ part 'src/components/component.dart';
 part 'src/components/position.dart';
 part 'src/components/velocity.dart';
 part 'src/components/collidable.dart';
+part 'src/components/player.dart';
 
+// Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 // Builders
@@ -133,6 +135,10 @@ class CitadelServer {
         break;
       case 'set_user':
         webSockets[request['payload']] = ws;
+        break;
+      case 'get_gamestate':
+        _sendGamestate();
+        break;
 
     }
     print("Received: $message");
@@ -160,10 +166,27 @@ class CitadelServer {
     }
   }
 
+  void _sendGamestate() {
+    // For now, just sending players.
+    entitiesWithComponents([Player]).forEach( (player) {
+      _queueCommand('set_entity', {
+          'x': player[Position].x,
+          'y': player[Position].y,
+          'entity_id': player.id,
+          'tile_gid': 2 /* TODO: remove hard-coding */
+
+      });
+    });
+  }
+
   void _send(cmd) {
     var msg = json.stringify(cmd);
     websocket.add(msg);
     log.info('Sent: $msg');
+  }
+
+  void _queueCommand(String type, Map payload) {
+    commandQueue.add({ 'type': type, 'payload': payload});
   }
 
   _executeSystems() {

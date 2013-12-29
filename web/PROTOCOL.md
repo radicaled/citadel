@@ -1,4 +1,4 @@
-Protocl
+Protocol message format
 ===
 
 Websocket communications are sent in the form of:
@@ -7,6 +7,17 @@ Websocket communications are sent in the form of:
     type: 'MESSAGE_TYPE',
     payload: ARRAY_OR_HASH
 }
+
+
+Client Protocl
+===
+
+get_gamestate
+===
+
+The client sends message when it is ready to receive the current gamestate.
+
+The payload is an integer representing the current player / user.
 
 Server Protocol
 ===

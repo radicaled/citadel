@@ -5,6 +5,7 @@ Entity buildPlayer() {
   entity.attach(new Position(0, 0));
   entity.attach(new Velocity(0, 0));
   entity.attach(new Collidable());
+  entity.attach(new Player());
 
   liveEntities.add(entity);
   return entity;

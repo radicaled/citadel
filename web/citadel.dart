@@ -6,10 +6,14 @@ import 'package:js/js.dart' as js;
 import 'package:json/json.dart' as json;
 
 tmx.Tilemap tilemap;
+tmx.TiledMap map;
+
 Stage stage;
-Sprite guy = new Sprite();
+var resourceManager = new ResourceManager();
 WebSocket ws;
 int currentPlayerId;
+
+Map<int, GameSprite> entities = new Map<int, GameSprite>();
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -97,6 +101,7 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onOpen.listen((e) {
     print('Connected');
     ws.send(json.stringify({ 'type': 'set_user', 'payload': currentPlayerId}));
+    ws.send(json.stringify({ 'type': 'get_gamestate', 'payload': currentPlayerId}));
     //ws.send('Hello from Dart!');
   });
 
@@ -124,13 +129,11 @@ List<int> _inflateZlib(List<int> bytes) {
 }
 
 parseMap(String xml) {
-  var map = tilemap.loadMap(xml);
+  map = tilemap.loadMap(xml);
   renderMap(map);
 }
 
 renderMap(tmx.TiledMap map) {
-  var resourceManager = new ResourceManager();
-
   map.tilesets.forEach( (tileset) {
     var image = tileset.images.first;
 
@@ -156,9 +159,6 @@ renderMap(tmx.TiledMap map) {
         });
       }
     });
-    var ss = new SpriteSheet(resourceManager.getBitmapData('Humans'), 32, 32);
-    guy.addChild(new Bitmap(ss.frameAt(1)));
-    stage.addChild(guy);
   });
 }
 
@@ -168,9 +168,42 @@ void handleMessage(jsonString) {
   var payload = msg['payload'];
 
   switch (msg['type']) {
-    case 'moveTo':
-      guy.x = payload['x'] * 32;
-      guy.y = payload['y'] * 32;
+    case 'move_entity':
+      _moveEntity(payload);
+      break;
+    case 'create_entity':
+      _createEntity(payload);
       break;
   }
+}
+
+void _createEntity(payload) {
+  var s = new GameSprite();
+  s.entityId = payload['entity_id'];
+  s.x = payload['x'] * 32;
+  s.y = payload['y'] * 32;
+
+  var tile = map.getTileByGID(payload['tile_gid']);
+  if (!tile.isEmpty) {
+    var ss = getSpriteSheet(tile.tileset);
+    s.addChild(new Bitmap(ss.frameAt(tile.tileId)));
+  }
+
+  stage.addChild(s);
+
+  entities[s.entityId] = s;
+}
+
+void _moveEntity(payload) {
+  var entity = entities[payload['entity_id']];
+  entity.x = payload['x'] * 32;
+  entity.y = payload['y'] * 32;
+}
+
+class GameSprite extends Sprite {
+  int entityId;
+}
+
+SpriteSheet getSpriteSheet(tmx.Tileset ts) {
+  return new SpriteSheet(resourceManager.getBitmapData(ts.name), ts.width, ts.height);
 }

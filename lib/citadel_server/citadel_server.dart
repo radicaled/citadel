@@ -169,11 +169,11 @@ class CitadelServer {
   void _sendGamestate() {
     // For now, just sending players.
     entitiesWithComponents([Player]).forEach( (player) {
-      _queueCommand('set_entity', {
+      _queueCommand('create_entity', {
           'x': player[Position].x,
           'y': player[Position].y,
           'entity_id': player.id,
-          'tile_gid': 2 /* TODO: remove hard-coding */
+          'tile_gid': 1 /* TODO: remove hard-coding */
 
       });
     });

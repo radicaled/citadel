@@ -67,3 +67,11 @@ Move an entity.
     * payload.entity_id: entity id to move.
     * payload.x: target x location for this entity.
     * payload.y: target y location for this entity.
+
+
+remove_entity
+===
+
+Remove an entity from the game.
+
+    * payload.entity_id: entity id to remove

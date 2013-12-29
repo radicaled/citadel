@@ -166,6 +166,8 @@ void handleMessage(jsonString) {
     case 'create_entity':
       _createEntity(payload);
       break;
+    case 'remove_entity':
+      _removeEntity(payload);
   }
 }
 
@@ -184,6 +186,11 @@ void _createEntity(payload) {
   stage.addChild(s);
 
   entities[s.entityId] = s;
+}
+
+void _removeEntity(payload) {
+  var gs = entities.remove(payload['entity_id']);
+  gs.removeFromParent();
 }
 
 void _moveEntity(payload) {

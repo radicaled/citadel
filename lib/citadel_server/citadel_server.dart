@@ -106,8 +106,11 @@ class CitadelServer {
       ..y = 8;
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
-      gameConnections.add(new GameConnection(ws, player));
-      ws.listen((data) => _handleWebSocketMessage(data, ws));
+      var ge = new GameConnection(ws, player);
+      gameConnections.add(ge);
+
+      ws.listen((data) => _handleWebSocketMessage(data, ws),
+        onDone: () => _removeConnection(ge));
     });
   }
 
@@ -124,6 +127,12 @@ class CitadelServer {
 
     }
     print("Received: $message");
+  }
+
+  _removeConnection(GameConnection ge) {
+    gameConnections.remove(ge);
+    liveEntities.remove(ge.entity);
+    _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
   }
 
   void _doMovement(Entity player, Map payload) {

@@ -63,7 +63,6 @@ void main() {
   //});
   HttpRequest.getString(url)
     .then(parseMap)
-    .then((_) => login())
     .then((_) => initWebSocket());
 
   //login().then((_) => initWebSocket());
@@ -75,12 +74,7 @@ void movePlayer(direction) {
 }
 
 void send(type, payload) {
-  ws.send(json.stringify({ 'type': type, 'payload': payload, 'id': currentPlayerId }));
-}
-
-Future login() {
-  return HttpRequest.getString('http://127.0.0.1:8000/login')
-      .then((data) =>  currentPlayerId = json.parse(data)['id']);
+  ws.send(json.stringify({ 'type': type, 'payload': payload }));
 }
 
 void initWebSocket([int retrySeconds = 2]) {
@@ -100,9 +94,7 @@ void initWebSocket([int retrySeconds = 2]) {
 
   ws.onOpen.listen((e) {
     print('Connected');
-    ws.send(json.stringify({ 'type': 'set_user', 'payload': currentPlayerId}));
-    ws.send(json.stringify({ 'type': 'get_gamestate', 'payload': currentPlayerId}));
-    //ws.send('Hello from Dart!');
+    ws.send(json.stringify({ 'type': 'get_gamestate' }));
   });
 
   ws.onClose.listen((e) {

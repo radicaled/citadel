@@ -19,10 +19,15 @@ part 'src/components/player.dart';
 // Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
+
 // Builders
 part 'src/builders/build_player.dart';
 part 'src/builders/build_wall.dart';
 part 'src/entity_utils.dart';
+
+// misc
+
+part 'src/game_connection.dart';
 
 final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
@@ -31,14 +36,13 @@ final logging.Logger log = new logging.Logger('CitadelServer')
 
 List<Entity> liveEntities = new List<Entity>();
 List<Map> commandQueue = new List<Map>();
+List<GameConnection> gameConnections = new List<GameConnection>();
 
 final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
-int currentPlayerId = 1;
+int currentEntityId = 1;
 
 class CitadelServer {
-  WebSocket websocket;
-  Map<int, WebSocket> webSockets = new Map<int, WebSocket>();
   tmx.TiledMap map;
 
   void test() {
@@ -89,52 +93,30 @@ class CitadelServer {
       .then((HttpServer server) {
 
         var router = new Router(server)
-          ..serve(loginUrl).listen(_loginUser)
           ..serve(wsGameUrl).listen(_gameConnection);
     });
   }
 
   void _gameConnection(HttpRequest req) {
-    log.info('New game connection');
-    WebSocketTransformer.upgrade(req).then((WebSocket ws) {
-      websocket = ws;
-      websocket.listen((data) => _handleWebSocketMessage(data, ws)); // onDone here.
-    });
-  }
-
-  void _loginUser(HttpRequest req) {
-    // TODO: security
-    var newPlayerId = currentPlayerId++;
-    var cookie = new Cookie('playerId', (newPlayerId).toString());
-    log.info('Logged in new user');
-
-    var res = req.response;
-    res.headers.contentType = new ContentType('text', 'text');
-    res.headers.add('Access-Control-Allow-Origin', '*');
-    res.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
-    res.cookies.add(cookie);
-    res.statusCode = 200;
-    res.write(json.stringify({ 'id': newPlayerId }));
-    res.close();
-
     Entity player = buildPlayer();
-    player.id = newPlayerId;
 
     // TODO: generics.
     (player.components[Position] as Position)
       ..x = 8
       ..y = 8;
+
+    WebSocketTransformer.upgrade(req).then((WebSocket ws) {
+      gameConnections.add(new GameConnection(ws, player));
+      ws.listen((data) => _handleWebSocketMessage(data, ws));
+    });
   }
 
   void _handleWebSocketMessage(message, [WebSocket ws]) {
     var request = json.parse(message);
-
+    var ge = gameConnections.firstWhere((ge) => ge.ws == ws);
     switch (request['type']) {
       case 'move':
-        _doMovement(request['id'], request['payload']);
-        break;
-      case 'set_user':
-        webSockets[request['payload']] = ws;
+        _doMovement(ge.entity, request['payload']);
         break;
       case 'get_gamestate':
         _sendGamestate();
@@ -144,11 +126,7 @@ class CitadelServer {
     print("Received: $message");
   }
 
-  void _doMovement(int entityId, Map payload) {
-    print('Looking for ID of $entityId');
-    var player = liveEntities.firstWhere( (entity) => entity.id == entityId );
-    var comps = player.components;
-    print('Found player $player with components: $comps');
+  void _doMovement(Entity player, Map payload) {
     var velocity = player[Velocity];
     switch (payload['direction']) {
       case 'N':
@@ -181,7 +159,7 @@ class CitadelServer {
 
   void _send(cmd) {
     var msg = json.stringify(cmd);
-    websocket.add(msg);
+    gameConnections.forEach((ge) => ge.ws.add(msg));
     log.info('Sent: $msg');
   }
 

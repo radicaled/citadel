@@ -171,6 +171,8 @@ void handleMessage(jsonString) {
   }
 }
 
+// TODO: check to see if redundant entites have been created?
+// EG, we already have an entity with ID=1, but now there are more?
 void _createEntity(payload) {
   var s = new GameSprite();
   s.entityId = payload['entity_id'];

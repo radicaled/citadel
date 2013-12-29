@@ -100,10 +100,17 @@ class CitadelServer {
   void _gameConnection(HttpRequest req) {
     Entity player = buildPlayer();
 
-    // TODO: generics.
-    (player.components[Position] as Position)
+    Position pos = player[Position];
+    pos
       ..x = 8
       ..y = 8;
+
+    _send(_makeCommand('create_entity', {
+        'x': pos.x,
+        'y': pos.y,
+        'entity_id': player.id,
+        'tile_gid': 1 /* TODO: remove hard-coding */
+    }));
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
       var ge = new GameConnection(ws, player);
@@ -111,22 +118,24 @@ class CitadelServer {
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
         onDone: () => _removeConnection(ge));
+      // TODO: send immediate gamestate here.
     });
   }
 
   void _handleWebSocketMessage(message, [WebSocket ws]) {
     var request = json.parse(message);
     var ge = gameConnections.firstWhere((ge) => ge.ws == ws);
+    print("Received: $message");
+
     switch (request['type']) {
       case 'move':
         _doMovement(ge.entity, request['payload']);
         break;
       case 'get_gamestate':
-        _sendGamestate();
+        _sendGamestate(ge);
         break;
 
     }
-    print("Received: $message");
   }
 
   _removeConnection(GameConnection ge) {
@@ -153,27 +162,34 @@ class CitadelServer {
     }
   }
 
-  void _sendGamestate() {
+  void _sendGamestate(GameConnection ge) {
     // For now, just sending players.
     entitiesWithComponents([Player]).forEach( (player) {
-      _queueCommand('create_entity', {
+      _sendTo(_makeCommand('create_entity', {
           'x': player[Position].x,
           'y': player[Position].y,
           'entity_id': player.id,
           'tile_gid': 1 /* TODO: remove hard-coding */
-
-      });
+      }), [ge]);
     });
   }
 
   void _send(cmd) {
+    _sendTo(cmd, gameConnections);
+  }
+
+  void _sendTo(cmd, List<GameConnection> connections) {
     var msg = json.stringify(cmd);
-    gameConnections.forEach((ge) => ge.ws.add(msg));
+    connections.forEach((ge) => ge.ws.add(msg));
     log.info('Sent: $msg');
   }
 
+  Map _makeCommand(String type, Map payload) {
+    return { 'type': type, 'payload': payload };
+  }
+
   void _queueCommand(String type, Map payload) {
-    commandQueue.add({ 'type': type, 'payload': payload});
+    commandQueue.add(_makeCommand(type, payload));
   }
 
   _executeSystems() {

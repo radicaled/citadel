@@ -120,12 +120,12 @@ List<int> _inflateZlib(List<int> bytes) {
   return zlib.decompress();
 }
 
-parseMap(String xml) {
+Future parseMap(String xml) {
   map = tilemap.loadMap(xml);
-  renderMap(map);
+  return renderMap(map);
 }
 
-renderMap(tmx.TiledMap map) {
+Future renderMap(tmx.TiledMap map) {
   map.tilesets.forEach( (tileset) {
     var image = tileset.images.first;
 
@@ -136,7 +136,7 @@ renderMap(tmx.TiledMap map) {
     resourceManager.addBitmapData(tileset.name, imagePath);
   });
 
-  resourceManager.load().then( (_) {
+  return resourceManager.load().then( (_) {
     map.layers.forEach( (layer) {
       var i = true;
       if (i) {

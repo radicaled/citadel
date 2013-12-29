@@ -94,7 +94,7 @@ void initWebSocket([int retrySeconds = 2]) {
 
   ws.onOpen.listen((e) {
     print('Connected');
-    ws.send(json.stringify({ 'type': 'get_gamestate' }));
+    //ws.send(json.stringify({ 'type': 'get_gamestate' }));
   });
 
   ws.onClose.listen((e) {

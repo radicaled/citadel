@@ -118,7 +118,7 @@ class CitadelServer {
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
         onDone: () => _removeConnection(ge));
-      // TODO: send immediate gamestate here.
+      _sendGamestate(ge);
     });
   }
 

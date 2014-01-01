@@ -1,12 +1,12 @@
 import 'dart:html';
 import 'dart:async';
-import 'package:citadel/tilemap.dart' as tmx;
+import 'package:tmx/tmx.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
 import 'package:json/json.dart' as json;
 
-tmx.Tilemap tilemap;
-tmx.TiledMap map;
+tmx.TileMapParser parser = new tmx.TileMapParser();
+tmx.TileMap map;
 
 Stage stage;
 var resourceManager = new ResourceManager();
@@ -51,8 +51,6 @@ void main() {
   var renderLoop = new RenderLoop();
 
   renderLoop.addStage(stage);
-
-  tilemap = new tmx.Tilemap(_inflateZlib);
 
   var url = "http://127.0.0.1:3030/citadel/assets/maps/shit_station-1.tmx";
 
@@ -121,11 +119,11 @@ List<int> _inflateZlib(List<int> bytes) {
 }
 
 Future parseMap(String xml) {
-  map = tilemap.loadMap(xml);
+  map = parser.parse(xml);
   return renderMap(map);
 }
 
-Future renderMap(tmx.TiledMap map) {
+Future renderMap(tmx.TileMap map) {
   map.tilesets.forEach( (tileset) {
     var image = tileset.images.first;
 

@@ -3,7 +3,7 @@ library citadel_server;
 import 'package:game_loop/game_loop_isolate.dart';
 import 'package:json/json.dart' as json;
 import 'package:logging/logging.dart' as logging;
-import 'package:citadel/tilemap.dart' as tmx;
+import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
 import 'dart:io';
 
@@ -43,7 +43,7 @@ final wsGameUrl = '/ws/game';
 int currentEntityId = 1;
 
 class CitadelServer {
-  tmx.TiledMap map;
+  tmx.TileMap map;
 
   void test() {
     // GODDAMN IT NO REPL THE DEBUGGER DOESN'T COUNT
@@ -63,9 +63,9 @@ class CitadelServer {
   }
 
   _loadMap() {
-    var tilemap = new tmx.Tilemap((List<int> bytes) => new ZLibDecoder().convert(bytes));
+    var parser = new tmx.TileMapParser();
     new File('./assets/maps/shit_station-1.tmx').readAsString().then((xml) {
-      map = tilemap.loadMap(xml);
+      map = parser.loadMap(xml);
 
       map.layers.forEach( (tmx.Layer layer) {
         layer.tiles.forEach( (tmx.Tile tile) {

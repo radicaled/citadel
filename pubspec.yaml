@@ -14,4 +14,5 @@ dependencies:
       ref: master
       url: https://github.com/bp74/StageXL.git
   unittest: any
+  tmx: any
   xml: any

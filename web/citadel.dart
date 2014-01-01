@@ -155,9 +155,11 @@ Future renderMap(tmx.TileMap map) {
 
 void handleMessage(jsonString) {
   var msg = json.parse(jsonString);
-  var payload = msg['payload'];
+  executeMessage(msg['type'], msg['payload']);
+}
 
-  switch (msg['type']) {
+void executeMessage(type, payload) {
+  switch (type) {
     case 'move_entity':
       _moveEntity(payload);
       break;
@@ -166,6 +168,9 @@ void handleMessage(jsonString) {
       break;
     case 'remove_entity':
       _removeEntity(payload);
+      break;
+    case 'set_gamestate':
+      payload.forEach((submessage) => executeMessage(submessage['type'], submessage['payload']));
   }
 }
 

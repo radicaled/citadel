@@ -15,6 +15,7 @@ part 'src/components/position.dart';
 part 'src/components/velocity.dart';
 part 'src/components/collidable.dart';
 part 'src/components/player.dart';
+part 'src/components/tile_graphics.dart';
 
 // Systems
 part 'src/systems/collision_system.dart';
@@ -69,8 +70,18 @@ class CitadelServer {
 
       map.layers.forEach( (tmx.Layer layer) {
         layer.tiles.forEach( (tmx.Tile tile) {
+          int x = tile.x ~/ 32;
+          int y = tile.y ~/ 32;
           if (!tile.isEmpty && tile.tileset.properties['entity'] == 'wall') {
-            buildWall(tile.x / 32, tile.y / 32);
+            buildWall(x, y, tile.gid);
+          } else if (!tile.isEmpty) {
+            // TODO: clean-up.
+            var entity = new Entity();
+
+            entity.attach(new Position(x, y));
+            entity.attach(new TileGraphics([tile.gid]));
+
+            liveEntities.add(entity);
           }
         });
       });
@@ -101,15 +112,18 @@ class CitadelServer {
     Entity player = buildPlayer();
 
     Position pos = player[Position];
+    TileGraphics tgs = player[TileGraphics];
     pos
       ..x = 8
-      ..y = 8;
+      ..y = 8
+      ..z = 16;
 
     _send(_makeCommand('create_entity', {
         'x': pos.x,
         'y': pos.y,
+        'z': pos.z,
         'entity_id': player.id,
-        'tile_gid': 1 /* TODO: remove hard-coding */
+        'tileGids': tgs.tileGids,
     }));
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
@@ -164,12 +178,13 @@ class CitadelServer {
 
   void _sendGamestate(GameConnection ge) {
     // For now, just sending players.
-    entitiesWithComponents([Player]).forEach( (player) {
+    entitiesWithComponents([TileGraphics, Position]).forEach( (player) {
       _sendTo(_makeCommand('create_entity', {
           'x': player[Position].x,
           'y': player[Position].y,
+          'z': player[Position].z,
+          'tileGids': player[TileGraphics].tileGids,
           'entity_id': player.id,
-          'tile_gid': 2 /* TODO: remove hard-coding */
       }), [ge]);
     });
   }

@@ -43,9 +43,10 @@ create_entity
 Create and render an entity on screen.
 
     * payload.entity_id: entity id for this entity.
-    * payload.tile_gid: global tile id that visually represents this entity.
     * payload.x: x location of this entity.
     * payload.y: y location of this entity.
+    * payload.z: z location of this entity.
+    * payload.tileGids: an array of tile_gids that visually represent this entity
 
 
 update_entity
@@ -58,6 +59,7 @@ Update an entity.
         * if no tile_gid, then entity has not visually updated.
     * payload.x: updated x location of this entity.
     * payload.y: updated y location of this entity.
+    * payload.z: updated z location of this entity.
 
 move_entity
 ===

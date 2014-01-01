@@ -136,7 +136,7 @@ Future renderMap(tmx.TileMap map) {
 
   return resourceManager.load().then( (_) {
     map.layers.forEach( (layer) {
-      var i = true;
+      var i = false;
       if (i) {
         layer.tiles.where( (tile) => !tile.isEmpty).forEach( (tile) {
           var bd = resourceManager.getBitmapData(tile.tileset.name);
@@ -177,11 +177,11 @@ void _createEntity(payload) {
   s.x = payload['x'] * 32;
   s.y = payload['y'] * 32;
 
-  var tile = map.getTileByGID(payload['tile_gid']);
-  if (!tile.isEmpty) {
+  (payload['tileGids'] as List).forEach((tileGid) {
+    var tile = map.getTileByGID(tileGid);
     var ss = getSpriteSheet(tile.tileset);
     s.addChild(new Bitmap(ss.frameAt(tile.tileId)));
-  }
+  });
 
   stage.addChild(s);
 

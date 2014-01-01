@@ -65,7 +65,7 @@ class CitadelServer {
   _loadMap() {
     var parser = new tmx.TileMapParser();
     new File('./assets/maps/shit_station-1.tmx').readAsString().then((xml) {
-      map = parser.loadMap(xml);
+      map = parser.parse(xml);
 
       map.layers.forEach( (tmx.Layer layer) {
         layer.tiles.forEach( (tmx.Tile tile) {

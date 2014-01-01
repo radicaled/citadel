@@ -141,7 +141,7 @@ Future renderMap(tmx.TileMap map) {
         layer.tiles.where( (tile) => !tile.isEmpty).forEach( (tile) {
           var bd = resourceManager.getBitmapData(tile.tileset.name);
           var ss = new SpriteSheet(bd, tile.width, tile.height);
-          var sbd = ss.frameAt(tile.tileId - 1);
+          var sbd = ss.frameAt(tile.tileId);
           var bitmap = new Bitmap(sbd);
           bitmap.x = tile.x;
           bitmap.y = tile.y;

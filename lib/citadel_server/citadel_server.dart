@@ -169,7 +169,7 @@ class CitadelServer {
           'x': player[Position].x,
           'y': player[Position].y,
           'entity_id': player.id,
-          'tile_gid': 1 /* TODO: remove hard-coding */
+          'tile_gid': 2 /* TODO: remove hard-coding */
       }), [ge]);
     });
   }

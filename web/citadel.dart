@@ -20,6 +20,8 @@ void main() {
   stage = new Stage('Test Stage', canvas);
   stage.focus = stage;
 
+  canvas.onContextMenu.listen((event) => event.preventDefault() );
+
   stage.onKeyDown.listen( (key) {
   });
 

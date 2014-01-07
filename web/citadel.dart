@@ -4,6 +4,7 @@ import 'package:tmx/tmx.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
 import 'package:json/json.dart' as json;
+import 'package:citadel/citadel_client/citadel_client.dart' as client;
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
@@ -13,7 +14,7 @@ var resourceManager = new ResourceManager();
 WebSocket ws;
 int currentPlayerId;
 
-Map<int, GameSprite> entities = new Map<int, GameSprite>();
+Map<int, client.GameSprite> entities = new Map<int, client.GameSprite>();
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -179,7 +180,7 @@ void executeMessage(type, payload) {
 // TODO: check to see if redundant entites have been created?
 // EG, we already have an entity with ID=1, but now there are more?
 void _createEntity(payload) {
-  var s = new GameSprite();
+  var s = new client.GameSprite();
   s.entityId = payload['entity_id'];
   s.x = payload['x'] * 32;
   s.y = payload['y'] * 32;
@@ -204,10 +205,6 @@ void _moveEntity(payload) {
   var entity = entities[payload['entity_id']];
   entity.x = payload['x'] * 32;
   entity.y = payload['y'] * 32;
-}
-
-class GameSprite extends Sprite {
-  int entityId;
 }
 
 SpriteSheet getSpriteSheet(tmx.Tileset ts) {

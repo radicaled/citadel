@@ -23,6 +23,7 @@
         * Start simple and extensible; when we're at this point we'll be ready to iterate it quickly.
 
 * Refactor CitadelServer?
+    * Lack of default namespaces are killing me here, Google. WTF, man.
 * Synchronicity: should initialize gamestate before sending any other messages to new clients.
     * IOW, what happens when another client triggers a movement step, before the new client gets the gamestate?
     * Message queue for each websocket connection?

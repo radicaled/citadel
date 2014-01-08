@@ -7,15 +7,9 @@ import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
 import 'dart:io';
 
-part 'src/entity.dart';
+import 'package:citadel/game/components.dart';
 
-// Components
-part 'src/components/component.dart';
-part 'src/components/position.dart';
-part 'src/components/velocity.dart';
-part 'src/components/collidable.dart';
-part 'src/components/player.dart';
-part 'src/components/tile_graphics.dart';
+part '../game/entities/entity.dart';
 
 // Systems
 part 'src/systems/collision_system.dart';

@@ -1,15 +1,12 @@
-part of citadel_server;
+part of entities;
 
 class Entity {
   Map<Type, Component> components = new Map<Type, Component>();
   int id;
 
-  Entity() {
-    id = currentEntityId++;
-  }
+  Entity();
 
   void attach(Component component) {
-    component.entity = this;
     components[component.runtimeType] = component;
   }
 

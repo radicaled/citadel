@@ -1,4 +1,4 @@
-part of citadel_server;
+part of components;
 
 class Collidable extends Component {
 

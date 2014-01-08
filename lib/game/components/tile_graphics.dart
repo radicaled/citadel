@@ -1,4 +1,4 @@
-part of citadel_server;
+part of components;
 
 class TileGraphics extends Component {
   /*
@@ -10,5 +10,5 @@ class TileGraphics extends Component {
 
    */
   List<int> tileGids;
-  TileGraphics(this.tileGids);
+  TileGraphics([this.tileGids]);
 }

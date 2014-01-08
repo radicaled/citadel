@@ -17,8 +17,7 @@ void collisionSystem() {
 
     // Do any other solid components (moving or not) collide with this one?
     // If so, cease their velocity immediately.
-    var collidables = entitiesWithComponents([Position, Collidable])
-      .where( (otherEntity) => otherEntity != entity);
+    var collidables = entitiesWithComponents([Position, Collidable]);
 
     if (collidables.any( (otherEntity) {
       var pos = otherEntity[Position];

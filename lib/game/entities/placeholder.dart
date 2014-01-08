@@ -1,9 +1,8 @@
 part of entities;
 
-var _wallDef = entity('wall', (eb) {
+var _placeholderDef = entity('placeholder', (eb) {
   eb.addAll([
              Position,
-             Collidable,
              TileGraphics
              ]);
 });

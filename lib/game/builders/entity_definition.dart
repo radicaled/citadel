@@ -22,9 +22,17 @@ class EntityDefinition {
     
     _definitionFunction(eb);
     
-    eb.components.forEach((Type component) {
+    eb.components.forEach((componentOrArray) {
+      var component;
+      var args = [];
+      
+      if (componentOrArray is List) {
+        component = componentOrArray.first;
+        args = componentOrArray.last;
+      } else { component = componentOrArray; }
+      
       var cm = reflectClass(component);
-      Component newComponent = cm.newInstance(new Symbol(''), []).reflectee;
+      Component newComponent = cm.newInstance(new Symbol(''), args).reflectee;
       components.add(newComponent);
     });
     

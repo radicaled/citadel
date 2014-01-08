@@ -7,7 +7,7 @@ import 'builders.dart';
 part 'entities/entity.dart';
 part 'entities/wall.dart';
 part 'entities/player.dart';
-
+part 'entities/placeholder.dart';
 /* Dart's lazy initialization means that the right-hand members of a variable declaration
  * are not visited until the variable is accessed.
  * 
@@ -31,7 +31,7 @@ void initialize() {
 Entity buildEntity(String name) {
   if(!_initialized) { initialize(); }
   
-  if (!entityDefinitions.keys.contains(name)) { 
+  if (!entityDefinitions.containsKey(name)) { 
     throw new ArgumentError('Entity $name not found.'); 
   }
   

@@ -8,16 +8,13 @@ import 'package:route/server.dart';
 import 'dart:io';
 
 import 'package:citadel/game/components.dart';
+import 'package:citadel/game/entities.dart';
 
-part '../game/entities/entity.dart';
 
 // Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 
-// Builders
-part 'src/builders/build_player.dart';
-part 'src/builders/build_wall.dart';
 part 'src/entity_utils.dart';
 
 // misc
@@ -36,6 +33,13 @@ List<GameConnection> gameConnections = new List<GameConnection>();
 final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
 int currentEntityId = 1;
+
+Entity trackEntity(Entity e) {
+  e.id = currentEntityId++;
+  liveEntities.add(e);
+  return e;
+}
+
 
 class CitadelServer {
   tmx.TileMap map;
@@ -66,17 +70,20 @@ class CitadelServer {
         layer.tiles.forEach( (tmx.Tile tile) {
           int x = tile.x ~/ 32;
           int y = tile.y ~/ 32;
-          if (!tile.isEmpty && tile.tileset.properties['entity'] == 'wall') {
-            buildWall(x, y, tile.gid);
+          var entity;
+          if (!tile.isEmpty && tile.tileset.properties.containsKey('entity')) {
+            entity = buildEntity(tile.tileset.properties['entity']);
           } else if (!tile.isEmpty) {
-            // TODO: clean-up.
-            var entity = new Entity();
-
-            entity.attach(new Position(x, y));
-            entity.attach(new TileGraphics([tile.gid]));
-
-            liveEntities.add(entity);
+            entity = buildEntity('placeholder');
           }
+          
+          if (entity != null) {
+            entity[Position].x = x;
+            entity[Position].y = y;
+            entity[TileGraphics].tileGids = [tile.gid];
+            trackEntity(entity);  
+          }
+          
         });
       });
     });
@@ -103,7 +110,7 @@ class CitadelServer {
   }
 
   void _gameConnection(HttpRequest req) {
-    Entity player = buildPlayer();
+    Entity player = trackEntity(buildEntity('player'));
 
     Position pos = player[Position];
     TileGraphics tgs = player[TileGraphics];
@@ -111,7 +118,8 @@ class CitadelServer {
       ..x = 8
       ..y = 8
       ..z = 16;
-
+    tgs.tileGids = [2];
+    
     _send(_makeCommand('create_entity', {
         'x': pos.x,
         'y': pos.y,

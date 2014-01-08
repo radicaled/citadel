@@ -70,20 +70,19 @@ class CitadelServer {
         layer.tiles.forEach( (tmx.Tile tile) {
           int x = tile.x ~/ 32;
           int y = tile.y ~/ 32;
-          var entity;
-          if (!tile.isEmpty && tile.tileset.properties.containsKey('entity')) {
-            entity = buildEntity(tile.tileset.properties['entity']);
-          } else if (!tile.isEmpty) {
-            entity = buildEntity('placeholder');
-          }
           
-          if (entity != null) {
+          if (!tile.isEmpty) {
+            var entityType = [
+                              tile.properties['entity'], 
+                              tile.tileset.properties['entity'],
+                              'placeholder'
+                             ].firstWhere((et) => et != null);
+            var entity = buildEntity(entityType);
             entity[Position].x = x;
             entity[Position].y = y;
             entity[TileGraphics].tileGids = [tile.gid];
-            trackEntity(entity);  
+            trackEntity(entity);
           }
-          
         });
       });
     });

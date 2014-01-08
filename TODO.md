@@ -11,9 +11,8 @@
             * Bots "beep boop" in the chat box
             * Item descriptions displayed there.
                 * Do item descriptions really need to be in the chat box?
+                
 * Scripting objects
-    * Defining what components an entity has
-        * Dart or YAML file?
     * Defining possible actions on an entity
         * Dart or YAML file?
 * Systems

@@ -5,6 +5,7 @@ var _wallDef = entity('wall', (eb) {
              Position,
              Collidable,
              TileGraphics,
-             [Description, ['A generic wall']]
+             [Description, ['A generic wall']],
+             [Name, ['A wall']]
              ]);
 });

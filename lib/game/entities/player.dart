@@ -7,7 +7,8 @@ var _playerDef = entity('player', (eb) {
               Collidable,
               Player,
               TileGraphics,
-              [Description, ['A generic player']]
+              [Description, ['A generic player']],
+              [Name, ['Steve']]
              ]);
   
 });

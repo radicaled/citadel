@@ -7,3 +7,4 @@ part 'components/collidable.dart';
 part 'components/player.dart';
 part 'components/tile_graphics.dart';
 part 'components/description.dart';
+part 'components/name.dart';

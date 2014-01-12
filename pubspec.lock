@@ -52,10 +52,10 @@ packages:
   stagexl:
     description:
       ref: master
-      resolved-ref: b60ec2ffef710928f777003a050f783719588745
+      resolved-ref: ee6d01072bbc1cdc3c9482e26de3dfd533bc1ac8
       url: "https://github.com/bp74/StageXL.git"
     source: git
-    version: "0.8.8"
+    version: "0.8.9"
   tmx:
     description: tmx
     source: hosted

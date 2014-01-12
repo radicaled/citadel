@@ -4,8 +4,10 @@ part of citadel_client;
 // Currently only one can be displayed at a time.
 class ContextMenu {
   static ContextMenu current;
+  static StreamController<String> _controller = new StreamController.broadcast();
+  static Stream get onSelection => _controller.stream;
   
-  DisplayObjectContainer parent;
+  DisplayObjectContainer _parent;
   Sprite displayable;
   List<ContextMenuItem> items;
   
@@ -14,13 +16,14 @@ class ContextMenu {
     return current = new ContextMenu._internal(parent, items);
   }
   
-  ContextMenu._internal(this.parent, this.items) {
+  ContextMenu._internal(this._parent, this.items) {
     if (this.items == null) { items = new List(); }
     displayable = new Sprite();
   }
   
   void dismiss() {
     displayable.removeFromParent();
+    current = null;
   }
   
   void show(num x, num y) {
@@ -59,10 +62,14 @@ class ContextMenu {
       
       itemY += 20;
       
+      tf.onMouseClick.listen((event) {
+        _controller.add('Selected ${item.name}');
+      });
+      
       displayable.addChild(tf);
     });
     
-    parent.addChild(displayable);
+    _parent.addChild(displayable);
     
   }
 }

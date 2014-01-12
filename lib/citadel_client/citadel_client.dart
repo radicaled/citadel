@@ -1,6 +1,7 @@
 library citadel_client;
 
 // Dependencies
+import 'dart:async';
 import 'package:stagexl/stagexl.dart';
 
 // Graphics

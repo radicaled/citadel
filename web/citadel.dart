@@ -27,7 +27,22 @@ void main() {
     var cm = new c.ContextMenu(stage, [new c.ContextMenuItem('Hello'), new c.ContextMenuItem('World')]);
     cm.show(event.stageX, event.stageY);
   });
-
+  
+  stage.onMouseClick.listen((event) {
+    if (c.ContextMenu.current != null) {
+      var cm = c.ContextMenu.current;
+      if(!cm.displayable.hitTestPoint(event.stageX, event.stageY, true)) {
+        cm.dismiss();
+      }
+    }
+    
+  });
+  
+  c.ContextMenu.onSelection.listen((text) {
+    c.ContextMenu.current.dismiss();
+    print(text);
+  });
+  
   canvas.onKeyPress.listen( (ke) {
     // a = 97
     // d = 100

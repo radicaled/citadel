@@ -4,6 +4,7 @@ var _wallDef = entity('wall', (eb) {
   eb.addAll([
              Position,
              Collidable,
-             TileGraphics
+             TileGraphics,
+             [Description, ['A generic wall']]
              ]);
 });

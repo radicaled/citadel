@@ -47,6 +47,8 @@ void main() {
   c.ContextMenu.onSelection.listen((cmi) {
     c.ContextMenu.current.dismiss();
     print('Selected ${cmi.name} with value ${cmi.value}');
+    // TODO: just looking for now.
+    lookEntity(cmi.value);
   });
   
   canvas.onKeyPress.listen( (ke) {
@@ -92,6 +94,10 @@ void main() {
 
 void movePlayer(direction) {
   send('move', { 'direction': direction });
+}
+
+void lookEntity(entityId) {
+  send('look_at', { 'entity_id': entityId });
 }
 
 void send(type, payload) {

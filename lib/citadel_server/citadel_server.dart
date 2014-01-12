@@ -149,6 +149,8 @@ class CitadelServer {
       case 'get_gamestate':
         _sendGamestate(ge);
         break;
+      case 'look_at':
+        _sendDescription(ge, request['payload']);
 
     }
   }
@@ -159,6 +161,13 @@ class CitadelServer {
     _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
   }
 
+  void _sendDescription(GameConnection ge, Map payload) {
+    int entityId = payload['entity_id'];
+    var entity = entitiesWithComponents([Description]).firstWhere( (e) => e.id == entityId);
+    _sendTo(_makeCommand('entity_description', { 'description': entity[Description].text }),
+      [ge]);
+  }
+  
   void _doMovement(Entity player, Map payload) {
     var velocity = player[Velocity];
     switch (payload['direction']) {
@@ -186,7 +195,7 @@ class CitadelServer {
           'z': entity[Position].z,
           'tileGids': entity[TileGraphics].tileGids,
           'entity_id': entity.id,
-          'name': entity[Name] != null ? (entity[Name] as Name).text : 'Something'
+          'name': entity[Name] != null ? entity[Name].text : 'Something'
       }));
     });
     _sendTo(_makeCommand('set_gamestate', payload), [ge]);

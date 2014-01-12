@@ -1,6 +1,6 @@
 part of components;
 
-class Description {
+class Description extends Component {
   String text;
   Description([this.text]);
 }

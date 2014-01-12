@@ -19,6 +19,12 @@ The client sends message when it is ready to receive the current gamestate.
 
 The payload is an integer representing the current player / user.
 
+
+look_at
+==
+
+    * payload.entity_id: entity id player wanted to look at
+
 Server -> Client Protocol
 ===
 
@@ -78,3 +84,11 @@ remove_entity
 Remove an entity from the game.
 
     * payload.entity_id: entity id to remove
+    
+    
+entity_description
+==
+
+Description of an entity (probably player requested)
+
+    * payload.description: a textual description of an entity.

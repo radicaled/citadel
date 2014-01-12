@@ -163,6 +163,7 @@ class CitadelServer {
 
   void _sendDescription(GameConnection ge, Map payload) {
     int entityId = payload['entity_id'];
+    // TODO: will crash if entity not found; should secure.
     var entity = entitiesWithComponents([Description]).firstWhere( (e) => e.id == entityId);
     _sendTo(_makeCommand('entity_description', { 'description': entity[Description].text }),
       [ge]);

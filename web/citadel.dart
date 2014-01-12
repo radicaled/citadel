@@ -27,7 +27,7 @@ void main() {
     // TODO: just randomly assuming all objects atm.
     var cmis = entities.values
         .where((gs) => gs.hitTestPoint(event.stageX, event.stageY))
-        .map((gs) => new c.ContextMenuItem('Object', gs.entityId) )
+        .map((gs) => new c.ContextMenuItem(gs.name, gs.entityId) )
         .toList();
     
     new c.ContextMenu(stage, cmis)
@@ -202,6 +202,7 @@ void executeMessage(type, payload) {
 void _createEntity(payload) {
   var s = new c.GameSprite();
   s.entityId = payload['entity_id'];
+  s.name = payload['name'];
   s.x = payload['x'] * 32;
   s.y = payload['y'] * 32;
 

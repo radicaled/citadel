@@ -4,7 +4,7 @@ import 'package:tmx/tmx.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
 import 'package:json/json.dart' as json;
-import 'package:citadel/citadel_client/citadel_client.dart' as client;
+import 'package:citadel/citadel_client/citadel_client.dart' as c;
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
@@ -14,7 +14,7 @@ var resourceManager = new ResourceManager();
 WebSocket ws;
 int currentPlayerId;
 
-Map<int, client.GameSprite> entities = new Map<int, client.GameSprite>();
+Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -23,10 +23,9 @@ void main() {
 
   canvas.onContextMenu.listen((event) => event.preventDefault() );
 
-  stage.onKeyDown.listen( (key) {
-  });
-
-  stage.onMouseClick.listen( (click) {
+  stage.onMouseRightClick.listen((event) {
+    var cm = new c.ContextMenu(stage, [new c.ContextMenuItem('Hello'), new c.ContextMenuItem('World')]);
+    cm.show(event.stageX, event.stageY);
   });
 
   canvas.onKeyPress.listen( (ke) {
@@ -180,7 +179,7 @@ void executeMessage(type, payload) {
 // TODO: check to see if redundant entites have been created?
 // EG, we already have an entity with ID=1, but now there are more?
 void _createEntity(payload) {
-  var s = new client.GameSprite();
+  var s = new c.GameSprite();
   s.entityId = payload['entity_id'];
   s.x = payload['x'] * 32;
   s.y = payload['y'] * 32;

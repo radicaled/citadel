@@ -4,7 +4,7 @@ part of citadel_client;
 // Currently only one can be displayed at a time.
 class ContextMenu {
   static ContextMenu current;
-  static StreamController<String> _controller = new StreamController.broadcast();
+  static StreamController<ContextMenuItem> _controller = new StreamController.broadcast();
   static Stream get onSelection => _controller.stream;
   
   DisplayObjectContainer _parent;
@@ -63,7 +63,7 @@ class ContextMenu {
       itemY += 20;
       
       tf.onMouseClick.listen((event) {
-        _controller.add('Selected ${item.name}');
+        _controller.add(item);
       });
       
       displayable.addChild(tf);

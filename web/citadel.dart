@@ -24,8 +24,14 @@ void main() {
   canvas.onContextMenu.listen((event) => event.preventDefault() );
 
   stage.onMouseRightClick.listen((event) {
-    var cm = new c.ContextMenu(stage, [new c.ContextMenuItem('Hello'), new c.ContextMenuItem('World')]);
-    cm.show(event.stageX, event.stageY);
+    // TODO: just randomly assuming all objects atm.
+    var cmis = entities.values
+        .where((gs) => gs.hitTestPoint(event.stageX, event.stageY))
+        .map((gs) => new c.ContextMenuItem('Object', gs.entityId) )
+        .toList();
+    
+    new c.ContextMenu(stage, cmis)
+      ..show(event.stageX, event.stageY);
   });
   
   stage.onMouseClick.listen((event) {
@@ -38,9 +44,9 @@ void main() {
     
   });
   
-  c.ContextMenu.onSelection.listen((text) {
+  c.ContextMenu.onSelection.listen((cmi) {
     c.ContextMenu.current.dismiss();
-    print(text);
+    print('Selected ${cmi.name} with value ${cmi.value}');
   });
   
   canvas.onKeyPress.listen( (ke) {

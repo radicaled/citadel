@@ -200,6 +200,10 @@ void executeMessage(type, payload) {
       break;
     case 'set_gamestate':
       payload.forEach((submessage) => executeMessage(submessage['type'], submessage['payload']));
+      break;
+    case 'entity_description':
+      querySelector('#log').appendHtml('<p>${payload['description']}');
+      break;
   }
 }
 

@@ -179,14 +179,14 @@ class CitadelServer {
 
   void _sendGamestate(GameConnection ge) {
     var payload = [];
-    // For now, just sending players.
-    entitiesWithComponents([TileGraphics, Position]).forEach( (player) {
+    entitiesWithComponents([TileGraphics, Position]).forEach( (entity) {
       payload.add(_makeCommand('create_entity', {
-          'x': player[Position].x,
-          'y': player[Position].y,
-          'z': player[Position].z,
-          'tileGids': player[TileGraphics].tileGids,
-          'entity_id': player.id,
+          'x': entity[Position].x,
+          'y': entity[Position].y,
+          'z': entity[Position].z,
+          'tileGids': entity[TileGraphics].tileGids,
+          'entity_id': entity.id,
+          'name': entity[Name] != null ? (entity[Name] as Name).text : 'Something'
       }));
     });
     _sendTo(_makeCommand('set_gamestate', payload), [ge]);

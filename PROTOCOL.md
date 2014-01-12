@@ -47,6 +47,7 @@ Create and render an entity on screen.
     * payload.y: y location of this entity.
     * payload.z: z location of this entity.
     * payload.tileGids: an array of tile_gids that visually represent this entity
+    * payload.name: the name of this entity.
 
 
 update_entity

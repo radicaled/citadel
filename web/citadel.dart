@@ -85,7 +85,7 @@ void main() {
   //  login().then((_) => initWebSocket());
   //});
   HttpRequest.getString(url)
-    .then(parseMap)
+    .then(loadMap)
     .then((_) => initWebSocket());
 
   //login().then((_) => initWebSocket());
@@ -147,12 +147,9 @@ List<int> _inflateZlib(List<int> bytes) {
   return zlib.decompress();
 }
 
-Future parseMap(String xml) {
+Future loadMap(String xml) {
   map = parser.parse(xml);
-  return renderMap(map);
-}
 
-Future renderMap(tmx.TileMap map) {
   map.tilesets.forEach( (tileset) {
     var image = tileset.images.first;
 
@@ -163,24 +160,8 @@ Future renderMap(tmx.TileMap map) {
     resourceManager.addBitmapData(tileset.name, imagePath);
   });
 
-  return resourceManager.load().then( (_) {
-    map.layers.forEach( (layer) {
-      var i = false;
-      if (i) {
-        layer.tiles.where( (tile) => !tile.isEmpty).forEach( (tile) {
-          var bd = resourceManager.getBitmapData(tile.tileset.name);
-          var ss = new SpriteSheet(bd, tile.width, tile.height);
-          var sbd = ss.frameAt(tile.tileId);
-          var bitmap = new Bitmap(sbd);
-          bitmap.x = tile.x;
-          bitmap.y = tile.y;
-          stage.addChild(bitmap);
-        });
-      }
-    });
-  });
+  return resourceManager.load();
 }
-
 
 void handleMessage(jsonString) {
   var msg = json.parse(jsonString);

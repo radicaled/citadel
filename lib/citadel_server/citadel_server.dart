@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
-
+import 'package:citadel/game/actions.dart';
 
 // Systems
 part 'src/systems/collision_system.dart';
@@ -163,12 +163,15 @@ class CitadelServer {
 
   void _sendDescription(GameConnection ge, Map payload) {
     int entityId = payload['entity_id'];
-
+    
     var entity = entitiesWithComponents([Description])
         .firstWhere( (e) => e.id == entityId, orElse: () => null);
     if (entity != null) {
-      _sendTo(_makeCommand('entity_description', { 'description': entity[Description].text }),
-        [ge]);
+      var lookAction = new LookAction(ge.entity, entity);
+      lookAction.execute(onEmit: (text) {
+        _sendTo(_makeCommand('entity_description', { 'description': text }),
+            [ge]);        
+      });
     }
   }
   

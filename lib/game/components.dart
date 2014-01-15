@@ -8,3 +8,4 @@ part 'components/player.dart';
 part 'components/tile_graphics.dart';
 part 'components/description.dart';
 part 'components/name.dart';
+part 'components/vision.dart';

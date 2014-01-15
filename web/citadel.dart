@@ -77,7 +77,7 @@ void main() {
 
   renderLoop.addStage(stage);
 
-  var url = "http://127.0.0.1:3030/citadel/assets/maps/shit_station-1.tmx";
+  var url = "//${window.location.host}/citadel/assets/maps/shit_station-1.tmx";
 
   // call the web server asynchronously
   //HttpRequest.getString(url).then((xml) {

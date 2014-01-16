@@ -181,11 +181,13 @@ class CitadelServer {
         .firstWhere( (e) => e.id == entityId, orElse: () => null);
     if (entity != null) {
       var lookAction = new LookAction(ge.gameConnection.entity, entity);
-      lookAction.execute(onEmit: (text) {
-        _sendTo(_makeCommand('emit', { 'text': text }),
-            [ge.gameConnection]);        
-      });
+      lookAction.execute(onEmit: (text) => _emitTo(text, ge.gameConnection));
     }
+  }
+  
+  void _emitTo(String text, GameConnection gc) {
+    _sendTo(_makeCommand('emit', { 'text': text }),
+        [gc]);
   }
   
   void _doMovement(GameEvent ge) {

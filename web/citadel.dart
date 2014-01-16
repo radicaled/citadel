@@ -121,11 +121,13 @@ void initWebSocket([int retrySeconds = 2]) {
 
   ws.onOpen.listen((e) {
     print('Connected');
+    querySelector('#ws-status').text = 'ONLINE';
     //ws.send(json.stringify({ 'type': 'get_gamestate' }));
   });
 
   ws.onClose.listen((e) {
     print('Websocket closed, retrying in $retrySeconds seconds');
+    querySelector('#ws-status').text = 'OFFLINE';
     scheduleReconnect();
   });
 

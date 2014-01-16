@@ -8,6 +8,6 @@ class LookAction extends Action {
   }
   
   perform() {
-    emit(target[Description].text);    
+    emit(target[Description].text);
   }
 }

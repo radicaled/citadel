@@ -6,6 +6,7 @@ import 'package:logging/logging.dart' as logging;
 import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
 import 'dart:io';
+import 'dart:async';
 
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
@@ -34,10 +35,35 @@ final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
 int currentEntityId = 1;
 
+
+
 Entity trackEntity(Entity e) {
   e.id = currentEntityId++;
   liveEntities.add(e);
   return e;
+}
+
+class GameEvent {
+  Map _message;
+  GameConnection gameConnection;
+  
+  String get name => _message['type'];
+  Map get payload => _message['payload'];
+  
+  GameEvent(this._message, this.gameConnection);
+  
+  toString() {
+    return "GameEvent($name: $payload)";  
+  }
+}
+
+StreamController<GameEvent> gameStreamController = new StreamController.broadcast();
+Stream<GameEvent> gameStream = gameStreamController.stream;
+
+Stream<GameEvent> subscribe(event_name, [onData(GameEvent ge)]) {
+  var stream = gameStream.where((gv) => gv.name == event_name);
+  if (onData != null) { stream.listen(onData); }
+  return stream; 
 }
 
 
@@ -50,15 +76,25 @@ class CitadelServer {
     print(pos.runtimeType);
     print(Position == pos.runtimeType);
   }
+  
+  void _setupEvents() {
+    gameStream.listen((ge) => print("I heard: $ge"));
+    subscribe('look_at', _sendDescription);
+  }
 
   void start() {
     // TODO: make sure these run in order.
     log.info('loading map');
     _loadMap();
-
+    
+    log.info('listening for game events');
+    _setupEvents();
+    
     log.info('starting server');
     _startLoop();
     _startServer();
+    
+    
   }
 
   _loadMap() {
@@ -141,7 +177,9 @@ class CitadelServer {
     var request = json.parse(message);
     var ge = gameConnections.firstWhere((ge) => ge.ws == ws);
     print("Received: $message");
-
+    
+    gameStreamController.add(new GameEvent(request, ge));
+    
     switch (request['type']) {
       case 'move':
         _doMovement(ge.entity, request['payload']);
@@ -150,7 +188,8 @@ class CitadelServer {
         _sendGamestate(ge);
         break;
       case 'look_at':
-        _sendDescription(ge, request['payload']);
+        /* no op for now */
+        break;
 
     }
   }
@@ -161,16 +200,16 @@ class CitadelServer {
     _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
   }
 
-  void _sendDescription(GameConnection ge, Map payload) {
-    int entityId = payload['entity_id'];
+  void _sendDescription(GameEvent ge) {
+    int entityId = ge.payload['entity_id'];
     
     var entity = entitiesWithComponents([Description])
         .firstWhere( (e) => e.id == entityId, orElse: () => null);
     if (entity != null) {
-      var lookAction = new LookAction(ge.entity, entity);
+      var lookAction = new LookAction(ge.gameConnection.entity, entity);
       lookAction.execute(onEmit: (text) {
         _sendTo(_makeCommand('entity_description', { 'description': text }),
-            [ge]);        
+            [ge.gameConnection]);        
       });
     }
   }

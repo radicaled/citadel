@@ -184,8 +184,8 @@ void executeMessage(type, payload) {
     case 'set_gamestate':
       payload.forEach((submessage) => executeMessage(submessage['type'], submessage['payload']));
       break;
-    case 'entity_description':
-      querySelector('#log').appendHtml('<p>${payload['description']}');
+    case 'emit':
+      querySelector('#log').appendHtml('<p>${payload['text']}');
       break;
   }
 }

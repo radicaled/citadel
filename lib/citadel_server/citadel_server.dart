@@ -182,7 +182,7 @@ class CitadelServer {
     if (entity != null) {
       var lookAction = new LookAction(ge.gameConnection.entity, entity);
       lookAction.execute(onEmit: (text) {
-        _sendTo(_makeCommand('entity_description', { 'description': text }),
+        _sendTo(_makeCommand('emit', { 'text': text }),
             [ge.gameConnection]);        
       });
     }

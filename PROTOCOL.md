@@ -86,9 +86,9 @@ Remove an entity from the game.
     * payload.entity_id: entity id to remove
     
     
-entity_description
+emit
 ==
 
-Description of an entity (probably player requested)
+Some text that has been emitted
 
-    * payload.description: a textual description of an entity.
+    * payload.text: text to be emitted

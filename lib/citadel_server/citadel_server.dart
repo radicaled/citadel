@@ -19,7 +19,7 @@ part 'src/systems/movement_system.dart';
 part 'src/entity_utils.dart';
 
 // misc
-
+part 'src/events/game_event.dart';
 part 'src/game_connection.dart';
 
 final logging.Logger log = new logging.Logger('CitadelServer')
@@ -43,20 +43,6 @@ Entity trackEntity(Entity e) {
   return e;
 }
 
-class GameEvent {
-  Map _message;
-  GameConnection gameConnection;
-  
-  String get name => _message['type'];
-  Map get payload => _message['payload'];
-  
-  GameEvent(this._message, this.gameConnection);
-  
-  toString() {
-    return "GameEvent($name: $payload)";  
-  }
-}
-
 StreamController<GameEvent> gameStreamController = new StreamController.broadcast();
 Stream<GameEvent> gameStream = gameStreamController.stream;
 
@@ -78,8 +64,10 @@ class CitadelServer {
   }
   
   void _setupEvents() {
-    gameStream.listen((ge) => print("I heard: $ge"));
+    gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', _sendDescription);
+    subscribe('move', _doMovement);
+    subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 
   void start() {
@@ -176,22 +164,8 @@ class CitadelServer {
   void _handleWebSocketMessage(message, [WebSocket ws]) {
     var request = json.parse(message);
     var ge = gameConnections.firstWhere((ge) => ge.ws == ws);
-    print("Received: $message");
     
     gameStreamController.add(new GameEvent(request, ge));
-    
-    switch (request['type']) {
-      case 'move':
-        _doMovement(ge.entity, request['payload']);
-        break;
-      case 'get_gamestate':
-        _sendGamestate(ge);
-        break;
-      case 'look_at':
-        /* no op for now */
-        break;
-
-    }
   }
 
   _removeConnection(GameConnection ge) {
@@ -214,9 +188,10 @@ class CitadelServer {
     }
   }
   
-  void _doMovement(Entity player, Map payload) {
+  void _doMovement(GameEvent ge) {
+    var player = ge.gameConnection.entity;
     var velocity = player[Velocity];
-    switch (payload['direction']) {
+    switch (ge.payload['direction']) {
       case 'N':
         velocity.y -= 1;
         break;
@@ -232,7 +207,7 @@ class CitadelServer {
     }
   }
 
-  void _sendGamestate(GameConnection ge) {
+  void _sendGamestate(GameConnection gc) {
     var payload = [];
     entitiesWithComponents([TileGraphics, Position]).forEach( (entity) {
       payload.add(_makeCommand('create_entity', {
@@ -244,7 +219,7 @@ class CitadelServer {
           'name': entity[Name] != null ? entity[Name].text : 'Something'
       }));
     });
-    _sendTo(_makeCommand('set_gamestate', payload), [ge]);
+    _sendTo(_makeCommand('set_gamestate', payload), [gc]);
   }
 
   void _send(cmd) {

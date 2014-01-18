@@ -7,6 +7,7 @@ import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
 import 'dart:io';
 import 'dart:async';
+import 'dart:mirrors';
 
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
@@ -26,7 +27,7 @@ final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
-
+// TODO: feel like this should be a map
 List<Entity> liveEntities = new List<Entity>();
 List<Map> commandQueue = new List<Map>();
 List<GameConnection> gameConnections = new List<GameConnection>();
@@ -65,9 +66,27 @@ class CitadelServer {
   
   void _setupEvents() {
     gameStream.listen((ge) => log.info("Received Event: $ge"));
-    subscribe('look_at', _sendDescription);
+    subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', _doMovement);
-    subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
+    subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));    
+  }
+ 
+  // Handle an action invoked by the player
+  handlePlayerAction(Type actionType) {    
+    return (GameEvent ge) {      
+      var player = ge.gameConnection.entity;
+      var target = findEntity(ge.payload['entity_id']);     
+      
+      Action action = reflectClass(actionType).newInstance(new Symbol(''), [player, target]).reflectee;
+      action.execute(onEmit: (text) => _emitTo(text, ge.gameConnection));
+    };
+  }
+  
+  // Attempt to locate an entity by its entityId
+  // Returns null if entityId not found.
+  Entity findEntity(int entityId) {
+    if (entityId == null) return null;
+    return liveEntities.firstWhere((e) => e.id == entityId, orElse: () => null);
   }
 
   void start() {

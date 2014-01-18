@@ -57,13 +57,6 @@ Stream<GameEvent> subscribe(event_name, [onData(GameEvent ge)]) {
 class CitadelServer {
   tmx.TileMap map;
 
-  void test() {
-    // GODDAMN IT NO REPL THE DEBUGGER DOESN'T COUNT
-    var pos = new Position(0, 0);
-    print(pos.runtimeType);
-    print(Position == pos.runtimeType);
-  }
-
   void _setupEvents() {
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));

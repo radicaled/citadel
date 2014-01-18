@@ -1,7 +1,6 @@
 Primary
 ==
 
-* Fix content menu rendering?
 * Start mapping more more entities
 
 Secondary

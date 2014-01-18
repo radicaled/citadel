@@ -39,24 +39,37 @@ class ContextMenu {
     var menuBkgrnd = new Shape()
       ..width = width
       ..height = height
-      ..graphics.rect(0, 0, width, height)
-      ..graphics.fillColor(Color.Aquamarine)
-      ..graphics.strokeColor(Color.Red);
+      ..graphics.rect(0, 0, width + 1, height + 1) // We'll fill in the blanks when we're ready.
+      ..graphics.strokeColor(Color.BlanchedAlmond, 3.0);
 
     displayable.addChild(menuBkgrnd);
 
-    num itemX, itemY = 0;
+    num itemX = 0, itemY = 0;
     items.forEach((item) {
       var tf = new TextField(item.name)
         ..x = itemX
         ..y = itemY
         ..width = width
-        ..height = 20;
+        ..height = 20
+        ..background = true
+        ..backgroundColor = Color.Aquamarine;
 
       itemY += 20;
 
       tf.onMouseClick.listen((event) {
         _controller.add(item);
+      });
+
+      tf.onMouseOver.listen((event) {
+        tf.filters = [
+                      new ColorMatrixFilter.invert()
+                      ];
+        tf.applyCache(0, 0, width, 20);
+      });
+
+      tf.onMouseOut.listen((event) {
+        tf.filters = [];
+        tf.removeCache();
       });
 
       displayable.addChild(tf);

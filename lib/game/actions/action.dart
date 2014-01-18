@@ -4,7 +4,6 @@ abstract class Action {
   StreamController<String> _controller = new StreamController.broadcast();
   Stream onEmit;
 
-  Map _requirements = {};
   Entity actioneer, target;
   bool isSatisfied;
 

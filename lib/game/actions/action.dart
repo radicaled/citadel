@@ -5,6 +5,7 @@ abstract class Action {
   Stream onEmit;
 
   Entity actioneer, target;
+  Map options = {};
   bool isSatisfied;
 
   Action(this.actioneer, this.target) {

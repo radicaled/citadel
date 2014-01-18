@@ -50,7 +50,7 @@ Stream<GameEvent> gameStream = gameStreamController.stream;
 Stream<GameEvent> subscribe(event_name, [onData(GameEvent ge)]) {
   var stream = gameStream.where((gv) => gv.name == event_name);
   if (onData != null) { stream.listen(onData); }
-  return stream; 
+  return stream;
 }
 
 
@@ -63,25 +63,26 @@ class CitadelServer {
     print(pos.runtimeType);
     print(Position == pos.runtimeType);
   }
-  
+
   void _setupEvents() {
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));
-    subscribe('move', _doMovement);
-    subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));    
+    subscribe('move', handlePlayerAction(MoveAction));
+    subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
- 
+
   // Handle an action invoked by the player
-  handlePlayerAction(Type actionType) {    
-    return (GameEvent ge) {      
+  handlePlayerAction(Type actionType) {
+    return (GameEvent ge) {
       var player = ge.gameConnection.entity;
-      var target = findEntity(ge.payload['entity_id']);     
-      
+      var target = findEntity(ge.payload['entity_id']);
+
       Action action = reflectClass(actionType).newInstance(new Symbol(''), [player, target]).reflectee;
+      action.options = ge.payload;
       action.execute(onEmit: (text) => _emitTo(text, ge.gameConnection));
     };
   }
-  
+
   // Attempt to locate an entity by its entityId
   // Returns null if entityId not found.
   Entity findEntity(int entityId) {
@@ -93,15 +94,15 @@ class CitadelServer {
     // TODO: make sure these run in order.
     log.info('loading map');
     _loadMap();
-    
+
     log.info('listening for game events');
     _setupEvents();
-    
+
     log.info('starting server');
     _startLoop();
     _startServer();
-    
-    
+
+
   }
 
   _loadMap() {
@@ -113,10 +114,10 @@ class CitadelServer {
         layer.tiles.forEach( (tmx.Tile tile) {
           int x = tile.x ~/ 32;
           int y = tile.y ~/ 32;
-          
+
           if (!tile.isEmpty) {
             var entityType = [
-                              tile.properties['entity'], 
+                              tile.properties['entity'],
                               tile.tileset.properties['entity'],
                               'placeholder'
                              ].firstWhere((et) => et != null);
@@ -161,7 +162,7 @@ class CitadelServer {
       ..y = 8
       ..z = 16;
     tgs.tileGids = [2];
-    
+
     _send(_makeCommand('create_entity', {
         'x': pos.x,
         'y': pos.y,
@@ -183,7 +184,7 @@ class CitadelServer {
   void _handleWebSocketMessage(message, [WebSocket ws]) {
     var request = json.parse(message);
     var ge = gameConnections.firstWhere((ge) => ge.ws == ws);
-    
+
     gameStreamController.add(new GameEvent(request, ge));
   }
 
@@ -195,7 +196,7 @@ class CitadelServer {
 
   void _sendDescription(GameEvent ge) {
     int entityId = ge.payload['entity_id'];
-    
+
     var entity = entitiesWithComponents([Description])
         .firstWhere( (e) => e.id == entityId, orElse: () => null);
     if (entity != null) {
@@ -203,29 +204,10 @@ class CitadelServer {
       lookAction.execute(onEmit: (text) => _emitTo(text, ge.gameConnection));
     }
   }
-  
+
   void _emitTo(String text, GameConnection gc) {
     _sendTo(_makeCommand('emit', { 'text': text }),
         [gc]);
-  }
-  
-  void _doMovement(GameEvent ge) {
-    var player = ge.gameConnection.entity;
-    var velocity = player[Velocity];
-    switch (ge.payload['direction']) {
-      case 'N':
-        velocity.y -= 1;
-        break;
-      case 'W':
-        velocity.x -= 1;
-        break;
-      case 'S':
-        velocity.y += 1;
-        break;
-      case 'E':
-        velocity.x += 1;
-        break;
-    }
   }
 
   void _sendGamestate(GameConnection gc) {

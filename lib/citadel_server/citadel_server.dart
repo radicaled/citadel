@@ -187,17 +187,6 @@ class CitadelServer {
     _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
   }
 
-  void _sendDescription(GameEvent ge) {
-    int entityId = ge.payload['entity_id'];
-
-    var entity = entitiesWithComponents([Description])
-        .firstWhere( (e) => e.id == entityId, orElse: () => null);
-    if (entity != null) {
-      var lookAction = new LookAction(ge.gameConnection.entity, entity);
-      lookAction.execute(onEmit: (text) => _emitTo(text, ge.gameConnection));
-    }
-  }
-
   void _emitTo(String text, GameConnection gc) {
     _sendTo(_makeCommand('emit', { 'text': text }),
         [gc]);

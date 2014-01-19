@@ -189,6 +189,9 @@ void executeMessage(type, payload) {
     case 'create_entity':
       _createEntity(payload);
       break;
+    case 'update_entity':
+      _updateEntity(payload);
+      break;
     case 'remove_entity':
       _removeEntity(payload);
       break;
@@ -219,6 +222,21 @@ void _createEntity(payload) {
   stage.addChild(s);
 
   entities[s.entityId] = s;
+}
+
+void _updateEntity(Map payload) {
+  var gs = entities[payload['entity_id']];
+  if (payload.containsKey('x')) { gs.x = payload['x']; }
+  if (payload.containsKey('y')) { gs.x = payload['x']; }
+
+  if (payload.containsKey('tile_gids')) {
+    gs.removeChildren();
+    (payload['tile_gids'] as List).forEach((tileGid) {
+      var tile = map.getTileByGID(tileGid);
+      var ss = getSpriteSheet(tile.tileset);
+      gs.addChild(new Bitmap(ss.frameAt(tile.tileId)));
+    });
+  }
 }
 
 void _removeEntity(payload) {

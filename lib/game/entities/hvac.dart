@@ -1,10 +1,10 @@
 part of entities;
 
-var _hvacDef = entity('hvac', (eb) {
-  eb.addAll([
-             Position,
-             TileGraphics,
-             [Name, ['HVAC Control Unit']],
-             [Description, ['An HVAC Control Unit']]
-             ]);
-});
+class Hvac extends EntityBuilder {
+  _setup() {
+    has(Position);
+    has(TileGraphics);
+    has(Name, ['An HVAC Unit']);
+    has(Description, ['A Wall-Mounted HVAC unit']);
+  }
+}

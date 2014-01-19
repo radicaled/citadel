@@ -1,8 +1,8 @@
 part of entities;
 
-var _placeholderDef = entity('placeholder', (eb) {
-  eb.addAll([
-             Position,
-             TileGraphics
-             ]);
-});
+class Placeholder extends EntityBuilder {
+  _setup() {
+    has(Position);
+    has(TileGraphics);
+  }
+}

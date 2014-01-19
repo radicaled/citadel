@@ -146,7 +146,7 @@ class CitadelServer {
   }
 
   void _gameConnection(HttpRequest req) {
-    Entity player = trackEntity(buildEntity('player'));
+    Entity player = trackEntity(buildEntity('human')..attach(new Player()));
 
     Position pos = player[Position];
     TileGraphics tgs = player[TileGraphics];

@@ -1,11 +1,11 @@
 part of entities;
 
-var _wallDef = entity('wall', (eb) {
-  eb.addAll([
-             Position,
-             Collidable,
-             TileGraphics,
-             [Description, ['A generic wall']],
-             [Name, ['A wall']]
-             ]);
-});
+class Wall extends EntityBuilder {
+  _setup() {
+    has(Position);
+    has(Collidable);
+    has(TileGraphics);
+    has(Description, ['A generic wall']);
+    has(Name, ['A wall']);
+  }
+}

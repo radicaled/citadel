@@ -1,8 +1,8 @@
 part of entities;
 
-var _floorDef = entity('floor', (eb) {
-  eb.addAll([
-             Position,
-             TileGraphics
-             ]);
-});
+class Floor extends EntityBuilder {
+  _setup() {
+    has(Position);
+    has(TileGraphics);
+  }
+}

@@ -61,6 +61,17 @@ class CitadelServer {
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', handlePlayerAction(MoveAction));
+    subscribe('interact', (ge) {
+      var entity = findEntity(ge.payload['entity_id']);
+      if (entity.behaviors.containsKey('toggle')) {
+        entity.behaviors['toggle'](entity, ge.gameConnection.entity);
+        _send(_makeCommand('update_entity', {
+          'entity_id': entity.id,
+          'tile_gids': entity[TileGraphics].tileGids
+        }));
+      }
+
+    });
     //subscribe('interact', handlePlayerAction(InteractAction));
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }

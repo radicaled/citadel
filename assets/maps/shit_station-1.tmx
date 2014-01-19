@@ -35,6 +35,11 @@
  </tileset>
  <tileset firstgid="2630" name="Monitors" tilewidth="32" tileheight="32">
   <image source="../icons/obj/monitors.png" width="672" height="640"/>
+  <tile id="105">
+   <properties>
+    <property name="entity" value="hvac"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="3050" name="Misc Objects" tilewidth="32" tileheight="32">
   <image source="../icons/obj/objects.png" width="512" height="480"/>

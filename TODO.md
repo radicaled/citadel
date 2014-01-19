@@ -1,6 +1,10 @@
 Primary
 ==
 
+* Implement a 'HVAC' entity:
+    * Turning it 'off' should change the tile graphic.
+    * Turning it back 'on' should change the tile graphic to the 'on' graphic.
+    
 * Start mapping more more entities
 
 Secondary

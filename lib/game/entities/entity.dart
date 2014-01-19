@@ -1,7 +1,10 @@
 part of entities;
 
+typedef EntityBehavior(Entity thisEntity, Entity thatEntity);
+
 class Entity {
   Map<Type, Component> components = new Map<Type, Component>();
+  Map<String, EntityBehavior> behaviors = new Map();
   int id;
 
   Entity();

@@ -19,7 +19,7 @@ abstract class EntityBuilder {
     // made the method 'unreadable.'
   }
 
-  void can() {
-    throw 'No Op!';
+  void can(String name, EntityBehavior behavior) {
+    _entity.behaviors[name] = behavior;
   }
 }

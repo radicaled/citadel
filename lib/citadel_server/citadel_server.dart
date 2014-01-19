@@ -61,6 +61,7 @@ class CitadelServer {
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', handlePlayerAction(MoveAction));
+    //subscribe('interact', handlePlayerAction(InteractAction));
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 

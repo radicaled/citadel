@@ -25,6 +25,13 @@ look_at
 
     * payload.entity_id: entity id player wanted to look at
 
+interact
+==
+
+The player is trying to interact with payload.entity_id.
+
+    * payload.entity_id: entity id player is interacting with
+
 Server -> Client Protocol
 ===
 

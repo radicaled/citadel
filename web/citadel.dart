@@ -29,28 +29,35 @@ void main() {
         .where((gs) => gs.hitTestPoint(event.stageX, event.stageY))
         .map((gs) => new c.ContextMenuItem(gs.name, gs.entityId) )
         .toList();
-    
+
     new c.ContextMenu(stage, cmis)
       ..show(event.stageX, event.stageY);
   });
-  
+
   stage.onMouseClick.listen((event) {
     if (c.ContextMenu.current != null) {
       var cm = c.ContextMenu.current;
       if(!cm.displayable.hitTestPoint(event.stageX, event.stageY, true)) {
         cm.dismiss();
       }
+    } else {
+      // There was no context menu to interact with; they were trying to click on an entity.
+      var gs = stage.hitTestInput(event.stageX, event.stageY);
+      if (gs is c.GameSprite) {
+        print('Tried to interact with ${gs.entityId} / ${gs.name}');
+        interactWith(gs.entityId);
+      }
     }
-    
+
   });
-  
+
   c.ContextMenu.onSelection.listen((cmi) {
     c.ContextMenu.current.dismiss();
     print('Selected ${cmi.name} with value ${cmi.value}');
     // TODO: just looking for now.
     lookEntity(cmi.value);
   });
-  
+
   canvas.onKeyPress.listen( (ke) {
     // a = 97
     // d = 100
@@ -102,6 +109,10 @@ void lookEntity(entityId) {
 
 void send(type, payload) {
   ws.send(json.stringify({ 'type': type, 'payload': payload }));
+}
+
+void interactWith(entityId) {
+  send('interact', { 'entity_id': entityId });
 }
 
 void initWebSocket([int retrySeconds = 2]) {

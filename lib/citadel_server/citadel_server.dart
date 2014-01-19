@@ -162,7 +162,7 @@ class CitadelServer {
         'y': pos.y,
         'z': pos.z,
         'entity_id': player.id,
-        'tileGids': tgs.tileGids,
+        'tile_gids': tgs.tileGids,
     }));
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
@@ -200,7 +200,7 @@ class CitadelServer {
           'x': entity[Position].x,
           'y': entity[Position].y,
           'z': entity[Position].z,
-          'tileGids': entity[TileGraphics].tileGids,
+          'tile_gids': entity[TileGraphics].tileGids,
           'entity_id': entity.id,
           'name': entity[Name] != null ? entity[Name].text : 'Something'
       }));

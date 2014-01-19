@@ -210,7 +210,7 @@ void _createEntity(payload) {
   s.x = payload['x'] * 32;
   s.y = payload['y'] * 32;
 
-  (payload['tileGids'] as List).forEach((tileGid) {
+  (payload['tile_gids'] as List).forEach((tileGid) {
     var tile = map.getTileByGID(tileGid);
     var ss = getSpriteSheet(tile.tileset);
     s.addChild(new Bitmap(ss.frameAt(tile.tileId)));

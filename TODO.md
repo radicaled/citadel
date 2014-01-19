@@ -4,6 +4,7 @@ Primary
 * Implement a 'HVAC' entity:
     * Turning it 'off' should change the tile graphic.
     * Turning it back 'on' should change the tile graphic to the 'on' graphic.
+    * Using a weapon should 'destroy' the 'HVAC', removing its tile.
     
 * Start mapping more more entities
 
@@ -16,10 +17,7 @@ Secondary
           * Need to send object names, but scope them by what's visible to the player (?).
             They'll know what's on the other side of the map if not.
                
-* Scripting objects
-    * Defining possible actions on an entity
-        * Dart or YAML file?
-* Systems
+ Systems
     * SS13 had a lot of complicated systems.
         * Can't use them directly, since the code is GPL3 -- I think it's code, anyway.
             Looked at one file, and frankly couldn't tell. Possibly a custom scripting language?

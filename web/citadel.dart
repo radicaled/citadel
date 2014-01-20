@@ -45,7 +45,7 @@ void main() {
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
         print('Tried to interact with ${gs.entityId} / ${gs.name}');
-        interactWith(gs.entityId);
+        interactWith(gs.entityId, 'use');
       }
     }
 
@@ -111,8 +111,8 @@ void send(type, payload) {
   ws.send(json.stringify({ 'type': type, 'payload': payload }));
 }
 
-void interactWith(entityId) {
-  send('interact', { 'entity_id': entityId });
+void interactWith(entityId, action_name) {
+  send('interact', { 'entity_id': entityId, 'action_name': action_name });
 }
 
 void initWebSocket([int retrySeconds = 2]) {

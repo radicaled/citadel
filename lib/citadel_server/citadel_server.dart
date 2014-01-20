@@ -63,8 +63,9 @@ class CitadelServer {
     subscribe('move', handlePlayerAction(MoveAction));
     subscribe('interact', (ge) {
       var entity = findEntity(ge.payload['entity_id']);
-      if (entity.behaviors.containsKey('toggle')) {
-        entity.behaviors['toggle'](entity, ge.gameConnection.entity);
+      var action_name = ge.payload['action_name'];
+      if (entity.behaviors.containsKey(action_name)) {
+        entity.behaviors[action_name](entity, ge.gameConnection.entity);
         _send(_makeCommand('update_entity', {
           'entity_id': entity.id,
           'tile_gids': entity[TileGraphics].tileGids

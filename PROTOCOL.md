@@ -28,9 +28,14 @@ look_at
 interact
 ==
 
+FIXME: we need to track handiness, too. It's possible that we'll make hands entites of their own (as well as other body parts), in which case with_entity_id stops being optional as it should correspond to at the very least a hand or a tentacle or something.
+
 The player is trying to interact with payload.entity_id.
 
     * payload.entity_id: entity id player is interacting with
+    * payload.with_entity_id (OPTIONAL): id the entity the player is using to interact with the target entity.
+      * if absent, it is assumed the player's active hand is in use.
+    * payload.action_name: the action being taken
 
 Server -> Client Protocol
 ===

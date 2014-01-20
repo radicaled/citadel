@@ -1,18 +1,21 @@
 library entities;
 
 import 'dart:mirrors';
+import 'dart:async';
 import 'components.dart';
 
 // The only public API anyone needs to worry about here is 'buildEntity'
 export 'entities.dart' show buildEntity;
 
 part 'entities/src/entity_builder.dart';
+part 'entities/src/entity_manager.dart';
 part 'entities/entity.dart';
 part 'entities/wall.dart';
 part 'entities/placeholder.dart';
 part 'entities/floor.dart';
 part 'entities/hvac.dart';
 part 'entities/human.dart';
+
 
 
 var entityDefinitions = new Map<String, EntityBuilder>();

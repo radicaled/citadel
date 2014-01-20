@@ -7,6 +7,8 @@ class Entity {
   Map<String, EntityBehavior> behaviors = new Map();
   int id;
 
+  // TODO: entityChanged stuff.
+
   Entity();
 
   void attach(Component component) {

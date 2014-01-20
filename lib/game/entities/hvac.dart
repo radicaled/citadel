@@ -14,6 +14,8 @@ class Hvac extends EntityBuilder {
       tiles.remove(gid);
       var newGid= tiles.first;
       thisEntity[TileGraphics].tileGids[0] = newGid;
+
+      EntityManager.changed(thisEntity);
     });
   }
 }

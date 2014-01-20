@@ -58,22 +58,18 @@ class CitadelServer {
   tmx.TileMap map;
 
   void _setupEvents() {
+    EntityManager.onChange.listen((entity) {
+      _send(_makeCommand('update_entity', {
+        // FIXME: send the rest of the 'changed' attributes
+        'entity_id': entity.id,
+        'tile_gids': entity[TileGraphics].tileGids
+      }));
+    });
+
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', handlePlayerAction(MoveAction));
-    subscribe('interact', (ge) {
-      var entity = findEntity(ge.payload['entity_id']);
-      var action_name = ge.payload['action_name'];
-      if (entity.behaviors.containsKey(action_name)) {
-        entity.behaviors[action_name](entity, ge.gameConnection.entity);
-        _send(_makeCommand('update_entity', {
-          'entity_id': entity.id,
-          'tile_gids': entity[TileGraphics].tileGids
-        }));
-      }
-
-    });
-    //subscribe('interact', handlePlayerAction(InteractAction));
+    subscribe('interact', handlePlayerAction(Interact));
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 

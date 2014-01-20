@@ -6,7 +6,7 @@ abstract class Action {
 
   Entity actioneer, target;
   Map options = {};
-  bool isSatisfied;
+  bool isSatisfied = true;
 
   Action(this.actioneer, this.target) {
     onEmit = _controller.stream;

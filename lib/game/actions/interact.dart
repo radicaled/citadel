@@ -9,7 +9,7 @@ class Interact extends Action {
     var action_name = options['action_name'];
     var behavior = actioneer.behaviors[action_name];
     if (behavior == null) {
-      emit('You have tried to do the impossible ($action_name).');
+      actioneer.emit('You have tried to do the impossible ($action_name).');
     } else {
       behavior(actioneer, target);
     }

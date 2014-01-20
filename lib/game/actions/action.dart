@@ -1,16 +1,11 @@
 part of actions;
 
 abstract class Action {
-  StreamController<String> _controller = new StreamController.broadcast();
-  Stream onEmit;
-
   Entity actioneer, target;
   Map options = {};
   bool isSatisfied = true;
 
-  Action(this.actioneer, this.target) {
-    onEmit = _controller.stream;
-  }
+  Action(this.actioneer, this.target);
 
   void requirements();
   void perform();
@@ -20,16 +15,8 @@ abstract class Action {
     isSatisfied = entity.has([component]);
   }
 
-  void execute({onEmit(String text)}) {
-    if (onEmit != null) { this.onEmit.listen(onEmit); }
-
+  void execute() {
     requirements();
     if (isSatisfied) { perform(); }
-    _controller.close();
-  }
-
-  // Emits some text to the actioneer
-  void emit(String text) {
-    _controller.add(text);
   }
 }

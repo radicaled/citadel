@@ -6,8 +6,8 @@ class LookAction extends Action {
     require(actioneer, Vision);
     require(target, Description);
   }
-  
+
   perform() {
-    emit(target[Description].text);
+    actioneer.emit(target[Description].text);
   }
 }

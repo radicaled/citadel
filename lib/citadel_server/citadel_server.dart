@@ -81,7 +81,7 @@ class CitadelServer {
 
       Action action = reflectClass(actionType).newInstance(new Symbol(''), [player, target]).reflectee;
       action.options = ge.payload;
-      action.execute(onEmit: (text) => _emitTo(text, ge.gameConnection));
+      action.execute();
     };
   }
 

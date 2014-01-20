@@ -9,12 +9,15 @@ export 'entities.dart' show buildEntity;
 
 part 'entities/src/entity_builder.dart';
 part 'entities/src/entity_manager.dart';
+part 'entities/src/entity_behavior.dart';
+
 part 'entities/entity.dart';
 part 'entities/wall.dart';
 part 'entities/placeholder.dart';
 part 'entities/floor.dart';
 part 'entities/hvac.dart';
 part 'entities/human.dart';
+part 'entities/multi_tool.dart';
 
 
 
@@ -47,5 +50,6 @@ _registerTypes() {
   register('placeholder', Placeholder);
   register('floor', Floor);
   register('hvac', Hvac);
+  register('multi_tool', MultiTool);
 }
 

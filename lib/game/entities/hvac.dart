@@ -7,7 +7,7 @@ class Hvac extends EntityBuilder {
     has(Name, ['An HVAC Unit']);
     has(Description, ['A Wall-Mounted HVAC unit']);
 
-    can('use', (thisEntity, thatEntity) {
+    reaction('use', (thisEntity, thatEntity) {
       // FIXME: this is hard-coded.
       var tiles = [2735, 2767];
       var gid = thisEntity[TileGraphics].tileGids.first;

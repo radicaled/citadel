@@ -7,11 +7,11 @@ class Interact extends Action {
 
   perform() {
     var action_name = options['action_name'];
-    var behavior = target.behaviors[action_name];
+    var behavior = actioneer.behaviors[action_name];
     if (behavior == null) {
-      emit('You have tried to do the impossible.');
+      emit('You have tried to do the impossible ($action_name).');
     } else {
-      behavior(target, actioneer);
+      behavior(actioneer, target);
     }
   }
 }

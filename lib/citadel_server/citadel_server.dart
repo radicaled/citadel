@@ -174,12 +174,14 @@ class CitadelServer {
     }));
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
-      var ge = new GameConnection(ws, player);
-      gameConnections.add(ge);
+      var gc = new GameConnection(ws, player);
+      gameConnections.add(gc);
+
+      player.onEmit.listen((text) => _emitTo(text, gc));
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
-        onDone: () => _removeConnection(ge));
-      _sendGamestate(ge);
+        onDone: () => _removeConnection(gc));
+      _sendGamestate(gc);
     });
   }
 

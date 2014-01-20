@@ -1,15 +1,19 @@
 part of entities;
 
-typedef EntityBehavior(Entity thisEntity, Entity thatEntity);
+typedef EntityInteraction(Entity thisEntity, Entity thatEntity);
 
 class Entity {
   Map<Type, Component> components = new Map<Type, Component>();
-  Map<String, EntityBehavior> behaviors = new Map();
+  Map<String, EntityInteraction> behaviors = new Map();
+  Map<String, EntityInteraction> reactions = new Map();
   int id;
 
-  // TODO: entityChanged stuff.
+  StreamController<String> _emitController = new StreamController.broadcast();
+  Stream<String> onEmit;
 
-  Entity();
+  Entity() {
+    onEmit = _emitController.stream;
+  }
 
   void attach(Component component) {
     components[component.runtimeType] = component;
@@ -23,5 +27,9 @@ class Entity {
 
   Component operator [](Type componentType) {
     return components[componentType];
+  }
+
+  void emit(String text) {
+    _emitController.add(text);
   }
 }

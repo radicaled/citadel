@@ -9,5 +9,12 @@ class Human extends EntityBuilder {
     has(Vision);
     has(Description, ['A generic human being']);
     has(Name, ['Steve']);
+
+    behavior('use', (b) {
+      b.after((thisEntity, thatEntity) {
+        var name = thatEntity.has([Name]) ? thatEntity[Name].text : 'something';
+        thisEntity.emit('You recklessly fiddle with $name');
+      });
+    });
   }
 }

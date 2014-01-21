@@ -66,6 +66,7 @@ class CitadelServer {
       }));
     });
 
+    Entity.onEmitNear.listen((emitEvent) => _emitNear(emitEvent.entity, emitEvent.text));
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', handlePlayerAction(MoveAction));
@@ -177,7 +178,7 @@ class CitadelServer {
       var gc = new GameConnection(ws, player);
       gameConnections.add(gc);
 
-      player.onEmit.listen((text) => _emitTo(text, gc));
+      player.onEmit.listen((emitEvent) => _emitTo(emitEvent.text, gc));
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
         onDone: () => _removeConnection(gc));
@@ -196,6 +197,14 @@ class CitadelServer {
     gameConnections.remove(ge);
     liveEntities.remove(ge.entity);
     _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
+  }
+
+  void _emit(String text) {
+    _send(_makeCommand('emit', { 'text': text }));
+  }
+
+  void _emitNear(Entity entity, String text) {
+    _emit(text);
   }
 
   void _emitTo(String text, GameConnection gc) {

@@ -8,8 +8,15 @@ class Entity {
   Map<String, EntityInteraction> reactions = new Map();
   int id;
 
-  StreamController<String> _emitController = new StreamController.broadcast();
-  Stream<String> onEmit;
+  // FIXME: onEmit represents an emit to a specific entity.
+  // Therefore, onEmit is an instance member, since not everyone will be interested in knowing that.
+  // onEmitNear is an emit to an area by an entity, and lots of people (lots of other entities) will be interested in knowing that.
+  // This should be correct..
+  StreamController<EmitEvent> _emitController = new StreamController.broadcast();
+  Stream<EmitEvent> onEmit;
+
+  static StreamController<EmitEvent> _emitNearController = new StreamController.broadcast();
+  static Stream<EmitEvent> onEmitNear = _emitNearController.stream;
 
   Entity() {
     onEmit = _emitController.stream;
@@ -30,6 +37,10 @@ class Entity {
   }
 
   void emit(String text) {
-    _emitController.add(text);
+    _emitController.add(new EmitEvent(this, text));
+  }
+
+  void emitNear(String text) {
+    _emitNearController.add(new EmitEvent(this, text));
   }
 }

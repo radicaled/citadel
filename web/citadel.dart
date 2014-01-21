@@ -15,6 +15,7 @@ WebSocket ws;
 int currentPlayerId;
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
+c.ContextMenu currentContextMenu;
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -24,19 +25,19 @@ void main() {
   canvas.onContextMenu.listen((event) => event.preventDefault() );
 
   stage.onMouseRightClick.listen((event) {
-    // TODO: just randomly assuming all objects atm.
+    if (currentContextMenu != null) { currentContextMenu.dismiss(); }
     var cmis = entities.values
         .where((gs) => gs.hitTestPoint(event.stageX, event.stageY))
         .map((gs) => new c.ContextMenuItem(gs.name, gs.entityId) )
         .toList();
 
-    new c.ContextMenu(stage, cmis)
+    currentContextMenu = new c.ContextMenu(stage, cmis)
       ..show(event.stageX, event.stageY);
   });
 
   stage.onMouseClick.listen((event) {
-    if (c.ContextMenu.current != null) {
-      var cm = c.ContextMenu.current;
+    if (currentContextMenu != null) {
+      var cm = currentContextMenu;
       if(!cm.displayable.hitTestPoint(event.stageX, event.stageY, true)) {
         cm.dismiss();
       }
@@ -52,7 +53,7 @@ void main() {
   });
 
   c.ContextMenu.onSelection.listen((cmi) {
-    c.ContextMenu.current.dismiss();
+    currentContextMenu.dismiss();
     print('Selected ${cmi.name} with value ${cmi.value}');
     // TODO: just looking for now.
     lookEntity(cmi.value);

@@ -11,19 +11,13 @@ class ContextMenu {
   Sprite displayable;
   List<ContextMenuItem> items;
 
-  factory ContextMenu(DisplayObjectContainer parent, [List<ContextMenuItem> items]) {
-    if (current != null) { current.dismiss(); }
-    return current = new ContextMenu._internal(parent, items);
-  }
-
-  ContextMenu._internal(this._parent, this.items) {
+  ContextMenu(this._parent, [this.items]) {
     if (this.items == null) { items = new List(); }
     displayable = new Sprite();
   }
 
   void dismiss() {
     displayable.removeFromParent();
-    current = null;
   }
 
   void show(num x, num y) {

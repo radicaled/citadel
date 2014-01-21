@@ -37,6 +37,13 @@ The player is trying to interact with payload.entity_id.
       * if absent, it is assumed the player's active hand is in use.
     * payload.action_name: the action being taken
 
+pickup
+==
+
+Pick up an object.
+
+    * payload.entity_id: entity id player wanted to pick up
+
 Server -> Client Protocol
 ===
 

@@ -58,7 +58,8 @@ class CitadelServer {
   tmx.TileMap map;
 
   void _setupEvents() {
-    EntityManager.onChange.listen((entity) {
+    EntityManager.onChanged.listen((entityEvent) {
+      var entity = entityEvent.entity;
       _send(_makeCommand('update_entity', {
         // FIXME: send the rest of the 'changed' attributes
         'entity_id': entity.id,
@@ -66,21 +67,29 @@ class CitadelServer {
       }));
     });
 
+    EntityManager.onHidden.listen((entityEvent) {
+      var entity = entityEvent.entity;
+      _queueCommand('remove_entity', { 'entity_id': entity.id });
+    });
+
     Entity.onEmitNear.listen((emitEvent) => _emitNear(emitEvent.entity, emitEvent.text));
+
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', handlePlayerAction(MoveAction));
     subscribe('interact', handlePlayerAction(Interact));
+    subscribe('pickup', handlePlayerAction(PickupAction));
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 
   // Handle an action invoked by the player
   handlePlayerAction(Type actionType) {
     return (GameEvent ge) {
-      var player = ge.gameConnection.entity;
+      var actioneer = findEntity(ge.payload['with_entity_id']);
+      if (actioneer == null) { actioneer = ge.gameConnection.entity; }
       var target = findEntity(ge.payload['entity_id']);
 
-      Action action = reflectClass(actionType).newInstance(new Symbol(''), [player, target]).reflectee;
+      Action action = reflectClass(actionType).newInstance(new Symbol(''), [actioneer, target]).reflectee;
       action.options = ge.payload;
       action.execute();
     };

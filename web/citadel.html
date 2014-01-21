@@ -9,10 +9,28 @@
   <body>
     <h1>Citadel (<span id='ws-status'></span>)</h1>
     
+    <style>
+      ul {
+        list-style-type: none;
+      }
+      .selected {
+        background: azure;
+        border: 1px solid gray;
+      }
+    </style>
+    
     <canvas id='stage' width='800' height='600' tabindex='1'></canvas>
-    <div id='log' style='float:right'>
-      Stuff appears here.
+    <div class='sidebar' style='float:right'>
+	    <ul id='desires'>
+	      <li data-type='look' class='selected'>Look</li>
+	      <li data-type='pickup'>Pickup</li>	      
+	    </ul>	    
+	    <p id='holding'>Bare handed</p>
+	    <div id='log'>
+        Stuff appears here.
+      </div>
     </div>
+    
     <script type="application/dart" src="citadel.dart"></script>
     <script src="packages/browser/dart.js"></script>
   </body>

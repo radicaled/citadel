@@ -16,6 +16,9 @@ int currentPlayerId;
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
 c.ContextMenu currentContextMenu;
+String currentDesire = 'look';
+int leftHand, rightHand;
+
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -40,13 +43,16 @@ void main() {
       var cm = currentContextMenu;
       if(!cm.displayable.hitTestPoint(event.stageX, event.stageY, true)) {
         cm.dismiss();
+        currentContextMenu = null;
       }
     } else {
       // There was no context menu to interact with; they were trying to click on an entity.
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
         print('Tried to interact with ${gs.entityId} / ${gs.name}');
-        interactWith(gs.entityId, 'use');
+        // FIXME: hard-coded to assume multi-tool
+        var interaction = leftHand != null ? 'disable' : 'use';
+        interactWith(gs.entityId, interaction, leftHand);
       }
     }
 
@@ -54,11 +60,21 @@ void main() {
 
   c.ContextMenu.onSelection.listen((cmi) {
     currentContextMenu.dismiss();
+    currentContextMenu = null;
     print('Selected ${cmi.name} with value ${cmi.value}');
-    // TODO: just looking for now.
-    lookEntity(cmi.value);
+    switch(currentDesire) {
+      case 'look':
+        lookEntity(cmi.value);
+        break;
+      case 'pickup':
+        pickupEntity(cmi.value);
+        // FIXME: we're assuming it worked.
+        leftHand = cmi.value;
+        querySelector('#holding').text = 'Entity ${cmi.value}';
+        break;
+    }
   });
-
+  // FIXME: this entire damn thing.
   canvas.onKeyPress.listen( (ke) {
     // a = 97
     // d = 100
@@ -76,6 +92,12 @@ void main() {
         break;
       case 119:
         movePlayer('N');
+        break;
+      case 49: // 1
+        changeDesire('look');
+        break;
+      case 50: // 2
+        changeDesire('pickup');
         break;
     }
 
@@ -100,10 +122,20 @@ void main() {
   //initWebSocket();
 }
 
+void changeDesire(desire) {
+  currentDesire = desire;
+  querySelector('ul#desires li.selected').classes.remove('selected');
+  querySelector('[data-type="$desire"]').classes.add('selected');
+}
+
 void movePlayer(direction) {
   send('move', { 'direction': direction });
 }
-
+// FIXME: this should be an interaction, right?
+void pickupEntity(entityId) {
+  send('pickup', { 'entity_id': entityId });
+}
+// FIXME: this should be an interaction, right?
 void lookEntity(entityId) {
   send('look_at', { 'entity_id': entityId });
 }
@@ -112,8 +144,8 @@ void send(type, payload) {
   ws.send(json.stringify({ 'type': type, 'payload': payload }));
 }
 
-void interactWith(entityId, action_name) {
-  send('interact', { 'entity_id': entityId, 'action_name': action_name });
+void interactWith(entityId, action_name, [withEntityId]) {
+  send('interact', { 'entity_id': entityId, 'action_name': action_name, 'with_entity_id': withEntityId });
 }
 
 void initWebSocket([int retrySeconds = 2]) {

@@ -4,7 +4,7 @@ Primary
 * Implement a 'HVAC' entity:
     * Turning it 'off' should change the tile graphic.
     * Turning it back 'on' should change the tile graphic to the 'on' graphic.
-    * Using a weapon should 'destroy' the 'HVAC', removing its tile.
+    * Using a multi-tool should 'disable' the 'HVAC', changing its tile permanently.
     
 * Start mapping more more entities
 

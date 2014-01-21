@@ -17,5 +17,12 @@ class Hvac extends EntityBuilder {
 
       EntityManager.changed(thisEntity);
     });
+
+    reaction('disable', (thisEntity, thatEntity) {
+      // FIXME: This is hard-coded
+      thisEntity[TileGraphics].tileGids[0] = 2763;
+      thisEntity.emitNear('The HVAC console makes a strange buzzing noise.');
+      EntityManager.changed(thisEntity);
+    });
   }
 }

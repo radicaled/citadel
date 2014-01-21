@@ -6,6 +6,9 @@ class Entity {
   Map<Type, Component> components = new Map<Type, Component>();
   Map<String, EntityInteraction> behaviors = new Map();
   Map<String, EntityInteraction> reactions = new Map();
+
+  Entity root;
+
   int id;
 
   // FIXME: onEmit represents an emit to a specific entity.
@@ -20,6 +23,7 @@ class Entity {
 
   Entity() {
     onEmit = _emitController.stream;
+    root = this;
   }
 
   void attach(Component component) {
@@ -32,12 +36,13 @@ class Entity {
     return types.every( (type) => components.containsKey(type) );
   }
 
+
   Component operator [](Type componentType) {
     return components[componentType];
   }
 
   void emit(String text) {
-    _emitController.add(new EmitEvent(this, text));
+    root._emitController.add(new EmitEvent(this, text));
   }
 
   void emitNear(String text) {

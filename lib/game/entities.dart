@@ -48,7 +48,6 @@ register(name, type) {
 
 _registerTypes() {
   register('wall', Wall);
-  register('player', Player);
   register('human', Human);
   register('placeholder', Placeholder);
   register('floor', Floor);

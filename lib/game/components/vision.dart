@@ -1,5 +1,5 @@
 part of components;
 
-class Vision {
-  
+class Vision extends Component {
+
 }

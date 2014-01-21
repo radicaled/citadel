@@ -5,6 +5,10 @@ Primary
     * Turning it 'off' should change the tile graphic.
     * Turning it back 'on' should change the tile graphic to the 'on' graphic.
     * Using a multi-tool should 'disable' the 'HVAC', changing its tile permanently.
+
+
+* Need to track items in hand / etc.
+    * Update possible actions and UI too.
     
 * Start mapping more more entities
 

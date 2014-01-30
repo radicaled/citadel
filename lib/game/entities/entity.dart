@@ -30,6 +30,18 @@ class Entity {
     components[component.runtimeType] = component;
   }
 
+  /**
+   * React to an event [name]. If not found, the optional [orElse] function can be called.
+   *
+   * Returns true if Entity reacted.
+   */
+  bool react(String name, Entity instigator, {orElse()}) {
+    var reaction = reactions[name];
+    if (reaction != null) { reaction(this, instigator); }
+    else if (orElse != null) { orElse(); }
+    return reaction != null;
+  }
+
   // TODO: can optimize this.
   bool has(List<Type> types) {
     if (components.length == 0) { return false; }

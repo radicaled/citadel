@@ -17,8 +17,7 @@ class EntityBehavior {
 
     _beforeCallbacks.forEach((bc) => bc(_thisEntity, _thatEntity));
 
-    var reaction = _thatEntity.reactions[name];
-    if (reaction != null) { reaction(_thatEntity, _thisEntity); }
+    _thatEntity.react(name, _thisEntity);
 
     _afterCallbacks.forEach((bc) => bc(_thisEntity, _thatEntity));
   }

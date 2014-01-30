@@ -246,7 +246,7 @@ class CitadelServer {
     log.info('Sent: $msg');
   }
 
-  Map _makeCommand(String type, Map payload) {
+  Map _makeCommand(String type, payload) {
     return { 'type': type, 'payload': payload };
   }
 

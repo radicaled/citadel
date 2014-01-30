@@ -8,6 +8,10 @@ class Hvac extends EntityBuilder {
     has(Description, ['A Wall-Mounted HVAC unit']);
 
     reaction('use', (thisEntity, thatEntity) {
+      if (thisEntity.has([Disabled])) {
+        thisEntity.emit(thisEntity[Disabled].text);
+        return;
+      }
       // FIXME: this is hard-coded.
       var tiles = [2735, 2767];
       var gid = thisEntity[TileGraphics].tileGids.first;
@@ -22,6 +26,7 @@ class Hvac extends EntityBuilder {
       // FIXME: This is hard-coded
       thisEntity[TileGraphics].tileGids[0] = 2763;
       thisEntity.emitNear('The HVAC console makes a strange buzzing noise.');
+      thisEntity.attach(new Disabled()..text= 'The console sparks at you.');
       EntityManager.changed(thisEntity);
     });
   }

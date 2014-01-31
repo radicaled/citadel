@@ -141,7 +141,7 @@ Map currentAction() {
 }
 
 void movePlayer(direction) {
-  send('intent', { 'intent_name': direction });
+  intent(direction);
 }
 // FIXME: this should be an interaction, right?
 void pickupEntity(entityId, hand) {
@@ -149,7 +149,17 @@ void pickupEntity(entityId, hand) {
 }
 // FIXME: this should be an interaction, right?
 void lookEntity(entityId) {
-  send('look_at', { 'entity_id': entityId });
+  intent('LOOK', entityId);
+}
+
+void intent(intentName, [targetEntityId, withEntityId]) {
+  var payload = {
+                  'intent_name': intentName,
+                  'target_entity_id': targetEntityId,
+                  'with_entity_id': withEntityId
+                };
+  send('intent', payload);
+
 }
 
 void send(type, payload) {

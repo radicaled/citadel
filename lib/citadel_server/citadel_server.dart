@@ -14,12 +14,15 @@ import 'package:citadel/game/entities.dart';
 import 'package:citadel/game/actions.dart';
 import 'package:citadel/game/intents.dart';
 
-// Systems
+// Component Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/systems/pickup_system.dart';
+
+// Intent systems
 part 'src/systems/intent_system.dart';
 part 'src/systems/move_intent_system.dart';
+part 'src/systems/look_intent_system.dart';
 
 part 'src/entity_utils.dart';
 
@@ -120,6 +123,8 @@ class CitadelServer {
     intentSystem.register('MOVE_S', moveIntentSystem);
     intentSystem.register('MOVE_E', moveIntentSystem);
     intentSystem.register('MOVE_W', moveIntentSystem);
+
+    intentSystem.register('LOOK', lookIntentSystem);
   }
 
   void start() {

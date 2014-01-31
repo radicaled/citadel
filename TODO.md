@@ -1,9 +1,7 @@
 Primary
 ==
-
-* Need to track items in hand / etc.
-    * Update possible actions and UI too.
-    
+* Need to make the UI less awful, seriously.
+   
 * Start mapping more more entities
 
 Secondary

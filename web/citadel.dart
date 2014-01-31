@@ -51,9 +51,14 @@ void main() {
       if (gs is c.GameSprite) {
         var ca = currentAction();
         var actionName = ca['name'];
-        var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
-        print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
-        interactWith(gs.entityId, actionName, withEntityId: entityId);
+        // FIXME: bad idea.
+        if (actionName == 'pickup') {
+          pickupEntity(gs.entityId, null);
+        } else {
+          var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
+          print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
+          interactWith(gs.entityId, actionName, withEntityId: entityId);
+        }
       }
     }
 
@@ -63,7 +68,9 @@ void main() {
     currentContextMenu.dismiss();
     currentContextMenu = null;
     print('Selected ${cmi.name} with value ${cmi.value}');
-
+    // FIXME: right now, you can only look at items through right click selection.
+    lookEntity(cmi.value);
+/*
     var ca = currentAction();
     switch(ca['name']) {
       case 'look':
@@ -73,7 +80,7 @@ void main() {
         pickupEntity(cmi.value, ca['hand']);
         break;
     }
-
+*/
   });
   // FIXME: this entire damn thing.
   canvas.onKeyPress.listen( (ke) {

@@ -16,7 +16,7 @@ int currentPlayerId;
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
 c.ContextMenu currentContextMenu;
-String currentDesire = 'look';
+int currentActionIndex = 0;
 int leftHand, rightHand;
 
 void main() {
@@ -49,10 +49,11 @@ void main() {
       // There was no context menu to interact with; they were trying to click on an entity.
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
-        print('Tried to interact with ${gs.entityId} / ${gs.name}');
-        // FIXME: hard-coded to assume multi-tool
-        var interaction = leftHand != null ? 'disable' : 'use';
-        interactWith(gs.entityId, interaction, leftHand);
+        var ca = currentAction();
+        var actionName = ca['name'];
+        var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
+        print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
+        interactWith(gs.entityId, actionName, entityId);
       }
     }
 
@@ -62,17 +63,17 @@ void main() {
     currentContextMenu.dismiss();
     currentContextMenu = null;
     print('Selected ${cmi.name} with value ${cmi.value}');
-    switch(currentDesire) {
+
+    var ca = currentAction();
+    switch(ca['name']) {
       case 'look':
         lookEntity(cmi.value);
         break;
       case 'pickup':
-        pickupEntity(cmi.value);
-        // FIXME: we're assuming it worked.
-        leftHand = cmi.value;
-        querySelector('#holding').text = 'Entity ${cmi.value}';
+        pickupEntity(cmi.value, ca['hand']);
         break;
     }
+
   });
   // FIXME: this entire damn thing.
   canvas.onKeyPress.listen( (ke) {
@@ -93,12 +94,11 @@ void main() {
       case 119:
         movePlayer('N');
         break;
-      case 49: // 1
-        changeDesire('look');
-        break;
-      case 50: // 2
-        changeDesire('pickup');
-        break;
+    }
+    if (ke.keyCode >= 48 && ke.keyCode <= 57) {
+      var number = ke.keyCode - 48;
+      if (number == 0) { number = 10; } // Keyboard is 1234567890, not 0123456789
+      selectAction(number - 1);
     }
 
   });
@@ -122,18 +122,30 @@ void main() {
   //initWebSocket();
 }
 
-void changeDesire(desire) {
-  currentDesire = desire;
-  querySelector('ul#desires li.selected').classes.remove('selected');
-  querySelector('[data-type="$desire"]').classes.add('selected');
+void selectAction(actionIndex) {
+  var elements = querySelectorAll('ul#actions [data-type="action"]');
+  if (elements.length > actionIndex) {
+    var element = elements.elementAt(actionIndex);
+    currentActionIndex = actionIndex;
+    querySelectorAll('ul#actions li.selected').forEach((e) => e.classes.remove('selected'));
+    element.classes.add('selected');
+  }
+}
+
+Map currentAction() {
+  var element = querySelectorAll('ul#actions [data-type="action"]').elementAt(currentActionIndex);
+  return { 'name': element.attributes['data-action-name'],
+    'hand': element.attributes['data-action-hand'],
+    'entity_id': element.attributes['data-entity-id']
+  };
 }
 
 void movePlayer(direction) {
   send('move', { 'direction': direction });
 }
 // FIXME: this should be an interaction, right?
-void pickupEntity(entityId) {
-  send('pickup', { 'entity_id': entityId });
+void pickupEntity(entityId, hand) {
+  send('pickup', { 'entity_id': entityId, 'hand': hand });
 }
 // FIXME: this should be an interaction, right?
 void lookEntity(entityId) {
@@ -234,7 +246,21 @@ void executeMessage(type, payload) {
     case 'emit':
       querySelector('#log').appendHtml('<p>${payload['text']}');
       break;
+    case 'picked_up':
+      _pickedUpEntity(payload);
   }
+}
+
+void _pickedUpEntity(payload) {
+  var entityId = payload['entity_id'];
+  var hand = payload['hand'];
+  var selector = "#$hand-hand";
+  querySelector(selector + ' h3').text = "$hand hand: ${payload['name']}";
+  querySelectorAll(selector + ' [data-type="action"]').forEach((e) => e.remove());
+  var actionSelector = selector + ' ul.actions-for-hand';
+  payload['actions'].forEach((action) {
+    querySelector(actionSelector).appendHtml('<li data-type="action" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+  });
 }
 
 // TODO: check to see if redundant entites have been created?

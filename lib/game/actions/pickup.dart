@@ -5,11 +5,7 @@ class PickupAction extends Action {
 
   requirements() {}
   perform() {
-    target.root = actioneer;
-    var actionName = actioneer.has([Name]) ? actioneer[Name].text : 'Someone';
-    var targetName = target.has([Name]) ? target[Name].text : 'Something';
-    actioneer.emitNear('$actionName picks up the $targetName');
-    EntityManager.hidden(target);
+    actioneer.attach(new PickingUp(target, options['hand']));
   }
 
 }

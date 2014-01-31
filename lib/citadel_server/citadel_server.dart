@@ -16,6 +16,7 @@ import 'package:citadel/game/actions.dart';
 // Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
+part 'src/systems/pickup_system.dart';
 
 part 'src/entity_utils.dart';
 
@@ -36,6 +37,9 @@ final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
 int currentEntityId = 1;
 
+Map _makeCommand(String type, payload) {
+  return { 'type': type, 'payload': payload };
+}
 
 
 Entity trackEntity(Entity e) {
@@ -246,15 +250,12 @@ class CitadelServer {
     log.info('Sent: $msg');
   }
 
-  Map _makeCommand(String type, payload) {
-    return { 'type': type, 'payload': payload };
-  }
-
   void _queueCommand(String type, Map payload) {
     commandQueue.add(_makeCommand(type, payload));
   }
 
   _executeSystems() {
+    pickupSystem();
     collisionSystem();
     movementSystem();
   }

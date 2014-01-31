@@ -111,3 +111,14 @@ emit
 Some text that has been emitted
 
     * payload.text: text to be emitted
+
+picked_up
+==
+
+The player is now holding an entity.
+
+	* payload.entity_id: entity_id the player is holding
+	* payload.name: name of the entity the player is holding
+	* payload.hand: what hand the player is holding aforementioned entity
+	* payload.actions: (array) a list of actions now available.
+

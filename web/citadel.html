@@ -21,10 +21,32 @@
     
     <canvas id='stage' width='800' height='600' tabindex='1'></canvas>
     <div class='sidebar' style='float:right'>
-	    <ul id='desires'>
-	      <li data-type='look' class='selected'>Look</li>
-	      <li data-type='pickup'>Pickup</li>	      
-	    </ul>	    
+	    
+	    <ul id='actions'>
+	      <li>
+          <h3>You</h3>
+						<ul>
+						  <li data-type='action' data-action-name='look' class='selected'>Look</li>
+						</ul>
+	      </li>
+	      
+	      <li id='left-hand'>
+          <h3>Left Hand</h3>
+          <ul class='actions-for-hand'>
+            <li data-type='action' data-action-name='use' data-action-hand='left'>Use</li>
+            <li data-type='action' data-action-name='pickup' data-action-hand='left'>Pickup</li>            
+          </ul>	      
+	      </li>
+	      
+	      <li id='right-hand'>
+          <h3>Right Hand</h3>
+          <ul class='actions-for-hand'>
+            <li data-type='action' data-action-name='use' data-action-hand='left'>Use</li>
+            <li data-type='action' data-action-name='pickup' data-action-hand='right'>Pickup</li>
+          </ul>       
+        </li>
+	    </ul>
+	    	    
 	    <p id='holding'>Bare handed</p>
 	    <div id='log'>
         Stuff appears here.

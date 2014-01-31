@@ -11,7 +11,7 @@ void pickupIntentSystem(Intent intent) {
 
   commandQueue.add(_makeCommand('picked_up', {
     'entity_id': target.id,
-    'name': target[Name].text,
+    'name': targetName,
     'hand': 'left', // FIXME: hard-coded
     'actions': target.behaviors.keys.toList()
   }));

@@ -8,6 +8,8 @@ class Intent {
   int invokingEntityId;
   int targetEntityId;
   int withEntityId;
+  // The action being performed via the entity specified by withEntityId.
+  String actionName;
 
   Intent(this.name);
 }

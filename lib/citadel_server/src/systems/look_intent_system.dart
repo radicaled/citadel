@@ -5,5 +5,7 @@ lookIntentSystem(Intent intent) {
   // Or should we just rely on lookReaction to emit the right text?
   var invoker = findEntity(intent.invokingEntityId);
   var target  = findEntity(intent.targetEntityId);
-  target.react('look', invoker, orElse: () => invoker.emit(target[Description].text));
+  if (target.has([Description])) {
+    target.react('look', invoker, orElse: () => invoker.emit(target[Description].text));
+  }
 }

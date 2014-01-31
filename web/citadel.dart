@@ -53,7 +53,7 @@ void main() {
         var actionName = ca['name'];
         var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
         print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
-        interactWith(gs.entityId, actionName, entityId);
+        interactWith(gs.entityId, actionName, withEntityId: entityId);
       }
     }
 
@@ -145,18 +145,23 @@ void movePlayer(direction) {
 }
 // FIXME: this should be an interaction, right?
 void pickupEntity(entityId, hand) {
-  intent('PICKUP', entityId);
+  intent('PICKUP', targetEntityId: entityId);
 }
 // FIXME: this should be an interaction, right?
 void lookEntity(entityId) {
-  intent('LOOK', entityId);
+  intent('LOOK', targetEntityId: entityId);
 }
 
-void intent(intentName, [targetEntityId, withEntityId]) {
+void interactWith(entityId, actionName, {withEntityId}) {
+  intent('INTERACT', targetEntityId: entityId, withEntityId: withEntityId, actionName: actionName);
+}
+
+void intent(intentName, {targetEntityId, withEntityId, actionName}) {
   var payload = {
                   'intent_name': intentName,
                   'target_entity_id': targetEntityId,
-                  'with_entity_id': withEntityId
+                  'with_entity_id': withEntityId,
+                  'action_name': actionName
                 };
   send('intent', payload);
 
@@ -164,10 +169,6 @@ void intent(intentName, [targetEntityId, withEntityId]) {
 
 void send(type, payload) {
   ws.send(json.stringify({ 'type': type, 'payload': payload }));
-}
-
-void interactWith(entityId, action_name, [withEntityId]) {
-  send('interact', { 'entity_id': entityId, 'action_name': action_name, 'with_entity_id': withEntityId });
 }
 
 void initWebSocket([int retrySeconds = 2]) {

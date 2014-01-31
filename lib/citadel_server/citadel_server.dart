@@ -23,6 +23,7 @@ part 'src/systems/pickup_intent_system.dart';
 part 'src/systems/intent_system.dart';
 part 'src/systems/move_intent_system.dart';
 part 'src/systems/look_intent_system.dart';
+part 'src/systems/interact_intent_system.dart';
 
 part 'src/entity_utils.dart';
 
@@ -87,7 +88,6 @@ class CitadelServer {
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('intent', handlePlayerIntent());
-    subscribe('interact', handlePlayerAction(Interact));
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 
@@ -98,7 +98,8 @@ class CitadelServer {
       var intent = new Intent(intentName)
         ..invokingEntityId = ge.gameConnection.entity.id
         ..targetEntityId = ge.payload['target_entity_id']
-        ..withEntityId = ge.payload['with_entity_id'];
+        ..withEntityId = ge.payload['with_entity_id']
+        ..actionName = ge.payload['action_name'];
       intentSystem.intentQueue.add(intent);
     };
   }
@@ -123,6 +124,7 @@ class CitadelServer {
 
     intentSystem.register('LOOK', lookIntentSystem);
     intentSystem.register('PICKUP', pickupIntentSystem);
+    intentSystem.register('INTERACT', interactIntentSystem);
   }
 
   void start() {

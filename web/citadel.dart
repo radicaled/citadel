@@ -145,7 +145,7 @@ void movePlayer(direction) {
 }
 // FIXME: this should be an interaction, right?
 void pickupEntity(entityId, hand) {
-  send('pickup', { 'entity_id': entityId, 'hand': hand });
+  intent('PICKUP', entityId);
 }
 // FIXME: this should be an interaction, right?
 void lookEntity(entityId) {

@@ -17,7 +17,7 @@ import 'package:citadel/game/intents.dart';
 // Component Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
-part 'src/systems/pickup_system.dart';
+part 'src/systems/pickup_intent_system.dart';
 
 // Intent systems
 part 'src/systems/intent_system.dart';
@@ -87,10 +87,7 @@ class CitadelServer {
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('intent', handlePlayerIntent());
-    subscribe('look_at', handlePlayerAction(LookAction));
-    subscribe('move', handlePlayerAction(MoveAction));
     subscribe('interact', handlePlayerAction(Interact));
-    subscribe('pickup', handlePlayerAction(PickupAction));
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 
@@ -125,6 +122,7 @@ class CitadelServer {
     intentSystem.register('MOVE_W', moveIntentSystem);
 
     intentSystem.register('LOOK', lookIntentSystem);
+    intentSystem.register('PICKUP', pickupIntentSystem);
   }
 
   void start() {
@@ -280,7 +278,6 @@ class CitadelServer {
 
   _executeSystems() {
     intentSystem.execute();
-    pickupSystem();
     collisionSystem();
     movementSystem();
   }

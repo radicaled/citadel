@@ -7,11 +7,9 @@ import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
 import 'dart:io';
 import 'dart:async';
-import 'dart:mirrors';
 
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
-import 'package:citadel/game/actions.dart';
 import 'package:citadel/game/intents.dart';
 
 // Component Systems
@@ -101,18 +99,6 @@ class CitadelServer {
         ..withEntityId = ge.payload['with_entity_id']
         ..actionName = ge.payload['action_name'];
       intentSystem.intentQueue.add(intent);
-    };
-  }
-  // Handle an action invoked by the player
-  handlePlayerAction(Type actionType) {
-    return (GameEvent ge) {
-      var actioneer = findEntity(ge.payload['with_entity_id']);
-      if (actioneer == null) { actioneer = ge.gameConnection.entity; }
-      var target = findEntity(ge.payload['entity_id']);
-
-      Action action = reflectClass(actionType).newInstance(new Symbol(''), [actioneer, target]).reflectee;
-      action.options = ge.payload;
-      action.execute();
     };
   }
 

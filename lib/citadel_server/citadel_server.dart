@@ -12,11 +12,14 @@ import 'dart:mirrors';
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
 import 'package:citadel/game/actions.dart';
+import 'package:citadel/game/intents.dart';
 
 // Systems
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/systems/pickup_system.dart';
+part 'src/systems/intent_system.dart';
+part 'src/systems/move_intent_system.dart';
 
 part 'src/entity_utils.dart';
 
@@ -57,6 +60,7 @@ Stream<GameEvent> subscribe(event_name, [onData(GameEvent ge)]) {
   return stream;
 }
 
+IntentSystem intentSystem = new IntentSystem();
 
 class CitadelServer {
   tmx.TileMap map;
@@ -79,6 +83,7 @@ class CitadelServer {
     Entity.onEmitNear.listen((emitEvent) => _emitNear(emitEvent.entity, emitEvent.text));
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
+    subscribe('intent', handlePlayerIntent());
     subscribe('look_at', handlePlayerAction(LookAction));
     subscribe('move', handlePlayerAction(MoveAction));
     subscribe('interact', handlePlayerAction(Interact));
@@ -86,6 +91,17 @@ class CitadelServer {
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
   }
 
+  // Handle a player intent
+  handlePlayerIntent() {
+    return (GameEvent ge) {
+      var intentName = ge.payload['intent_name'];
+      var intent = new Intent(intentName)
+        ..invokingEntityId = ge.gameConnection.entity.id
+        ..targetEntityId = ge.payload['target_entity_id']
+        ..withEntityId = ge.payload['with_entity_id'];
+      intentSystem.intentQueue.add(intent);
+    };
+  }
   // Handle an action invoked by the player
   handlePlayerAction(Type actionType) {
     return (GameEvent ge) {
@@ -99,11 +115,11 @@ class CitadelServer {
     };
   }
 
-  // Attempt to locate an entity by its entityId
-  // Returns null if entityId not found.
-  Entity findEntity(int entityId) {
-    if (entityId == null) return null;
-    return liveEntities.firstWhere((e) => e.id == entityId, orElse: () => null);
+  void _setupSystems() {
+    intentSystem.register('MOVE_N', moveIntentSystem);
+    intentSystem.register('MOVE_S', moveIntentSystem);
+    intentSystem.register('MOVE_E', moveIntentSystem);
+    intentSystem.register('MOVE_W', moveIntentSystem);
   }
 
   void start() {
@@ -113,6 +129,9 @@ class CitadelServer {
 
     log.info('listening for game events');
     _setupEvents();
+
+    log.info('setting up systems');
+    _setupSystems();
 
     log.info('starting server');
     _startLoop();
@@ -255,6 +274,7 @@ class CitadelServer {
   }
 
   _executeSystems() {
+    intentSystem.execute();
     pickupSystem();
     collisionSystem();
     movementSystem();

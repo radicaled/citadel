@@ -83,16 +83,16 @@ void main() {
     // w = 119
     switch(ke.keyCode){
       case 97:
-        movePlayer('W');
+        movePlayer('MOVE_W');
         break;
       case 100:
-        movePlayer('E');
+        movePlayer('MOVE_E');
         break;
       case 115:
-        movePlayer('S');
+        movePlayer('MOVE_S');
         break;
       case 119:
-        movePlayer('N');
+        movePlayer('MOVE_N');
         break;
     }
     if (ke.keyCode >= 48 && ke.keyCode <= 57) {
@@ -141,7 +141,7 @@ Map currentAction() {
 }
 
 void movePlayer(direction) {
-  send('move', { 'direction': direction });
+  send('intent', { 'intent_name': direction });
 }
 // FIXME: this should be an interaction, right?
 void pickupEntity(entityId, hand) {

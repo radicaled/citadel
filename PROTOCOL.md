@@ -44,6 +44,15 @@ Pick up an object.
 
     * payload.entity_id: entity id player wanted to pick up
 
+intent
+==
+
+The player intends to perform an action. A full list of intents is available in Intents.md
+
+    * payload.intent_name: name of intent (eg, 'MOVE_W', 'PICKUP', etc)
+    * payload.target_entity_id: (OPTIONAL) if the intent targets an entity, the id of that entity
+    * payload.with_entity_id: (OPTIONAL) if the player is using an entity for this intent
+
 Server -> Client Protocol
 ===
 
@@ -121,4 +130,3 @@ The player is now holding an entity.
 	* payload.name: name of the entity the player is holding
 	* payload.hand: what hand the player is holding aforementioned entity
 	* payload.actions: (array) a list of actions now available.
-

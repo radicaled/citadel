@@ -11,5 +11,3 @@ part 'components/name.dart';
 part 'components/vision.dart';
 part 'components/power.dart';
 part 'components/disabled.dart';
-
-part 'components/picking_up.dart';

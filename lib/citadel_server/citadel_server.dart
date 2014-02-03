@@ -22,6 +22,8 @@ part 'src/systems/intent_system.dart';
 part 'src/systems/move_intent_system.dart';
 part 'src/systems/look_intent_system.dart';
 part 'src/systems/interact_intent_system.dart';
+part 'src/systems/animation_system.dart';
+
 
 part 'src/entity_utils.dart';
 
@@ -73,7 +75,7 @@ class CitadelServer {
       _send(_makeCommand('update_entity', {
         // FIXME: send the rest of the 'changed' attributes
         'entity_id': entity.id,
-        'tile_gids': entity[TileGraphics].tileGids
+        'tile_phrases': entity[TileGraphics].tilePhrases
       }));
     });
 
@@ -268,6 +270,7 @@ class CitadelServer {
     intentSystem.execute();
     collisionSystem();
     movementSystem();
+    animationSystem();
   }
 
   _processCommands() {

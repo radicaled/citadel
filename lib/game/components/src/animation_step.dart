@@ -1,22 +1,33 @@
 part of components;
 
 class AnimationStep {
-  String tilePhrase;
+  static const NOT_STARTED = 'NOT_STARTED';
+  static const RUNNING = 'RUNNING';
+  static const FINISHED = 'FINISHED';
+
+  String graphicID;
   // Transition time in milliseconds.
   int transition;
 
-  Stopwatch stopwatch = new Stopwatch();
+  Function onDone;
 
-  bool get isRunning => stopwatch.isRunning;
-  bool get isFinished => stopwatch.elapsedMilliseconds > this.transition;
+  DateTime _startedAt;
 
-  AnimationStep(this.tilePhrase, this.transition);
-
-  void start() {
-    if (!stopwatch.isRunning) { stopwatch.start(); }
+  String get state {
+    if (_startedAt == null) return NOT_STARTED;
+    return _startedAt.difference(new DateTime.now()).inMilliseconds.abs() >= transition ? FINISHED : RUNNING;
   }
 
-  void finish() {
-    stopwatch.stop();
+  bool get isRunning => state == RUNNING;
+  bool get isFinished => state == FINISHED;
+
+  AnimationStep(this.graphicID, this.transition, {this.onDone});
+
+  void start() {
+    if (_startedAt == null) _startedAt = new DateTime.now();
+  }
+
+  void reset() {
+    _startedAt = null;
   }
 }

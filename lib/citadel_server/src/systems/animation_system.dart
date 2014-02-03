@@ -4,19 +4,20 @@ void animationSystem() {
   // TODO: client side rendering should alleviate some traffic, but then new clients have to be kept in sync with the animation...
   entitiesWithComponents([Animation]).forEach((entity) {
     var ani = entity[Animation];
-    var currentStep = ani.steps.first;
+    AnimationStep currentStep = ani.steps.first;
 
-    if (!currentStep.isRunning) {
-      currentStep.start();
-      entity[TileGraphics].tilePhrases = [currentStep.tilePhrase];
-      EntityManager.changed(entity);
-    } else if (currentStep.isFinished) {
-      ani.steps.removeFirst();
+    switch(currentStep.state) {
+      case AnimationStep.NOT_STARTED:
+        currentStep.start();
+        entity[TileGraphics].tilePhrases = [currentStep.graphicID];
+        EntityManager.changed(entity);
+        break;
+      case AnimationStep.FINISHED:
+        if (currentStep.onDone != null) currentStep.onDone();
+        ani.steps.removeFirst();
+        break;
     }
 
-    if (ani.steps.isEmpty) {
-      if (ani.onDone != null) { ani.onDone(); }
-      entity.components.remove(Animation);
-    }
+    if (ani.steps.isEmpty) entity.components.remove(Animation);
   });
 }

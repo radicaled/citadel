@@ -1,9 +1,8 @@
 part of components;
 
 class Animation extends Component {
-  Queue<AnimationStep> steps;
-  var onDone;
-  Animation(List<AnimationStep> steps, {this.onDone}) {
-    this.steps = new Queue.from(steps);
+  Queue<AnimationStep> steps = new Queue();
+  Animation([List<AnimationStep> steps]) {
+    if (steps != null) this.steps = new Queue.from(steps);
   }
 }

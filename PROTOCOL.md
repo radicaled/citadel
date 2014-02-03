@@ -81,7 +81,7 @@ Create and render an entity on screen.
     * payload.x: x location of this entity.
     * payload.y: y location of this entity.
     * payload.z: z location of this entity.
-    * payload.tile_gids: an array of tile gids that visually represent this entity
+    * payload.tile_phrases: an array of tile phrases that visually represent this entity
     * payload.name: the name of this entity.
 
 
@@ -91,8 +91,8 @@ update_entity
 Update an entity.
 
     * payload.entity_id: entity id to update
-    * payload.tile_gids: (OPTIONAL) global tile id for updated entity.
-        * if no tile_gids, then entity has not visually updated.
+    * payload.tile_phrases: (OPTIONAL) an array of tile phrases for the updated entity.
+        * if no tile_phrases, then entity has not visually updated.
     * payload.x: (OPTIONAL) updated x location of this entity.
     * payload.y: (OPTIONAL) updated y location of this entity.
     * payload.z: (OPTIONAL) updated z location of this entity.

@@ -290,8 +290,8 @@ void _createEntity(payload) {
   s.x = payload['x'] * 32;
   s.y = payload['y'] * 32;
 
-  (payload['tile_gids'] as List).forEach((tileGid) {
-    var tile = map.getTileByGID(tileGid);
+  (payload['tile_phrases'] as List).forEach((String tilePhrase) {
+    var tile = map.getTileByPhrase(tilePhrase);
     var ss = getSpriteSheet(tile.tileset);
     s.addChild(new Bitmap(ss.frameAt(tile.tileId)));
   });
@@ -306,10 +306,10 @@ void _updateEntity(Map payload) {
   if (payload.containsKey('x')) { gs.x = payload['x']; }
   if (payload.containsKey('y')) { gs.x = payload['x']; }
 
-  if (payload.containsKey('tile_gids')) {
+  if (payload.containsKey('tile_phrases')) {
     gs.removeChildren();
-    (payload['tile_gids'] as List).forEach((tileGid) {
-      var tile = map.getTileByGID(tileGid);
+    (payload['tile_phrases'] as List).forEach((tilePhrase) {
+      var tile = map.getTileByPhrase(tilePhrase);
       var ss = getSpriteSheet(tile.tileset);
       gs.addChild(new Bitmap(ss.frameAt(tile.tileId)));
     });

@@ -1,14 +1,11 @@
 part of components;
 
 class TileGraphics extends Component {
-  /*
-    In the form of:
-    {
-      tile_gid: 1, /* Tile GID */
-      z: 0 /* z-index of tile */
-    }
-
+  /**
+   * Tile phrases describe a tileset and a local tile ID.
+   * EG, "Command Doors|0" references the Command Doors tileset,
+   * with the target tile having a local ID of 0.
    */
-  List<int> tileGids;
-  TileGraphics([this.tileGids]);
+  List<String> tilePhrases;
+  TileGraphics([this.tilePhrases]);
 }

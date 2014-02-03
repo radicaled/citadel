@@ -150,7 +150,7 @@ class CitadelServer {
             var entity = buildEntity(entityType);
             entity[Position].x = x;
             entity[Position].y = y;
-            entity[TileGraphics].tileGids = [tile.gid];
+            entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
             trackEntity(entity);
           }
         });
@@ -187,14 +187,14 @@ class CitadelServer {
       ..x = 8
       ..y = 8
       ..z = 16;
-    tgs.tileGids = [2];
+    tgs.tilePhrases = ['Humans|1'];
 
     _send(_makeCommand('create_entity', {
         'x': pos.x,
         'y': pos.y,
         'z': pos.z,
         'entity_id': player.id,
-        'tile_gids': tgs.tileGids,
+        'tile_phrases': tgs.tilePhrases,
     }));
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
@@ -242,7 +242,7 @@ class CitadelServer {
           'x': entity[Position].x,
           'y': entity[Position].y,
           'z': entity[Position].z,
-          'tile_gids': entity[TileGraphics].tileGids,
+          'tile_phrases': entity[TileGraphics].tilePhrases,
           'entity_id': entity.id,
           'name': entity[Name] != null ? entity[Name].text : 'Something'
       }));

@@ -12,23 +12,16 @@ void collisionSystem() {
     var pos = entity[Position];
     var vel = entity[Velocity];
 
-    var x = pos.x + vel.x;
-    var y = pos.y + vel.y;
+    var expectedPosition = new Position(pos.x + vel.x, pos.y + vel.y);
 
     // Do any other solid components (moving or not) collide with this one?
     // If so, cease their velocity immediately.
     var collidables = entitiesWithComponents([Position, Collidable]);
+    var collidingEntity = collidables.firstWhere((oe) => oe[Position] == expectedPosition, orElse: () => null);
 
-    if (collidables.any( (otherEntity) {
-      var pos = otherEntity[Position];
-      return pos.x == x && pos.y == y;
-
-    })) {
-      vel.x = 0;
-      vel.y = 0;
+    if (collidingEntity != null) {
+      collidingEntity.react('collide', entity);
+      vel.halt();
     }
-
   });
-
-
 }

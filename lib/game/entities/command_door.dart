@@ -7,5 +7,12 @@ class CommandDoor extends EntityBuilder {
     has(TileGraphics);
     has(Name, ['Command Door']);
     has(Description, ['A massive reinforced door']);
+
+    reaction('collide', (thisEntity, thatEntity) {
+      // FIXME: assumed everyone has access.
+      thatEntity.emit('You crash into the command door!');
+      thisEntity.emitNear('CLANK!');
+
+    });
   }
 }

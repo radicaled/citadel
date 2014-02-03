@@ -12,7 +12,8 @@ class CommandDoor extends EntityBuilder {
       // FIXME: assumed everyone has access.
       thatEntity.emit('You crash into the command door!');
       thisEntity.emitNear('CLANK!');
-
+      // FIXME: what happens if two people trigger this reaction at once?
+      // We only want to run this new animation if an existing one is not running.
       AnimationBuilder.on(thisEntity)
         ..animate('Command Doors|2', 1)
         ..animate('Command Doors|3', 1)

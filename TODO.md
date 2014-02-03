@@ -1,5 +1,8 @@
 Primary
 ==
+
+* Create a functional doorway to another part of shit station v1
+
 * Need to make the UI less awful, seriously.
    
 * Start mapping more more entities

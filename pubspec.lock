@@ -68,3 +68,7 @@ packages:
     description: xml
     source: hosted
     version: "0.9.5"
+  yaml:
+    description: yaml
+    source: hosted
+    version: "0.9.0"

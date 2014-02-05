@@ -1,0 +1,10 @@
+gray_locker:
+  opened: Closets|1
+  closed: Closets|0
+
+  opening:
+    - graphic_id: Closets|1
+      transition: 0
+  closing:
+    - graphic_id: Closets|0
+      transition: 0

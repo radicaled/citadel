@@ -23,7 +23,7 @@ part 'entities/hvac.dart';
 part 'entities/human.dart';
 part 'entities/multi_tool.dart';
 part 'entities/command_door.dart';
-
+part 'entities/locker.dart';
 
 var entityDefinitions = new Map<String, EntityBuilder>();
 var _registered = false;
@@ -55,5 +55,6 @@ _registerTypes() {
   register('hvac', Hvac);
   register('multi_tool', MultiTool);
   register('command_door', CommandDoor);
+  register('locker', Locker);
 }
 

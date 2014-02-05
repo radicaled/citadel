@@ -20,6 +20,17 @@
  </tileset>
  <tileset firstgid="1364" name="Closets" tilewidth="32" tileheight="32">
   <image source="../icons/obj/closet.png" width="576" height="576"/>
+  <tile id="0">
+   <properties>
+    <property name="entity" value="locker"/>
+    <property name="tile_config" value="gray_locker"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="entity" value="locker"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="1688" name="Computers" tilewidth="32" tileheight="32">
   <image source="../icons/obj/computer.png" width="704" height="704"/>

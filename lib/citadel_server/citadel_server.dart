@@ -5,6 +5,8 @@ import 'package:json/json.dart' as json;
 import 'package:logging/logging.dart' as logging;
 import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
+import 'package:path/path.dart' as path;
+import 'package:yaml/yaml.dart';
 import 'dart:io';
 import 'dart:async';
 
@@ -23,6 +25,7 @@ part 'src/systems/move_intent_system.dart';
 part 'src/systems/look_intent_system.dart';
 part 'src/systems/interact_intent_system.dart';
 part 'src/systems/animation_system.dart';
+part 'src/systems/container_system.dart';
 
 
 part 'src/entity_utils.dart';
@@ -30,6 +33,7 @@ part 'src/entity_utils.dart';
 // misc
 part 'src/events/game_event.dart';
 part 'src/game_connection.dart';
+part 'src/tile_manager.dart';
 
 final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
@@ -65,6 +69,7 @@ Stream<GameEvent> subscribe(event_name, [onData(GameEvent ge)]) {
 }
 
 IntentSystem intentSystem = new IntentSystem();
+TileManager tileManager;
 
 class CitadelServer {
   tmx.TileMap map;
@@ -120,6 +125,9 @@ class CitadelServer {
     log.info('loading map');
     _loadMap();
 
+    log.info('loading tile information');
+    _loadTiles();
+
     log.info('listening for game events');
     _setupEvents();
 
@@ -131,6 +139,11 @@ class CitadelServer {
     _startServer();
 
 
+  }
+
+  _loadTiles() {
+    tileManager = new TileManager(path.join('config', 'tiles'));
+    tileManager.load();
   }
 
   _loadMap() {
@@ -153,6 +166,7 @@ class CitadelServer {
             entity[Position].x = x;
             entity[Position].y = y;
             entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
+            entity[TileGraphics].tileConfig = tile.properties['tile_config'];
             trackEntity(entity);
           }
         });
@@ -270,7 +284,11 @@ class CitadelServer {
     intentSystem.execute();
     collisionSystem();
     movementSystem();
+    containerSystem();
+
+    // Should always be last.
     animationSystem();
+
   }
 
   _processCommands() {

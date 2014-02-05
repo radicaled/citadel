@@ -1,7 +1,8 @@
 Primary
 ==
 
-* Create a functional doorway to another part of shit station v1
+* Players can open lockers and reveal entities inside.
+* Players can close lockers and hide entities inside.
 
 * Need to make the UI less awful, seriously.
    

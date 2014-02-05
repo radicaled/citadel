@@ -14,7 +14,7 @@ part 'components/vision.dart';
 part 'components/power.dart';
 part 'components/disabled.dart';
 part 'components/animation.dart';
-
+part 'components/container.dart';
 
 // Helpers
 part 'components/src/animation_step.dart';

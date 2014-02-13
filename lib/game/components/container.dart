@@ -1,10 +1,10 @@
 part of components;
 
 class Container extends Component {
-  static const OPENING = "OPENING";
-  static const CLOSING = "CLOSING";
-  static const OPENED = "OPENED";
-  static const CLOSED = "CLOSED";
+  static const OPENING = "opening";
+  static const CLOSING = "closing";
+  static const OPENED = "opened";
+  static const CLOSED = "closed";
 
   String state;
 

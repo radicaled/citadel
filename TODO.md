@@ -1,8 +1,7 @@
 Primary
 ==
 
-* Players can open lockers and reveal entities inside.
-* Players can close lockers and hide entities inside.
+* Way to specify what's in container by default.
 
 * Need to make the UI less awful, seriously.
    

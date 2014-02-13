@@ -89,6 +89,18 @@ class CitadelServer {
       _queueCommand('remove_entity', { 'entity_id': entity.id });
     });
 
+    EntityManager.onCreated.listen((entityEvent) {
+      var entity = entityEvent.entity;
+      _queueCommand('create_entity', {
+        'x': entity[Position].x,
+        'y': entity[Position].y,
+        'z': entity[Position].z,
+        'tile_phrases': entity[TileGraphics].tilePhrases,
+        'entity_id': entity.id,
+        'name': entity[Name] != null ? entity[Name].text : 'Something'
+      });
+    });
+
     Entity.onEmitNear.listen((emitEvent) => _emitNear(emitEvent.entity, emitEvent.text));
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
@@ -168,6 +180,16 @@ class CitadelServer {
             entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
             entity[TileGraphics].tileConfig = tile.properties['tile_config'];
             trackEntity(entity);
+            // FIXME: hack
+            if (entity.has([Container])) {
+              var c = entity[Container];
+              var e2 = buildEntity('multi_tool');
+              e2[TileGraphics].tilePhrases = ['Devices|0'];
+              e2.detach(Position);
+              trackEntity(e2);
+              e2.root = entity;
+            }
+
           }
         });
       });

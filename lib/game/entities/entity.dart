@@ -8,6 +8,7 @@ class Entity {
   Map<String, EntityInteraction> reactions = new Map();
 
   Entity root;
+  bool get isChild => root != this;
 
   int id;
 
@@ -28,6 +29,10 @@ class Entity {
 
   void attach(Component component) {
     components[component.runtimeType] = component;
+  }
+
+  Component detach(Type componentType) {
+    return components.remove(componentType);
   }
 
   /**

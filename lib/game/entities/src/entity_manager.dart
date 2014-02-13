@@ -4,6 +4,7 @@ class EntityManager {
   static StreamController<EntityEvent> _entityEventController = new StreamController.broadcast();
   static var onChanged = _subscribe('changed');
   static var onHidden = _subscribe('hidden');
+  static var onCreated = _subscribe('created');
 
 
   static changed(Entity entity) {
@@ -12,6 +13,10 @@ class EntityManager {
 
   static hidden(Entity entity) {
     _signal('hidden', entity);
+  }
+
+  static created(Entity entity) {
+    _signal('created', entity);
   }
 
   static Stream<EntityEvent> _subscribe(String name) {

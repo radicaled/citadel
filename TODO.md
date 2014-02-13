@@ -1,9 +1,6 @@
 Primary
 ==
 
-* Players can open lockers and reveal entities inside.
-* Players can close lockers and hide entities inside.
-
 * Need to make the UI less awful, seriously.
    
 * Start mapping more more entities

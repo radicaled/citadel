@@ -18,14 +18,16 @@ import 'package:citadel/game/intents.dart';
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/systems/pickup_intent_system.dart';
+part 'src/systems/animation_system.dart';
+part 'src/systems/animation_buffer_system.dart';
+part 'src/systems/container_system.dart';
 
 // Intent systems
 part 'src/systems/intent_system.dart';
 part 'src/systems/move_intent_system.dart';
 part 'src/systems/look_intent_system.dart';
 part 'src/systems/interact_intent_system.dart';
-part 'src/systems/animation_system.dart';
-part 'src/systems/container_system.dart';
+
 
 
 part 'src/entity_utils.dart';
@@ -178,7 +180,6 @@ class CitadelServer {
             entity[Position].x = x;
             entity[Position].y = y;
             entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
-            entity[TileGraphics].tileConfig = tile.properties['tile_config'];
             trackEntity(entity);
             // FIXME: hack
             if (entity.has([Container])) {
@@ -309,6 +310,7 @@ class CitadelServer {
     containerSystem();
 
     // Should always be last.
+    animationBufferSystem();
     animationSystem();
 
   }

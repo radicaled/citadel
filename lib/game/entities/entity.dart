@@ -1,16 +1,21 @@
 part of entities;
 
-typedef EntityInteraction(Entity thisEntity, Entity thatEntity);
+typedef void EntityInteraction(Entity thisEntity, Entity thatEntity);
+typedef void EntityScript(Entity entity);
 
 class Entity {
   Map<Type, Component> components = new Map<Type, Component>();
   Map<String, EntityInteraction> behaviors = new Map();
   Map<String, EntityInteraction> reactions = new Map();
+  Map<String, EntityScript> scripts = new Map();
+
+  List<String> animationBuffer = [];
 
   Entity root;
   bool get isChild => root != this;
 
   int id;
+  final String entityType;
 
   // FIXME: onEmit represents an emit to a specific entity.
   // Therefore, onEmit is an instance member, since not everyone will be interested in knowing that.
@@ -22,7 +27,7 @@ class Entity {
   static StreamController<EmitEvent> _emitNearController = new StreamController.broadcast();
   static Stream<EmitEvent> onEmitNear = _emitNearController.stream;
 
-  Entity() {
+  Entity(this.entityType) {
     onEmit = _emitController.stream;
     root = this;
   }
@@ -45,6 +50,13 @@ class Entity {
     if (reaction != null) { reaction(this, instigator); }
     else if (orElse != null) { orElse(); }
     return reaction != null;
+  }
+
+  /**
+   * Adds an animation to the current entity's animation buffer.
+   */
+  void animate(String name) {
+    animationBuffer.add(name);
   }
 
   // TODO: can optimize this.

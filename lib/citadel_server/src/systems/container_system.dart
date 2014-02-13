@@ -20,19 +20,12 @@ class ContainerSystem {
   }
 
   void _animate(Entity entity) {
-    // FIXME: All of it.
+    // FIXME: >:(
     var c = entity[Container];
-    var tg = entity[TileGraphics];
-    if (tg == null) return; // Goddamn
-
-    var tc = tileManager.tiles[tg.tileConfig];
-    if (tc == null) return; // Son of a
-
-    var frames = tc[c.state];
-    if (frames == null || !(frames is List)) return; // bitch
-
-    var ab = AnimationBuilder.on(entity);
-    frames.forEach((frame) => ab.animate(frame['graphic_id'], frame['transition']));
+    // Inbetween open / closed states.
+    if (!c.isOpen && !c.isClosed) {
+      entity.animate(c.state);
+    }
   }
 
   void _finalizeState(Entity entity) {

@@ -7,7 +7,6 @@ class TileGraphics extends Component {
    * with the target tile having a local ID of 0.
    */
   String currentGraphicID;
-  String tileConfig;
   List<String> tilePhrases;
   TileGraphics([this.tilePhrases]);
 }

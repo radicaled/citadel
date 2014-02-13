@@ -35,7 +35,7 @@ Entity buildEntity(String name) {
     throw new ArgumentError('Entity $name not found.');
   }
 
-  return eb.build();
+  return eb.build(name);
 }
 
 registerAll() {
@@ -56,5 +56,6 @@ _registerTypes() {
   register('multi_tool', MultiTool);
   register('command_door', CommandDoor);
   register('locker', Locker);
+  register('gray_locker', Locker);
 }
 

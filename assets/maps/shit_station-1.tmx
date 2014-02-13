@@ -22,8 +22,7 @@
   <image source="../icons/obj/closet.png" width="576" height="576"/>
   <tile id="0">
    <properties>
-    <property name="entity" value="locker"/>
-    <property name="tile_config" value="gray_locker"/>
+    <property name="entity" value="gray_locker"/>
    </properties>
   </tile>
   <tile id="63">

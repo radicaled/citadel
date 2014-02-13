@@ -4,8 +4,8 @@ abstract class EntityBuilder {
   var _entity;
   _setup();
 
-  Entity build() {
-    _entity = new Entity();
+  Entity build(String entityType) {
+    _entity = new Entity(entityType);
     _setup();
     return _entity;
   }
@@ -21,6 +21,13 @@ abstract class EntityBuilder {
 
   void reaction(String name, EntityInteraction reaction) {
     _entity.reactions[name] = reaction;
+  }
+
+  /**
+   * Scripts only modify the current entity.
+   */
+  void script(String name, EntityScript es) {
+    _entity.scripts[name] = es;
   }
 
   void behavior(String name, setup(EntityBehavior b)) {

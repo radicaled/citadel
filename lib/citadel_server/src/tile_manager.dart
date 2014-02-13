@@ -23,4 +23,35 @@ class TileManager {
       print(tiles);
     });
   }
+
+  /**
+   * Safely queries an entity for its [TileGraphics] component and [Entity.entityType], then returns a [List<Map>] in the following form:
+   *     {
+   *       'graphic_id': 'some_graphic_id',
+   *       'transition': 0, // can be null
+   *       'on_done':  'name_of_script_on_entity' // can be null
+   *     }
+   */
+  List<Map> lookup(Entity e, String frameSet) {
+    // FIXME: the whole null check / return pattern.
+    var list = [];
+
+    if (!e.has([TileGraphics])) return list;
+
+    var tileAnimations = tiles[e.entityType];
+    if (tileAnimations == null) return list;
+
+    var frames = tileAnimations[frameSet];
+    if (frames == null) return list;
+
+    if (frames is String) {
+      list.add({ 'graphic_id': frames });
+    } else if (frames is List) {
+      list.addAll(frames);
+    } else {
+      throw new ArgumentError('Unable to interpret the following class: $frames');
+    }
+
+    return list;
+  }
 }

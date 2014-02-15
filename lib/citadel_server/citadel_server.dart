@@ -27,7 +27,7 @@ part 'src/systems/intent_system.dart';
 part 'src/systems/move_intent_system.dart';
 part 'src/systems/look_intent_system.dart';
 part 'src/systems/interact_intent_system.dart';
-
+part 'src/systems/harm_intent_system.dart';
 
 
 part 'src/entity_utils.dart';
@@ -132,6 +132,8 @@ class CitadelServer {
     intentSystem.register('LOOK', lookIntentSystem);
     intentSystem.register('PICKUP', pickupIntentSystem);
     intentSystem.register('INTERACT', interactIntentSystem);
+
+    intentSystem.register('ATTACK', harmIntentSystem);
   }
 
   void start() {
@@ -152,7 +154,7 @@ class CitadelServer {
     _startLoop();
     _startServer();
 
-
+    log.info('Server started');
   }
 
   _loadTiles() {

@@ -24,7 +24,7 @@ class Hvac extends EntityBuilder {
 
     reaction('disable', (thisEntity, thatEntity) {
       // FIXME: This is hard-coded
-      thisEntity[TileGraphics].tilePhrases[0] = ['Monitors|133'];
+      thisEntity[TileGraphics].tilePhrases[0] = 'Monitors|133';
       thisEntity.emitNear('The HVAC console makes a strange buzzing noise.');
       thisEntity.attach(new Disabled()..text= 'The console sparks at you.');
       EntityManager.changed(thisEntity);

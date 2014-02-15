@@ -50,14 +50,17 @@ void main() {
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
         var ca = currentAction();
+        var type = ca['type'];
         var actionName = ca['name'];
-        // FIXME: bad idea.
-        if (actionName == 'pickup') {
-          pickupEntity(gs.entityId, null);
-        } else {
-          var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
-          print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
-          interactWith(gs.entityId, actionName, withEntityId: entityId);
+        var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
+        print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
+        switch(type) {
+          case 'action':
+            intent(actionName.toUpperCase(), targetEntityId: gs.entityId);
+            break;
+          case 'interact':
+            interactWith(gs.entityId, actionName, withEntityId: entityId);
+            break;
         }
       }
     }
@@ -130,7 +133,7 @@ void main() {
 }
 
 void selectAction(actionIndex) {
-  var elements = querySelectorAll('ul#actions [data-type="action"]');
+  var elements = querySelectorAll('ul#actions [data-type]');
   if (elements.length > actionIndex) {
     var element = elements.elementAt(actionIndex);
     currentActionIndex = actionIndex;
@@ -140,8 +143,9 @@ void selectAction(actionIndex) {
 }
 
 Map currentAction() {
-  var element = querySelectorAll('ul#actions [data-type="action"]').elementAt(currentActionIndex);
+  var element = querySelectorAll('ul#actions [data-type]').elementAt(currentActionIndex);
   return { 'name': element.attributes['data-action-name'],
+    'type': element.attributes['data-type'],
     'hand': element.attributes['data-action-hand'],
     'entity_id': element.attributes['data-entity-id']
   };
@@ -274,10 +278,10 @@ void _pickedUpEntity(payload) {
   var hand = payload['hand'];
   var selector = "#$hand-hand";
   querySelector(selector + ' h3').text = "$hand hand: ${payload['name']}";
-  querySelectorAll(selector + ' [data-type="action"]').forEach((e) => e.remove());
+  querySelectorAll(selector + ' [data-type]').forEach((e) => e.remove());
   var actionSelector = selector + ' ul.actions-for-hand';
   payload['actions'].forEach((action) {
-    querySelector(actionSelector).appendHtml('<li data-type="action" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+    querySelector(actionSelector).appendHtml('<li data-type="interact" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
   });
 }
 

@@ -53,6 +53,17 @@ class Entity {
   }
 
   /**
+   * Executes a script on this entity.
+   *
+   * Raises an [ArgumentError] if the script is not present.
+   */
+  void execute(String scriptName) {
+    var script = scripts[scriptName];
+    if(script == null) throw new ArgumentError('Script $scriptName is not present on $this!');
+    script(this);
+  }
+
+  /**
    * Adds an animation to the current entity's animation buffer.
    */
   void animate(String name) {

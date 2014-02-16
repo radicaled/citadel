@@ -73,6 +73,7 @@ void main() {
     print('Selected ${cmi.name} with value ${cmi.value}');
     // FIXME: right now, you can only look at items through right click selection.
     lookEntity(cmi.value);
+
 /*
     var ca = currentAction();
     switch(ca['name']) {

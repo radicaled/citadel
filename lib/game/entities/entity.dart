@@ -76,7 +76,6 @@ class Entity {
     return types.every( (type) => components.containsKey(type) );
   }
 
-
   Component operator [](Type componentType) {
     return components[componentType];
   }

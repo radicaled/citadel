@@ -17,6 +17,7 @@ part 'components/disabled.dart';
 part 'components/animation.dart';
 part 'components/container.dart';
 part 'components/health.dart';
+part 'components/visible.dart';
 
 // Helpers
 part 'components/src/animation_step.dart';

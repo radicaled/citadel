@@ -166,8 +166,9 @@ class CitadelServer {
     var parser = new tmx.TileMapParser();
     new File('./assets/maps/shit_station-1.tmx').readAsString().then((xml) {
       map = parser.parse(xml);
-
+      int z = -1;
       map.layers.forEach( (tmx.Layer layer) {
+        z++;
         layer.tiles.forEach( (tmx.Tile tile) {
           int x = tile.x ~/ 32;
           int y = tile.y ~/ 32;
@@ -181,16 +182,21 @@ class CitadelServer {
             var entity = buildEntity(entityType);
             entity[Position].x = x;
             entity[Position].y = y;
+            entity[Position].z = z;
             entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
+            entity.attach(new Visible());
             trackEntity(entity);
             // FIXME: hack
             if (entity.has([Container])) {
               var c = entity[Container];
               var e2 = buildEntity('multi_tool');
               e2[TileGraphics].tilePhrases = ['Devices|0'];
-              e2.detach(Position);
+              e2[Position]
+                ..x = x
+                ..y = y
+                ..z = z + 1;
               trackEntity(e2);
-              e2.root = entity;
+
             }
 
           }
@@ -237,6 +243,7 @@ class CitadelServer {
         'entity_id': player.id,
         'tile_phrases': tgs.tilePhrases,
     }));
+    player.attach(new Visible());
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
       var gc = new GameConnection(ws, player);
@@ -278,7 +285,7 @@ class CitadelServer {
 
   void _sendGamestate(GameConnection gc) {
     var payload = [];
-    entitiesWithComponents([TileGraphics, Position]).forEach( (entity) {
+    entitiesWithComponents([Visible, TileGraphics, Position]).forEach( (entity) {
       payload.add(_makeCommand('create_entity', {
           'x': entity[Position].x,
           'y': entity[Position].y,

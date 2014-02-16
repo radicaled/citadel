@@ -42,14 +42,13 @@ class ContainerSystem {
     if (!stateChange) return;
     var c = entity[Container];
     var p = entity[Position];
-    var entities = liveEntities.where((e) => e.isChild && e.root == entity);
-    liveEntities.where((e) => e.root != null).forEach((e) => print("Mine: ${e.id} | Root: ${e.root.id}"));
+    var entities = liveEntities.where((e) => e[Position].isSame2d(p) && e[Position] > p );
     // TODO: should I use a 'Visible' component instead?
     if (c.isOpen) {
-      entities.forEach((e) => e.attach(new Position.from(p)));
+      entities.forEach((e) => e.attach(new Visible()));
       entities.forEach((e) => EntityManager.created(e));
     } else if (c.isClosed) {
-      entities.forEach((e) => e.detach(Position));
+      entities.forEach((e) => e.detach(Visible));
       entities.forEach((e) => EntityManager.hidden(e));
     }
   }

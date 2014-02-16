@@ -42,7 +42,9 @@ class ContainerSystem {
     if (!stateChange) return;
     var c = entity[Container];
     var p = entity[Position];
-    var entities = liveEntities.where((e) => e[Position].isSame2d(p) && e[Position] > p );
+    // FIXME: I need a way to filter out special "hidden" entities.
+    // EG, atmospherics may be invisible entities that are on a higher z-plane than the locker.
+    var entities = entitiesWithComponents([Position]).where((e) => e[Position].isSame2d(p) && e[Position] > p );
     // TODO: should I use a 'Visible' component instead?
     if (c.isOpen) {
       entities.forEach((e) => e.attach(new Visible()));

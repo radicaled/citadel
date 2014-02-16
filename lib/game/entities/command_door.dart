@@ -12,6 +12,17 @@ class CommandDoor extends EntityBuilder {
       // FIXME: assumed everyone has access.
       thatEntity.emit('You crash into the command door!');
       thisEntity.emitNear('CLANK!');
+      thisEntity.execute('opening');
+    });
+
+    reaction('use', (thisEntity, thatEntity) {
+      // FIXME: assumed everyone has access.
+      thatEntity.emit('The door scans your ID and chirps happily');
+      thisEntity.emitNear('Swoosh!');
+      thisEntity.execute('opening');
+    });
+
+    script('opening', (thisEntity) {
       // FIXME: could be triggered multiple times...
       // Should move to a state system.
       thisEntity.animate('opening');

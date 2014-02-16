@@ -1,6 +1,7 @@
 library components;
 
 import 'dart:collection';
+import 'state_machine.dart';
 
 part 'components/component.dart';
 part 'components/position.dart';

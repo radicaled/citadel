@@ -11,9 +11,7 @@ class Locker extends EntityBuilder {
 
     reaction('use', (thisEntity, thatEntity) {
       thatEntity.emitNear('The locker rustles');
-      var container = thisEntity[Container];
-      if (container.isOpen) { container.state = Container.CLOSING; }
-      if (container.isClosed) { container.state = Container.OPENING; }
+      (thisEntity[Container] as Container).transition();
     });
   }
 }

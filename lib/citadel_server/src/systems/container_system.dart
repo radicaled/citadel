@@ -21,25 +21,19 @@ class ContainerSystem {
 
   void _animate(Entity entity) {
     // FIXME: >:(
-    var c = entity[Container];
+    Container c = entity[Container];
     // Inbetween open / closed states.
     if (!c.isOpen && !c.isClosed) {
-      entity.animate(c.state);
+      entity.animate(c.currentState);
     }
   }
 
   void _finalizeState(Entity entity) {
     // FIXME: state machine?
-    var c = entity[Container];
-    switch(c.state) {
-      case Container.CLOSING:
-        c.state = Container.CLOSED;
-        stateChange = true;
-        break;
-      case Container.OPENING:
-        c.state = Container.OPENED;
-        stateChange = true;
-        break;
+    Container c = entity[Container];
+    if ([Container.CLOSING, Container.OPENING].contains(c.currentState)) {
+      c.transition();
+      stateChange = true;
     }
   }
 

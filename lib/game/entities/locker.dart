@@ -5,7 +5,7 @@ class Locker extends EntityBuilder {
     has(Position);
     has(Collidable);
     has(TileGraphics);
-    has(Container, [Container.CLOSED]);
+    has(Container, [Container.CLOSING]);
     has(Name, ['Locker']);
     has(Description, ['A locker full of goodies']);
 

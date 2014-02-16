@@ -186,19 +186,6 @@ class CitadelServer {
             entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
             entity.attach(new Visible());
             trackEntity(entity);
-            // FIXME: hack
-            if (entity.has([Container])) {
-              var c = entity[Container];
-              var e2 = buildEntity('multi_tool');
-              e2[TileGraphics].tilePhrases = ['Devices|0'];
-              e2[Position]
-                ..x = x
-                ..y = y
-                ..z = z + 1;
-              trackEntity(e2);
-
-            }
-
           }
         });
       });

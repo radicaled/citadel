@@ -10,5 +10,5 @@ class Container extends Component {
 
   bool get isOpen => state == OPENED;
   bool get isClosed => state == CLOSED;
-  Container([this.state]);
+  Container(this.state);
 }

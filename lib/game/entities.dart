@@ -24,6 +24,8 @@ part 'entities/human.dart';
 part 'entities/multi_tool.dart';
 part 'entities/command_door.dart';
 part 'entities/locker.dart';
+part 'entities/arcade_machine.dart';
+part 'entities/donut.dart';
 
 var entityDefinitions = new Map<String, EntityBuilder>();
 var _registered = false;
@@ -57,5 +59,7 @@ _registerTypes() {
   register('command_door', CommandDoor);
   register('locker', Locker);
   register('gray_locker', Locker);
+  register('arcade_machine', ArcadeMachine);
+  register('plain_donut', Donut);
 }
 

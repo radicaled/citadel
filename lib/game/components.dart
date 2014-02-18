@@ -18,6 +18,7 @@ part 'components/animation.dart';
 part 'components/container.dart';
 part 'components/health.dart';
 part 'components/visible.dart';
+part 'components/damage.dart';
 
 // Helpers
 part 'components/src/animation_step.dart';

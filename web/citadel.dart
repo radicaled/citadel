@@ -73,18 +73,6 @@ void main() {
     print('Selected ${cmi.name} with value ${cmi.value}');
     // FIXME: right now, you can only look at items through right click selection.
     lookEntity(cmi.value);
-
-/*
-    var ca = currentAction();
-    switch(ca['name']) {
-      case 'look':
-        lookEntity(cmi.value);
-        break;
-      case 'pickup':
-        pickupEntity(cmi.value, ca['hand']);
-        break;
-    }
-*/
   });
   // FIXME: this entire damn thing.
   canvas.onKeyPress.listen( (ke) {
@@ -119,18 +107,9 @@ void main() {
   renderLoop.addStage(stage);
 
   var url = "//${window.location.host}/citadel/assets/maps/shit_station-1.tmx";
-
-  // call the web server asynchronously
-  //HttpRequest.getString(url).then((xml) {
-  //  parseMap(xml);
-  //  login().then((_) => initWebSocket());
-  //});
   HttpRequest.getString(url)
     .then(loadMap)
     .then((_) => initWebSocket());
-
-  //login().then((_) => initWebSocket());
-  //initWebSocket();
 }
 
 void selectAction(actionIndex) {
@@ -201,7 +180,6 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onOpen.listen((e) {
     print('Connected');
     querySelector('#ws-status').text = 'ONLINE';
-    //ws.send(json.stringify({ 'type': 'get_gamestate' }));
   });
 
   ws.onClose.listen((e) {

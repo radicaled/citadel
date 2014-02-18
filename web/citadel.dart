@@ -262,6 +262,9 @@ void _pickedUpEntity(payload) {
   payload['actions'].forEach((action) {
     querySelector(actionSelector).appendHtml('<li data-type="interact" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
   });
+  ['attack', 'throw', 'drop'].forEach((action) {
+    querySelector(actionSelector).appendHtml('<li data-type="action" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+  });
 }
 
 // TODO: check to see if redundant entites have been created?

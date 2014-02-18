@@ -8,13 +8,15 @@ void harmIntentSystem(Intent intent) {
   if (weapon == null) weapon = attacker;
 
   var maxDamage = 15;
-  // FIXME: query entity for damage components.
+  if (weapon.has([Damage])) maxDamage = weapon[Damage].maxDamage;
   // FIXME: assume hit, always.
   var health = target[Health];
   var name = target[Name].text;
   if (health != null) {
     health.currentHP -= maxDamage;
     target.emitNear('$name: Ow! That hurts a ton!');
+
+    target.react('damaged', attacker);
 
     if (health.currentHP <= 0) {
       target.emitNear('${name} dies!');

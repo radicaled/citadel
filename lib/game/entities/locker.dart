@@ -12,7 +12,8 @@ class Locker extends EntityBuilder {
 
     reaction('use', (thisEntity, thatEntity) {
       thatEntity.emitNear('The locker rustles');
-      (thisEntity[Openable] as Openable).transition();
+      Openable o = thisEntity[Openable];
+      if (!o.isTransitioning) { o.transition(); }
     });
   }
 }

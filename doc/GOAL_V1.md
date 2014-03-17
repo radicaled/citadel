@@ -8,10 +8,11 @@ V1 shitstation:
   --> Done
 * Players can open containers and see their contents.
   --> Done
-* Players can close containers and hide their contents.
+* Players can close containers and hide their contents.  
 * Players can melee attack each other with items.
   --> Done
 * Players can melee attack items with other items (to varying effect).
+  --> Done
 * Players can pick up objects.
   --> Done
 * Players can throw objects.

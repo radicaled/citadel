@@ -311,6 +311,8 @@ class CitadelServer {
     animationBufferSystem();
     animationSystem();
 
+    EntityManager.clearMessages();
+
   }
 
   _processCommands() {

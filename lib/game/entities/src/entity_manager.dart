@@ -6,6 +6,19 @@ class EntityManager {
   static var onHidden = _subscribe('hidden');
   static var onCreated = _subscribe('created');
 
+  static List<EntityMessage> messageQueue = new List();
+
+  static Iterable<Entity> withMessage(String message) {
+    return messageQueue.where((em) => em.name == message).map((em) => em.entity);
+  }
+
+  static addMessage(Entity e, String message) {
+    messageQueue.add(new EntityMessage(message, e));
+  }
+
+  static clearMessages() {
+   messageQueue.clear();
+  }
 
   static changed(Entity entity) {
     _signal('changed', entity);
@@ -27,4 +40,11 @@ class EntityManager {
     _entityEventController.add(new EntityEvent(name, entity));
   }
 
+}
+
+class EntityMessage {
+  String name;
+  Entity entity;
+
+  EntityMessage(this.name, this.entity);
 }

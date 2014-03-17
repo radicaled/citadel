@@ -27,6 +27,7 @@ class OpenableSystem {
     Openable o = entity[Openable];
     if (o.isTransitioning) {
       o.transition();
+      EntityManager.addMessage(entity, o.currentState);
     }
   }
 }

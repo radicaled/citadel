@@ -5,53 +5,30 @@ containerSystem() {
 }
 
 class ContainerSystem {
-  // FIXME
-  bool stateChange;
   void execute() {
-    entitiesWithComponents([Container]).forEach((e) => workOn(e));
-  }
-
-  void workOn(Entity entity) {
-    // FIXME
-    stateChange = false;
-    _animate(entity);
-    _finalizeState(entity);
-    _showOrHideContents(entity);
-  }
-
-  void _animate(Entity entity) {
-    // FIXME: >:(
-    Container c = entity[Container];
-    // Inbetween open / closed states.
-    if (!c.isOpen && !c.isClosed) {
-      entity.animate(c.currentState);
-    }
-  }
-
-  void _finalizeState(Entity entity) {
-    // FIXME: state machine?
-    Container c = entity[Container];
-    if ([Container.CLOSING, Container.OPENING].contains(c.currentState)) {
-      c.transition();
-      stateChange = true;
-    }
+    entitiesWith([Openable, Container], message: Openable.OPENED).forEach((e) => showContents(e));
+    entitiesWith([Openable, Container], message: Openable.CLOSED).forEach((e) => hideContents(e));
   }
 
   // FIXME: sync with animation
-  void _showOrHideContents(Entity entity) {
-    if (!stateChange) return;
-    var c = entity[Container];
+  void showContents(Entity entity) {
     var p = entity[Position];
+    var entities = _nearbyEntities(p);
+    entities.forEach((e) => e.attach(new Visible()));
+    entities.forEach((e) => EntityManager.created(e));
+  }
+
+  // FIXME: sync with animation
+  void hideContents(Entity entity) {
+    var p = entity[Position];
+    var entities = _nearbyEntities(p);
+    entities.forEach((e) => e.detach(Visible));
+    entities.forEach((e) => EntityManager.hidden(e));
+  }
+
+  _nearbyEntities(Position pos) {
     // FIXME: I need a way to filter out special "hidden" entities.
     // EG, atmospherics may be invisible entities that are on a higher z-plane than the locker.
-    var entities = entitiesWithComponents([Position]).where((e) => e[Position].isSame2d(p) && e[Position] > p );
-    // TODO: should I use a 'Visible' component instead?
-    if (c.isOpen) {
-      entities.forEach((e) => e.attach(new Visible()));
-      entities.forEach((e) => EntityManager.created(e));
-    } else if (c.isClosed) {
-      entities.forEach((e) => e.detach(Visible));
-      entities.forEach((e) => EntityManager.hidden(e));
-    }
+    return entitiesWithComponents([Position]).where((e) => e[Position].isSame2d(pos) && e[Position] > pos );
   }
 }

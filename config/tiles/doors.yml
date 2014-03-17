@@ -13,3 +13,17 @@ command_door:
     - graphic_id: Command Doors|7
       transition: 1
       on_done: opened
+  closing:
+  - graphic_id: Command Doors|7
+    transition: 1
+  - graphic_id: Command Doors|6
+    transition: 1
+  - graphic_id: Command Doors|5
+    transition: 1
+  - graphic_id: Command Doors|4
+    transition: 1
+  - graphic_id: Command Doors|3
+    transition: 1
+  - graphic_id: Command Doors|2
+    transition: 1
+    on_done: closed

@@ -21,6 +21,7 @@ part 'src/systems/pickup_intent_system.dart';
 part 'src/systems/animation_system.dart';
 part 'src/systems/animation_buffer_system.dart';
 part 'src/systems/container_system.dart';
+part 'src/systems/openable_system.dart';
 
 // Intent systems
 part 'src/systems/intent_system.dart';
@@ -303,6 +304,7 @@ class CitadelServer {
     intentSystem.execute();
     collisionSystem();
     movementSystem();
+    openableSystem();
     containerSystem();
 
     // Should always be last.

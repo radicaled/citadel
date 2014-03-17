@@ -5,6 +5,7 @@ class CommandDoor extends EntityBuilder {
     has(Position);
     has(Collidable);
     has(TileGraphics);
+    has(Openable, [Openable.CLOSING]);
     has(Name, ['Command Door']);
     has(Description, ['A massive reinforced door']);
 
@@ -17,19 +18,20 @@ class CommandDoor extends EntityBuilder {
 
     reaction('use', (thisEntity, thatEntity) {
       // FIXME: assumed everyone has access.
+      Openable o = thisEntity[Openable];
+      if (o.isTransitioning) { return; }
+
       thatEntity.emit('The door scans your ID and chirps happily');
       thisEntity.emitNear('Swoosh!');
-      thisEntity.execute('opening');
-    });
-
-    script('opening', (thisEntity) {
-      // FIXME: could be triggered multiple times...
-      // Should move to a state system.
-      thisEntity.animate('opening');
+      o.transition();
     });
 
     script('opened', (thisEntity) {
       thisEntity.components.remove(Collidable);
+    });
+
+    script('closed', (thisEntity) {
+      thisEntity.attach(new Collidable());
     });
   }
 }

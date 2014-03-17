@@ -13,7 +13,9 @@ class CommandDoor extends EntityBuilder {
       // FIXME: assumed everyone has access.
       thatEntity.emit('You crash into the command door!');
       thisEntity.emitNear('CLANK!');
-      thisEntity.execute('opening');
+      Openable o = thisEntity[Openable];
+      if (o.isTransitioning) { return; }
+      o.transition();
     });
 
     reaction('use', (thisEntity, thatEntity) {

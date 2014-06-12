@@ -10,10 +10,7 @@ dependencies:
   logging: any
   path: any
   route: any
-  stagexl:
-    git:
-      ref: master
-      url: https://github.com/bp74/StageXL.git
+  stagexl: any
   tmx: any
   unittest: any
   xml: any

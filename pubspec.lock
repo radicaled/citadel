@@ -4,71 +4,80 @@ packages:
   archive:
     description: archive
     source: hosted
-    version: "1.0.0"
+    version: "1.0.17"
   browser:
     description: browser
     source: hosted
-    version: "0.9.0"
-  collection_helpers:
-    description: collection_helpers
+    version: "0.10.0+2"
+  collection:
+    description: collection
     source: hosted
-    version: "0.9.1"
+    version: "0.9.3+1"
   crypto:
     description: crypto
     source: hosted
-    version: "0.8.10+3"
+    version: "0.9.0"
   game_loop:
     description: game_loop
     source: hosted
-    version: "0.9.3"
+    version: "0.9.4"
   js:
     description: js
     source: hosted
-    version: "0.2.0"
+    version: "0.2.2"
   json:
     description: json
     source: hosted
-    version: "0.9.0"
+    version: "0.10.0"
   logging:
     description: logging
     source: hosted
-    version: "0.9.1"
-  meta:
-    description: meta
+    version: "0.9.1+1"
+  matcher:
+    description: matcher
     source: hosted
-    version: "0.8.8"
+    version: "0.10.0+3"
   path:
     description: path
     source: hosted
-    version: "0.8.10+3"
+    version: "1.2.1"
+  petitparser:
+    description: petitparser
+    source: hosted
+    version: "1.1.3"
   route:
     description: route
     source: hosted
     version: "0.4.6"
+  source_maps:
+    description: source_maps
+    source: hosted
+    version: "0.9.1"
   stack_trace:
     description: stack_trace
     source: hosted
-    version: "0.8.10+3"
+    version: "1.0.0"
   stagexl:
-    description:
-      ref: master
-      resolved-ref: ee6d01072bbc1cdc3c9482e26de3dfd533bc1ac8
-      url: "https://github.com/bp74/StageXL.git"
-    source: git
-    version: "0.8.9"
+    description: stagexl
+    source: hosted
+    version: "0.9.3+2"
+  string_scanner:
+    description: string_scanner
+    source: hosted
+    version: "0.0.2"
   tmx:
     description: tmx
     source: hosted
-    version: "0.11.0"
+    version: "0.11.3"
   unittest:
     description: unittest
     source: hosted
-    version: "0.8.10+3"
+    version: "0.11.0+2"
   xml:
     description: xml
     source: hosted
-    version: "0.9.5"
+    version: "2.1.1"
   yaml:
     description: yaml
     source: hosted
-    version: "0.9.0"
+    version: "0.10.0"

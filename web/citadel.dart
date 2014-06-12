@@ -1,9 +1,9 @@
 import 'dart:html';
 import 'dart:async';
+import 'dart:convert';
 import 'package:tmx/tmx.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
-import 'package:json/json.dart' as json;
 import 'package:citadel/citadel_client/citadel_client.dart' as c;
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
@@ -22,7 +22,7 @@ int leftHand, rightHand;
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
-  stage = new Stage('Test Stage', canvas);
+  stage = new Stage(canvas);
   stage.focus = stage;
 
   canvas.onContextMenu.listen((event) => event.preventDefault() );
@@ -159,7 +159,7 @@ void intent(intentName, {targetEntityId, withEntityId, actionName}) {
 }
 
 void send(type, payload) {
-  ws.send(json.stringify({ 'type': type, 'payload': payload }));
+  ws.send(JSON.encode({ 'type': type, 'payload': payload }));
 }
 
 void initWebSocket([int retrySeconds = 2]) {
@@ -223,7 +223,7 @@ Future loadMap(String xml) {
 }
 
 void handleMessage(jsonString) {
-  var msg = json.parse(jsonString);
+  var msg = JSON.decode(jsonString);
   executeMessage(msg['type'], msg['payload']);
 }
 

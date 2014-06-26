@@ -159,13 +159,13 @@ class CitadelServer {
   }
 
   _loadTiles() {
-    tileManager = new TileManager(path.join('config', 'tiles'));
+    tileManager = new TileManager('packages/citadel/config/tiles');
     tileManager.load();
   }
 
   _loadMap() {
     var parser = new tmx.TileMapParser();
-    new File('./assets/maps/shit_station-1.tmx').readAsString().then((xml) {
+    new File('packages/citadel/assets/maps/shit_station-1.tmx').readAsString().then((xml) {
       map = parser.parse(xml);
       int z = -1;
       map.layers.forEach( (tmx.Layer layer) {

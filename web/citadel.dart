@@ -106,7 +106,7 @@ void main() {
 
   renderLoop.addStage(stage);
 
-  var url = "//${window.location.host}/citadel/assets/maps/shit_station-1.tmx";
+  var url = "//${window.location.host}/packages/citadel/assets/maps/shit_station-1.tmx";
   HttpRequest.getString(url)
     .then(loadMap)
     .then((_) => initWebSocket());
@@ -214,7 +214,7 @@ Future loadMap(String xml) {
 
     // Welcome to 2013: where they still make languages without RegExp literals.
     var pattern = new RegExp(r"^\.\.");
-    var imagePath = image.source.splitMapJoin(pattern, onMatch: (m) => "../assets");
+    var imagePath = image.source.splitMapJoin(pattern, onMatch: (m) => "packages/citadel/assets");
 
     resourceManager.addBitmapData(tileset.name, imagePath);
   });

@@ -10,6 +10,9 @@ tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
 
 Stage stage;
+Sprite gameLayer = new Sprite();
+Sprite guiLayer = new Sprite();
+
 var resourceManager = new ResourceManager();
 WebSocket ws;
 int currentPlayerId;
@@ -105,6 +108,8 @@ void main() {
   var renderLoop = new RenderLoop();
 
   renderLoop.addStage(stage);
+
+  setupLayers(canvas.width, canvas.height);
 
   var url = "//${window.location.host}/packages/citadel/assets/maps/shit_station-1.tmx";
   HttpRequest.getString(url)
@@ -282,7 +287,7 @@ void _createEntity(payload) {
     s.addChild(new Bitmap(ss.frameAt(tile.tileId)));
   });
 
-  stage.addChild(s);
+  gameLayer.addChild(s);
 
   entities[s.entityId] = s;
 }
@@ -315,4 +320,11 @@ void _moveEntity(payload) {
 
 SpriteSheet getSpriteSheet(tmx.Tileset ts) {
   return new SpriteSheet(resourceManager.getBitmapData(ts.name), ts.width, ts.height);
+}
+
+void setupLayers(width, height) {
+  stage.addChild(gameLayer);
+  stage.addChild(guiLayer);
+
+  c.constructGui(guiLayer);
 }

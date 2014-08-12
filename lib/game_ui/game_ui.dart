@@ -2,8 +2,13 @@ library game_ui;
 
 import 'package:stagexl/stagexl.dart';
 
+// Elements
+part 'label.dart';
 part 'button.dart';
+
+// Containers
 part 'vbox.dart';
+
 
 typedef _dslFxn(GuiDSL);
 typedef _containerFxn(ContainerDSL);
@@ -18,6 +23,10 @@ class GameGui {
 class GuiDSL {
   Button button(String text) {
     return new Button(text);
+  }
+
+  Label label(String text) {
+    return new Label(text);
   }
 
   Vbox vbox(int width, int height, BuilderFunction f) {

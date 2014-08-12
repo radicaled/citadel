@@ -3,18 +3,16 @@ part of game_ui;
 class Button extends Sprite {
   String text;
   TextField tf;
-  Button([this.text]) {
-    if (text != null) {
-      tf = new TextField();
-      tf.text = text;
-      tf.x = 0;
-      tf.y = 0;
 
-      //tf.width = 20;
-      tf.height = 20;
-      tf.textColor = Color.White;
-      addChild(tf);
-    }
+  int xPadding = 10;
+  int yPadding = 10;
+
+  Button([this.text]) {
+    tf = new TextField();
+    tf.textColor = Color.White;
+    addChild(tf);
+
+    _drawText(text);
     _drawBackground();
   }
 
@@ -22,5 +20,14 @@ class Button extends Sprite {
     graphics
       ..rect(0, 0, width, height)
       ..fillColor(Color.Black);
+  }
+
+  _drawText(text) {
+    tf.text = text;
+    tf.x = 0 + xPadding;
+    tf.y = 0 + yPadding;
+
+    tf.width = tf.getLineMetrics(0).width + xPadding;
+    tf.height = tf.getLineMetrics(0).height + yPadding;
   }
 }

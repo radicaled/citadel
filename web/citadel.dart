@@ -16,7 +16,21 @@ Sprite guiLayer = new Sprite();
 var resourceManager = new ResourceManager();
 WebSocket ws;
 int currentPlayerId;
-c.GameSprite currentTarget;
+// TODO: hacky.
+c.GameSprite _currentTarget;
+c.GameSprite get currentTarget => _currentTarget;
+             set currentTarget(c.GameSprite gs) {
+               if (currentTarget != null) {
+                 _currentTarget.filters = [];
+                 _currentTarget.refreshCache();
+               }
+               _currentTarget = gs;
+
+               _currentTarget.filters.add(new ColorMatrixFilter.invert());
+               _currentTarget.applyCache(0,  0, gs.width.toInt(),  gs.height.toInt());
+               // ... hm. Are my tiles too close together?
+               //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
+             }
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
 c.ContextMenu currentContextMenu;
@@ -35,7 +49,7 @@ void main() {
     if (currentContextMenu != null) { currentContextMenu.dismiss(); }
     var cmis = entities.values
         .where((gs) => gs.hitTestPoint(event.stageX, event.stageY))
-        .map((gs) => new c.ContextMenuItem(gs.name, gs.entityId) )
+        .map((gs) => new c.ContextMenuItem(gs.name, gs) )
         .toList();
 
     currentContextMenu = new c.ContextMenu(stage, cmis)
@@ -53,33 +67,9 @@ void main() {
       // There was no context menu to interact with; they were trying to click on an entity.
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
-        if (currentTarget != null) {
-          currentTarget.filters = [];
-          currentTarget.refreshCache();
-        }
         currentTarget = gs;
-
-        currentTarget.filters.add(new ColorMatrixFilter.invert());
-        currentTarget.applyCache(0,  0, gs.width.toInt(),  gs.height.toInt());
-        // ... hm. Are my tiles too close together?
-        //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
         c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
       }
-//      if (gs is c.GameSprite) {
-//        var ca = currentAction();
-//        var type = ca['type'];
-//        var actionName = ca['name'];
-//        var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
-//        print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
-//        switch(type) {
-//          case 'action':
-//            intent(actionName.toUpperCase(), targetEntityId: gs.entityId);
-//            break;
-//          case 'interact':
-//            interactWith(gs.entityId, actionName, withEntityId: entityId);
-//            break;
-//        }
-//      }
     }
 
   });
@@ -87,9 +77,9 @@ void main() {
   c.ContextMenu.onSelection.listen((cmi) {
     currentContextMenu.dismiss();
     currentContextMenu = null;
-    print('Selected ${cmi.name} with value ${cmi.value}');
-    // FIXME: right now, you can only look at items through right click selection.
-    lookEntity(cmi.value);
+
+    currentTarget = cmi.value;
+
   });
   // FIXME: this entire damn thing.
   canvas.onKeyPress.listen( (ke) {

@@ -11,14 +11,39 @@ part 'src/sprites/game_sprite.dart';
 part 'src/ui/context_menu.dart';
 part 'src/ui/context_menu_item.dart';
 
+// Good lord forgive me.
+GuiContainer gui;
+
 void constructGui(DisplayObjectContainer layer) {
-  var vbox = new Vbox(100, 100);
-  vbox.x = 200;
-  vbox.y = 400;
+  gui = new GuiContainer(layer);
+  gui.build();
+}
 
-  vbox.addChild(new Button('Use'));
-  vbox.addChild(new Button('Pickup'));
-  vbox.addChild(new Button('Attack'));
+// Good lord forgive me!!!!
+class GuiContainer {
+  Button useButton;
+  Button pickupButton;
+  Button attackButton;
 
-  layer.addChild(vbox);
+  Vbox actionContainer;
+
+  DisplayObjectContainer container;
+
+  GuiContainer(this.container);
+
+  void build() {
+    GameGui.construct((dsl) {
+      useButton = dsl.button('Use');
+      attackButton = dsl.button('Attack');
+      pickupButton = dsl.button('Pickup');
+
+      actionContainer = dsl.vbox(100, 100, (vbox) {
+        vbox.x = 200;
+        vbox.y = 400;
+        vbox.addAll([useButton, attackButton, pickupButton]);
+      });
+    });
+
+    container.addChild(actionContainer);
+  }
 }

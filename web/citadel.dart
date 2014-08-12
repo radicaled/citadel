@@ -16,6 +16,7 @@ Sprite guiLayer = new Sprite();
 var resourceManager = new ResourceManager();
 WebSocket ws;
 int currentPlayerId;
+c.GameSprite currentTarget;
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
 c.ContextMenu currentContextMenu;
@@ -52,20 +53,33 @@ void main() {
       // There was no context menu to interact with; they were trying to click on an entity.
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
-        var ca = currentAction();
-        var type = ca['type'];
-        var actionName = ca['name'];
-        var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
-        print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
-        switch(type) {
-          case 'action':
-            intent(actionName.toUpperCase(), targetEntityId: gs.entityId);
-            break;
-          case 'interact':
-            interactWith(gs.entityId, actionName, withEntityId: entityId);
-            break;
+        if (currentTarget != null) {
+          currentTarget.filters = [];
+          currentTarget.refreshCache();
         }
+        currentTarget = gs;
+
+        currentTarget.filters.add(new ColorMatrixFilter.invert());
+        currentTarget.applyCache(0,  0, gs.width.toInt(),  gs.height.toInt());
+        // ... hm. Are my tiles too close together?
+        //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
+        c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
       }
+//      if (gs is c.GameSprite) {
+//        var ca = currentAction();
+//        var type = ca['type'];
+//        var actionName = ca['name'];
+//        var entityId = ca['entity_id'] != null ? int.parse(ca['entity_id']) : null;
+//        print('Tried to $actionName with ${gs.entityId} / ${gs.name} via $entityId');
+//        switch(type) {
+//          case 'action':
+//            intent(actionName.toUpperCase(), targetEntityId: gs.entityId);
+//            break;
+//          case 'interact':
+//            interactWith(gs.entityId, actionName, withEntityId: entityId);
+//            break;
+//        }
+//      }
     }
 
   });
@@ -110,6 +124,7 @@ void main() {
   renderLoop.addStage(stage);
 
   setupLayers(canvas.width, canvas.height);
+  setupGuiEvents();
 
   var url = "//${window.location.host}/packages/citadel/assets/maps/shit_station-1.tmx";
   HttpRequest.getString(url)
@@ -140,7 +155,7 @@ void movePlayer(direction) {
   intent(direction);
 }
 // FIXME: this should be an interaction, right?
-void pickupEntity(entityId, hand) {
+void pickupEntity(entityId) {
   intent('PICKUP', targetEntityId: entityId);
 }
 // FIXME: this should be an interaction, right?
@@ -327,4 +342,32 @@ void setupLayers(width, height) {
   stage.addChild(guiLayer);
 
   c.constructGui(guiLayer);
+}
+
+void setupGuiEvents() {
+  var gui = c.gui;
+
+  gui.lookButton.onMouseClick.listen((me) {
+    if (currentTarget != null) {
+      lookEntity(currentTarget.entityId);
+      }
+  });
+
+  gui.useButton.onMouseClick.listen((me) {
+    if (currentTarget != null) {
+      interactWith(currentTarget.entityId, 'use');
+    }
+  });
+
+  gui.pickupButton.onMouseClick.listen((me) {
+    if (currentTarget != null) {
+      pickupEntity(currentTarget.entityId);
+    }
+  });
+
+  gui.attackButton.onMouseClick.listen((me) {
+    if (currentTarget != null) {
+      intent('ATTACK', targetEntityId: currentTarget.entityId);
+    }
+  });
 }

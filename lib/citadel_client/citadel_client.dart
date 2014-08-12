@@ -21,9 +21,12 @@ void constructGui(DisplayObjectContainer layer) {
 
 // Good lord forgive me!!!!
 class GuiContainer {
+  Button lookButton;
   Button useButton;
   Button pickupButton;
   Button attackButton;
+
+  Label targetLabel;
 
   Vbox actionContainer;
 
@@ -33,14 +36,19 @@ class GuiContainer {
 
   void build() {
     GameGui.construct((dsl) {
+      lookButton = dsl.button('Look');
       useButton = dsl.button('Use');
       attackButton = dsl.button('Attack');
       pickupButton = dsl.button('Pickup');
 
+      targetLabel = dsl.label('');
+
       actionContainer = dsl.vbox(100, 100, (vbox) {
         vbox.x = 200;
         vbox.y = 400;
-        vbox.addAll([useButton, attackButton, pickupButton]);
+        vbox.addAll([lookButton, useButton, attackButton, pickupButton]);
+        // TODO: move somewhere else
+        vbox.add(targetLabel);
       });
     });
 

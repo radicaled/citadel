@@ -5,6 +5,7 @@ import 'package:tmx/tmx.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
 import 'package:citadel/citadel_client/citadel_client.dart' as c;
+import 'package:citadel/citadel_network/citadel_network.dart';
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
@@ -36,6 +37,8 @@ Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
 c.ContextMenu currentContextMenu;
 int currentActionIndex = 0;
 int leftHand, rightHand;
+
+NetworkHub networkHub;
 
 void main() {
   var canvas = querySelector('#stage');
@@ -190,6 +193,7 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onOpen.listen((e) {
     print('Connected');
     querySelector('#ws-status').text = 'ONLINE';
+    listenForEvents(ws.onMessage);
   });
 
   ws.onClose.listen((e) {
@@ -204,10 +208,24 @@ void initWebSocket([int retrySeconds = 2]) {
   });
 
   ws.onMessage.listen((MessageEvent e) {
-    print('Received message: ${e.data}');
-    handleMessage(e.data);
+
   });
 
+}
+
+void listenForEvents(Stream stream) {
+  var transformer = new StreamTransformer.fromHandlers(handleData: (MessageEvent me, sink) {
+    sink.add(me.data);
+  });
+  stream.listen((MessageEvent me) => print('Received message: ${me.data}'));
+  networkHub = new NetworkHub(stream.transform(transformer));
+
+  networkHub.on('move_entity').listen(_moveEntity);
+  networkHub.on('create_entity').listen(_createEntity);
+  networkHub.on('update_entity').listen(_updateEntity);
+  networkHub.on('remove_entity').listen(_removeEntity);
+  networkHub.on('emit').listen(_emit);
+  networkHub.on('picked_up').listen(_pickedUpEntity);
 }
 
 // TODO: I forgot what the Uint8 type is in JS. Uint8?
@@ -232,37 +250,13 @@ Future loadMap(String xml) {
   return resourceManager.load();
 }
 
-void handleMessage(jsonString) {
-  var msg = JSON.decode(jsonString);
-  executeMessage(msg['type'], msg['payload']);
+void _emit(Message message) {
+  var payload = message.payload;
+  querySelector('#log').appendHtml('<p>${payload['text']}');
 }
 
-void executeMessage(type, payload) {
-  switch (type) {
-    case 'move_entity':
-      _moveEntity(payload);
-      break;
-    case 'create_entity':
-      _createEntity(payload);
-      break;
-    case 'update_entity':
-      _updateEntity(payload);
-      break;
-    case 'remove_entity':
-      _removeEntity(payload);
-      break;
-    case 'set_gamestate':
-      payload.forEach((submessage) => executeMessage(submessage['type'], submessage['payload']));
-      break;
-    case 'emit':
-      querySelector('#log').appendHtml('<p>${payload['text']}');
-      break;
-    case 'picked_up':
-      _pickedUpEntity(payload);
-  }
-}
-
-void _pickedUpEntity(payload) {
+void _pickedUpEntity(Message message) {
+  var payload = message.payload;
   var entityId = payload['entity_id'];
   var hand = payload['hand'];
   var selector = "#$hand-hand";
@@ -279,8 +273,9 @@ void _pickedUpEntity(payload) {
 
 // TODO: check to see if redundant entites have been created?
 // EG, we already have an entity with ID=1, but now there are more?
-void _createEntity(payload) {
+void _createEntity(Message message) {
   var s = new c.GameSprite();
+  var payload = message.payload;
   s.entityId = payload['entity_id'];
   s.name = payload['name'];
   s.x = payload['x'] * 32;
@@ -297,7 +292,8 @@ void _createEntity(payload) {
   entities[s.entityId] = s;
 }
 
-void _updateEntity(Map payload) {
+void _updateEntity(Message message) {
+  var payload = message.payload;
   var gs = entities[payload['entity_id']];
   if (payload.containsKey('x')) { gs.x = payload['x']; }
   if (payload.containsKey('y')) { gs.x = payload['x']; }
@@ -312,12 +308,14 @@ void _updateEntity(Map payload) {
   }
 }
 
-void _removeEntity(payload) {
+void _removeEntity(Message message) {
+  var payload = message.payload;
   var gs = entities.remove(payload['entity_id']);
   gs.removeFromParent();
 }
 
-void _moveEntity(payload) {
+void _moveEntity(Message message) {
+  var payload = message.payload;
   var entity = entities[payload['entity_id']];
   entity.x = payload['x'] * 32;
   entity.y = payload['y'] * 32;

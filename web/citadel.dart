@@ -31,6 +31,7 @@ c.GameSprite get currentTarget => _currentTarget;
                _currentTarget.applyCache(0,  0, gs.width.toInt(),  gs.height.toInt());
                // ... hm. Are my tiles too close together?
                //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
+               c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
              }
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
@@ -71,7 +72,6 @@ void main() {
       var gs = stage.hitTestInput(event.stageX, event.stageY);
       if (gs is c.GameSprite) {
         currentTarget = gs;
-        c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
       }
     }
 

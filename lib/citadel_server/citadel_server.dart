@@ -272,9 +272,10 @@ class CitadelServer {
   }
 
   void _sendGamestate(GameConnection gc) {
-    var payload = [];
+    var messages = [];
+    var payload = { 'messages': messages };
     entitiesWithComponents([Visible, TileGraphics, Position]).forEach( (entity) {
-      payload.add(_makeCommand('create_entity', {
+      messages.add(_makeCommand('create_entity', {
           'x': entity[Position].x,
           'y': entity[Position].y,
           'z': entity[Position].z,

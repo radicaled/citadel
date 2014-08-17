@@ -61,14 +61,16 @@ set_gamestate
 ===
 
 A batched set of commands that set the current gamestate.
-The payload is an array of commands.
+payload.messages is an array of commands.
 ```json
 {
     type: set_gamestate,
-    payload: [
+    payload: {
+      messages: [
         { type: 'set_entity', payload: { /* ... */ }
         /* ... */
-    ]
+      ]
+    }
 }
 ```
 

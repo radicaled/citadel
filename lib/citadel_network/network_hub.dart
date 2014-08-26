@@ -4,19 +4,8 @@ class NetworkHub {
   Stream stream;
 
   NetworkHub(Stream stream) {
-    var transformer = new StreamTransformer.fromHandlers(handleData: (value, sink) {
-      var json = JSON.decode(value);
-      // TODO: hack >:(
-      if (json['type'] == 'set_gamestate') {
-        json['payload']['messages'].forEach((submessage) {
-          sink.add(new Message.fromJson(submessage));
-        });
-      } else {
-        sink.add(new Message.fromJson(json));
-      }
-    });
-
-    this.stream = stream.transform(transformer);
+    this.stream = stream.transform(_jsonTransformer)
+      .transform(_setGamestateTransformer);
   }
 
   Stream on(String messageType) {

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 part 'network_hub.dart';
+part 'stream_transformers.dart';
 
 class Message {
   String name;

@@ -17,6 +17,15 @@ class Button extends Sprite {
     _setupEvents();
   }
 
+  setIcon(DisplayObject icon) {
+    removeChildren();
+    // I got this equation working the first time.
+    // THE FIRST TIME. I AM TERRIBLE AT MATH YET A GENIUS
+    icon.x = (width ~/ 2) - icon.width ~/ 2;
+    icon.y = (height ~/ 2) - icon.height ~/ 2;
+    addChild(icon);
+  }
+
   _drawBackground([int color = Color.Black]) {
     graphics
       ..rect(0, 0, width, height)

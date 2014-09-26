@@ -1,9 +1,16 @@
 part of game_ui;
 
-class Vbox extends Sprite {
+class Vbox extends Container {
   int bWidth;
   int bHeight;
   int xPadding = 20;
+
+  int _backgroundColor = Color.Transparent;
+  int get backgroundColor => _backgroundColor;
+  void set backgroundColor(int color) {
+    _backgroundColor = color;
+    _drawBackground(_backgroundColor);
+  }
 
   Vbox(this.bWidth, this.bHeight);
 
@@ -18,5 +25,11 @@ class Vbox extends Sprite {
     object.x = x;
     object.y = y;
     super.addChild(object);
+  }
+
+  _drawBackground([int color = Color.Transparent]) {
+    graphics
+      ..rect(0, 0, width, height)
+      ..fillColor(color);
   }
 }

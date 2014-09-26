@@ -241,7 +241,10 @@ void _pickedUpEntity(Message message) {
   var hand = payload['hand'];
 
   // TODO: What are you holding?
+  var entity = entities[entityId];
+  var clone = entity.clone();
   // GameGui.voicesInHead: etc
+  c.gui.heldItem.setIcon(clone);
 
   payload['actions'].forEach((action) {
     // TODO: ??
@@ -264,7 +267,8 @@ void _createEntity(Message message) {
   (payload['tile_phrases'] as List).forEach((String tilePhrase) {
     var tile = map.getTileByPhrase(tilePhrase);
     var ss = getSpriteSheet(tile.tileset);
-    s.addChild(new Bitmap(ss.frameAt(tile.tileId)));
+    s.bitmapData = ss.frameAt(tile.tileId);
+    s.addChild(new Bitmap(s.bitmapData));
   });
 
   gameLayer.addChild(s);
@@ -283,7 +287,8 @@ void _updateEntity(Message message) {
     (payload['tile_phrases'] as List).forEach((tilePhrase) {
       var tile = map.getTileByPhrase(tilePhrase);
       var ss = getSpriteSheet(tile.tileset);
-      gs.addChild(new Bitmap(ss.frameAt(tile.tileId)));
+      gs.bitmapData = ss.frameAt(tile.tileId);
+      gs.addChild(new Bitmap(gs.bitmapData));
     });
   }
 }

@@ -14,12 +14,13 @@ class Button extends Sprite {
 
     _drawText(text);
     _drawBackground();
+    _setupEvents();
   }
 
-  _drawBackground() {
+  _drawBackground([int color = Color.Black]) {
     graphics
       ..rect(0, 0, width, height)
-      ..fillColor(Color.Black);
+      ..fillColor(color);
   }
 
   _drawText(text) {
@@ -29,5 +30,15 @@ class Button extends Sprite {
 
     tf.width = tf.getLineMetrics(0).width + xPadding;
     tf.height = tf.getLineMetrics(0).height + yPadding;
+  }
+
+  _setupEvents() {
+    onMouseDown.listen((_) {
+      _drawBackground(Color.Green);
+    });
+
+    onMouseUp.listen((_) {
+      _drawBackground();
+    });
   }
 }

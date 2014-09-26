@@ -107,7 +107,6 @@ void main() {
     if (ke.keyCode >= 48 && ke.keyCode <= 57) {
       var number = ke.keyCode - 48;
       if (number == 0) { number = 10; } // Keyboard is 1234567890, not 0123456789
-      selectAction(number - 1);
     }
 
   });
@@ -123,25 +122,6 @@ void main() {
   HttpRequest.getString(url)
     .then(loadMap)
     .then((_) => initWebSocket());
-}
-
-void selectAction(actionIndex) {
-  var elements = querySelectorAll('ul#actions [data-type]');
-  if (elements.length > actionIndex) {
-    var element = elements.elementAt(actionIndex);
-    currentActionIndex = actionIndex;
-    querySelectorAll('ul#actions li.selected').forEach((e) => e.classes.remove('selected'));
-    element.classes.add('selected');
-  }
-}
-
-Map currentAction() {
-  var element = querySelectorAll('ul#actions [data-type]').elementAt(currentActionIndex);
-  return { 'name': element.attributes['data-action-name'],
-    'type': element.attributes['data-type'],
-    'hand': element.attributes['data-action-hand'],
-    'entity_id': element.attributes['data-entity-id']
-  };
 }
 
 void movePlayer(direction) {
@@ -259,15 +239,15 @@ void _pickedUpEntity(Message message) {
   var payload = message.payload;
   var entityId = payload['entity_id'];
   var hand = payload['hand'];
-  var selector = "#$hand-hand";
-  querySelector(selector + ' h3').text = "$hand hand: ${payload['name']}";
-  querySelectorAll(selector + ' [data-type]').forEach((e) => e.remove());
-  var actionSelector = selector + ' ul.actions-for-hand';
+
+  // TODO: What are you holding?
+  // GameGui.voicesInHead: etc
+
   payload['actions'].forEach((action) {
-    querySelector(actionSelector).appendHtml('<li data-type="interact" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+    // TODO: ??
   });
   ['attack', 'throw', 'drop'].forEach((action) {
-    querySelector(actionSelector).appendHtml('<li data-type="action" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+    // TODO: ??
   });
 }
 

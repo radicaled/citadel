@@ -19,36 +19,14 @@
       }
       
       #log {
-        height: 500px;
-        overflow-y: auto;
+        height: 300px;
+        overflow-y: scroll;
         overflow-x: hidden;        
       }
     </style>
     
     <canvas id='stage' width='800' height='600' tabindex='1'></canvas>
     <div class='sidebar' style='float:right'>
-	    
-	    <ul id='actions'>
-	      <li id='left-hand'>
-          <h3>Left Hand</h3>
-          <ul class='actions-for-hand'>
-            <li data-type='interact' data-action-name='use' data-action-hand='left' class='selected'>Use</li>
-            <li data-type='action' data-action-name='pickup' data-action-hand='left'>Pickup</li>
-            <li data-type='action' data-action-name='attack' data-action-hand='left'>Attack</li>            
-          </ul>	      
-	      </li>
-	      
-	      <li id='right-hand'>
-          <h3>Right Hand</h3>
-          <ul class='actions-for-hand'>
-            <li data-type='interact' data-action-name='use' data-action-hand='right'>Use</li>
-            <li data-type='action' data-action-name='pickup' data-action-hand='right'>Pickup</li>
-            <li data-type='action' data-action-name='attack' data-action-hand='right'>Attack</li>
-          </ul>       
-        </li>
-	    </ul>
-	    	    
-	    <p id='holding'>Bare handed</p>
 	    <div id='log'>
         Stuff appears here.
       </div>

@@ -119,7 +119,7 @@ void main() {
   setupLayers(canvas.width, canvas.height);
   setupGuiEvents();
 
-  var url = "//${window.location.host}/packages/citadel/assets/maps/shit_station-1.tmx";
+  var url = "packages/citadel/assets/maps/shit_station-1.tmx";
   HttpRequest.getString(url)
     .then(loadMap)
     .then((_) => initWebSocket());

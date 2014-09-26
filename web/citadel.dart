@@ -25,13 +25,15 @@ c.GameSprite get currentTarget => _currentTarget;
                  _currentTarget.filters = [];
                  _currentTarget.refreshCache();
                }
-               _currentTarget = gs;
+               if (gs.selectable) {
+                 _currentTarget = gs;
 
-               _currentTarget.filters.add(new ColorMatrixFilter.invert());
-               _currentTarget.applyCache(0,  0, gs.width.toInt(),  gs.height.toInt());
-               // ... hm. Are my tiles too close together?
-               //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
-               c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
+                 _currentTarget.filters.add(new ColorMatrixFilter.invert());
+                 _currentTarget.applyCache(0, 0, gs.width.toInt(), gs.height.toInt());
+                 // ... hm. Are my tiles too close together?
+                 //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
+                 c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
+               }
              }
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
@@ -242,7 +244,8 @@ void _pickedUpEntity(Message message) {
 
   // TODO: What are you holding?
   var entity = entities[entityId];
-  var clone = entity.clone();
+  var clone = entity.clone()
+    ..selectable = false;
   // GameGui.voicesInHead: etc
   c.gui.heldItem.setIcon(clone);
 

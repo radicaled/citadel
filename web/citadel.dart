@@ -235,6 +235,7 @@ Future loadMap(String xml) {
 void _emit(Message message) {
   var payload = message.payload;
   querySelector('#log').appendHtml('<p>${payload['text']}');
+  querySelector('#log p:last-child').scrollIntoView();
 }
 
 void _pickedUpEntity(Message message) {

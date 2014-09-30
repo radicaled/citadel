@@ -25,13 +25,15 @@ c.GameSprite get currentTarget => _currentTarget;
                  _currentTarget.filters = [];
                  _currentTarget.refreshCache();
                }
-               _currentTarget = gs;
+               if (gs.selectable) {
+                 _currentTarget = gs;
 
-               _currentTarget.filters.add(new ColorMatrixFilter.invert());
-               _currentTarget.applyCache(0,  0, gs.width.toInt(),  gs.height.toInt());
-               // ... hm. Are my tiles too close together?
-               //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
-               c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
+                 _currentTarget.filters.add(new ColorMatrixFilter.invert());
+                 _currentTarget.applyCache(0, 0, gs.width.toInt(), gs.height.toInt());
+                 // ... hm. Are my tiles too close together?
+                 //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
+                 c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
+               }
              }
 
 Map<int, c.GameSprite> entities = new Map<int, c.GameSprite>();
@@ -107,7 +109,6 @@ void main() {
     if (ke.keyCode >= 48 && ke.keyCode <= 57) {
       var number = ke.keyCode - 48;
       if (number == 0) { number = 10; } // Keyboard is 1234567890, not 0123456789
-      selectAction(number - 1);
     }
 
   });
@@ -123,25 +124,6 @@ void main() {
   HttpRequest.getString(url)
     .then(loadMap)
     .then((_) => initWebSocket());
-}
-
-void selectAction(actionIndex) {
-  var elements = querySelectorAll('ul#actions [data-type]');
-  if (elements.length > actionIndex) {
-    var element = elements.elementAt(actionIndex);
-    currentActionIndex = actionIndex;
-    querySelectorAll('ul#actions li.selected').forEach((e) => e.classes.remove('selected'));
-    element.classes.add('selected');
-  }
-}
-
-Map currentAction() {
-  var element = querySelectorAll('ul#actions [data-type]').elementAt(currentActionIndex);
-  return { 'name': element.attributes['data-action-name'],
-    'type': element.attributes['data-type'],
-    'hand': element.attributes['data-action-hand'],
-    'entity_id': element.attributes['data-entity-id']
-  };
 }
 
 void movePlayer(direction) {
@@ -253,21 +235,26 @@ Future loadMap(String xml) {
 void _emit(Message message) {
   var payload = message.payload;
   querySelector('#log').appendHtml('<p>${payload['text']}');
+  querySelector('#log p:last-child').scrollIntoView();
 }
 
 void _pickedUpEntity(Message message) {
   var payload = message.payload;
   var entityId = payload['entity_id'];
   var hand = payload['hand'];
-  var selector = "#$hand-hand";
-  querySelector(selector + ' h3').text = "$hand hand: ${payload['name']}";
-  querySelectorAll(selector + ' [data-type]').forEach((e) => e.remove());
-  var actionSelector = selector + ' ul.actions-for-hand';
+
+  // TODO: What are you holding?
+  var entity = entities[entityId];
+  var clone = entity.clone()
+    ..selectable = false;
+  // GameGui.voicesInHead: etc
+  c.gui.heldItem.setIcon(clone);
+
   payload['actions'].forEach((action) {
-    querySelector(actionSelector).appendHtml('<li data-type="interact" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+    // TODO: ??
   });
   ['attack', 'throw', 'drop'].forEach((action) {
-    querySelector(actionSelector).appendHtml('<li data-type="action" data-action-name="$action" data-action-hand="$hand" data-entity-id="$entityId">$action</li>');
+    // TODO: ??
   });
 }
 
@@ -284,7 +271,8 @@ void _createEntity(Message message) {
   (payload['tile_phrases'] as List).forEach((String tilePhrase) {
     var tile = map.getTileByPhrase(tilePhrase);
     var ss = getSpriteSheet(tile.tileset);
-    s.addChild(new Bitmap(ss.frameAt(tile.tileId)));
+    s.bitmapData = ss.frameAt(tile.tileId);
+    s.addChild(new Bitmap(s.bitmapData));
   });
 
   gameLayer.addChild(s);
@@ -303,7 +291,8 @@ void _updateEntity(Message message) {
     (payload['tile_phrases'] as List).forEach((tilePhrase) {
       var tile = map.getTileByPhrase(tilePhrase);
       var ss = getSpriteSheet(tile.tileset);
-      gs.addChild(new Bitmap(ss.frameAt(tile.tileId)));
+      gs.bitmapData = ss.frameAt(tile.tileId);
+      gs.addChild(new Bitmap(gs.bitmapData));
     });
   }
 }

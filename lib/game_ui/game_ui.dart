@@ -7,6 +7,7 @@ part 'label.dart';
 part 'button.dart';
 
 // Containers
+part 'container.dart';
 part 'vbox.dart';
 
 
@@ -37,7 +38,7 @@ class GuiDSL {
 }
 
 class ContainerDSL {
-  DisplayObjectContainer container;
+  Container container;
   ContainerDSL(this.container);
 
   set x(int value) => container.x = value;
@@ -45,4 +46,6 @@ class ContainerDSL {
 
   void add(object) => container.addChild(object);
   void addAll(List objects) => objects.forEach((o) => container.addChild(o));
+
+  set backgroundColor(int color) => container.backgroundColor = color;
 }

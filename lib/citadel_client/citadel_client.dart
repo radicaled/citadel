@@ -26,9 +26,12 @@ class GuiContainer {
   Button pickupButton;
   Button attackButton;
 
+  Button heldItem;
+
   Label targetLabel;
 
   Vbox actionContainer;
+  Vbox statusContainer;
 
   DisplayObjectContainer container;
 
@@ -40,6 +43,7 @@ class GuiContainer {
       useButton = dsl.button('Use');
       attackButton = dsl.button('Attack');
       pickupButton = dsl.button('Pickup');
+      heldItem = dsl.button('Held Item');
 
       targetLabel = dsl.label('');
 
@@ -50,8 +54,16 @@ class GuiContainer {
         // TODO: move somewhere else
         vbox.add(targetLabel);
       });
+
+      statusContainer = dsl.vbox(100, 100, (vbox) {
+        vbox.x = 710;
+        vbox.y = 50;
+        vbox.add(heldItem);
+        vbox.backgroundColor = Color.Red;
+      });
     });
 
     container.addChild(actionContainer);
+    container.addChild(statusContainer);
   }
 }

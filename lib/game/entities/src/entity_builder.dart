@@ -2,11 +2,11 @@ part of entities;
 
 abstract class EntityBuilder {
   var _entity;
-  _setup();
+  setup();
 
   Entity build(String entityType) {
     _entity = new Entity(entityType);
-    _setup();
+    setup();
     return _entity;
   }
 

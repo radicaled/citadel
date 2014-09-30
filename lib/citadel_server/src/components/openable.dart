@@ -1,4 +1,4 @@
-part of components;
+part of citadel_server.components;
 
 class Openable extends Component with StateMachine {
   static const OPENING = "opening";

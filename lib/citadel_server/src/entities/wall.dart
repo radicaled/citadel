@@ -1,7 +1,7 @@
-part of entities;
+part of citadel_server.entities;
 
 class Wall extends EntityBuilder {
-  _setup() {
+  setup() {
     has(Position);
     has(Collidable);
     has(TileGraphics);

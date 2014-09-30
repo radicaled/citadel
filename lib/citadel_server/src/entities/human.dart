@@ -1,7 +1,7 @@
-part of entities;
+part of citadel_server.entities;
 
 class Human extends EntityBuilder {
-  _setup() {
+  setup() {
     has(Position);
     has(Velocity);
     has(Collidable);

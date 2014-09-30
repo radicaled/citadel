@@ -1,4 +1,4 @@
-part of entities;
+part of citadel_server;
 
 class AnimationBuilder {
   Entity entity;

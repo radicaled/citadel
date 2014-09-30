@@ -1,4 +1,4 @@
-part of components;
+part of citadel_server.components;
 
 class Description extends Component {
   String text;

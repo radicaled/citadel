@@ -1,4 +1,4 @@
-part of components;
+part of citadel_server.components;
 
 class Velocity extends Component {
   int x, y;

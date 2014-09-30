@@ -1,7 +1,7 @@
-part of entities;
+part of citadel_server.entities;
 
 class MultiTool extends EntityBuilder {
-  _setup() {
+  setup() {
     has(Position);
     has(TileGraphics);
     has(Power, [15 * 99]);

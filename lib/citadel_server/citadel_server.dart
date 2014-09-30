@@ -10,10 +10,15 @@ import 'package:yaml/yaml.dart';
 import 'dart:io';
 import 'dart:async';
 
-import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
+import 'package:citadel/game/components.dart';
 import 'package:citadel/game/intents.dart';
 import 'package:citadel/game/world.dart';
+
+import 'src/components.dart';
+import 'src/entities.dart';
+
+
 
 // Component Systems
 part 'src/systems/collision_system.dart';
@@ -38,6 +43,7 @@ part 'src/entity_utils.dart';
 part 'src/events/game_event.dart';
 part 'src/game_connection.dart';
 part 'src/tile_manager.dart';
+part 'src/helpers/animation_builder.dart';
 
 final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {

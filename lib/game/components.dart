@@ -20,6 +20,7 @@ part 'components/health.dart';
 part 'components/visible.dart';
 part 'components/damage.dart';
 part 'components/openable.dart';
+part 'components/inventory.dart';
 
 // Helpers
 part 'components/src/animation_step.dart';

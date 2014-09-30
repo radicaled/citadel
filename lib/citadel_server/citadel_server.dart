@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/entities.dart';
 import 'package:citadel/game/intents.dart';
+import 'package:citadel/game/world.dart';
 
 // Component Systems
 part 'src/systems/collision_system.dart';
@@ -50,6 +51,8 @@ List<GameConnection> gameConnections = new List<GameConnection>();
 final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
 int currentEntityId = 1;
+
+final world = new World();
 
 Map _makeCommand(String type, payload) {
   return { 'type': type, 'payload': payload };
@@ -104,7 +107,8 @@ class CitadelServer {
       });
     });
 
-    Entity.onEmitNear.listen((emitEvent) => _emitNear(emitEvent.entity, emitEvent.text));
+
+    world.onEmit.listen((emitEvent) => _emitNear(emitEvent.nearEntity, emitEvent.message));
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('intent', handlePlayerIntent());
@@ -237,7 +241,7 @@ class CitadelServer {
       var gc = new GameConnection(ws, player);
       gameConnections.add(gc);
 
-      player.onEmit.listen((emitEvent) => _emitTo(emitEvent.text, gc));
+      world.onEmit.where((ee) => ee.fromEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, gc));
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
         onDone: () => _removeConnection(gc));

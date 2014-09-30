@@ -6,7 +6,7 @@ void pickupIntentSystem(Intent intent) {
 
   var actionName = invoker.has([Name]) ? invoker[Name].text : 'Someone';
   var targetName = target.has([Name]) ? target[Name].text : 'Something';
-  invoker.emitNear('$actionName picks up the $targetName');
+  world.emit('$actionName picks up the $targetName');
   // FIXME: what if the object is clothing?
   target.detach(Visible);
   target.attach(new Position.from(invoker[Position]));

@@ -9,7 +9,7 @@ interactIntentSystem(Intent intent) {
 
   var behavior = withEntity.behaviors[actionName];
   if (behavior == null) {
-    invoker.emit('You have tried to do the impossible ($actionName).');
+    world.emit('You have tried to do the impossible ($actionName).', fromEntity: invoker);
   } else {
     behavior(withEntity, target);
   }

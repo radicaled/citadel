@@ -7,6 +7,7 @@ class Human extends EntityBuilder {
     has(Collidable);
     has(TileGraphics);
     has(Vision);
+    has(Inventory);
     has(Health, [100]);
     has(Description, ['A generic human being']);
     has(Name, ['Steve']);

@@ -12,7 +12,6 @@ part 'entities/src/entity_manager.dart';
 part 'entities/src/entity_behavior.dart';
 part 'entities/src/animation_builder.dart';
 
-part 'entities/src/events/emit_event.dart';
 part 'entities/src/events/entity_event.dart';
 
 part 'entities/entity.dart';

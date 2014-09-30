@@ -16,10 +16,10 @@ void harmIntentSystem(Intent intent) {
     var name = target[Name].text;
     if (health != null) {
       health.currentHP -= maxDamage;
-      target.emitNear('$name: Ow! That hurts a ton!');
+      world.emit('$name: Ow! That hurts a ton!', fromEntity: target, nearEntity: target);
 
       if (health.currentHP <= 0) {
-        target.emitNear('${name} dies!');
+        world.emit('${name} dies!', fromEntity: target, nearEntity: target);
         EntityManager.hidden(target);
       }
     }

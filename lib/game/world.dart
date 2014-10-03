@@ -20,5 +20,5 @@ class EmitEvent {
   String message;
   Entity nearEntity;
   Entity fromEntity;
-  EmitEvent(this.message, {Entity nearEntity, Entity fromEntity});
+  EmitEvent(this.message, {this.nearEntity, this.fromEntity});
 }

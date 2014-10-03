@@ -60,6 +60,10 @@ class Entity {
     return types.every( (type) => components.containsKey(type) );
   }
 
+  void use(Component component, void f(Component)) {
+    if (has([component])) { f(component); }
+  }
+
   Component operator [](Type componentType) {
     return components[componentType];
   }

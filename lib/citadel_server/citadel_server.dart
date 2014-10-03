@@ -190,7 +190,7 @@ class CitadelServer {
                               tile.tileset.properties['entity'],
                               'placeholder'
                              ].firstWhere((et) => et != null);
-            var entity = buildEntity(entityType);
+            var entity = buildEntity(entityType, world);
             entity[Position].x = x;
             entity[Position].y = y;
             entity[Position].z = z;
@@ -224,7 +224,7 @@ class CitadelServer {
   }
 
   void _gameConnection(HttpRequest req) {
-    Entity player = trackEntity(buildEntity('human')..attach(new Player()));
+    Entity player = trackEntity(buildEntity('human', world)..attach(new Player()));
 
     Position pos = player[Position];
     TileGraphics tgs = player[TileGraphics];

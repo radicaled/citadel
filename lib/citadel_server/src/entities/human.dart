@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class Human extends EntityBuilder {
+class Human extends CEntityBuilder {
   setup() {
     has(Position);
     has(Velocity);
@@ -15,7 +15,7 @@ class Human extends EntityBuilder {
     behavior('use', (b) {
       b.after((thisEntity, thatEntity) {
         var name = thatEntity.has([Name]) ? thatEntity[Name].text : 'something';
-        thisEntity.emit('You recklessly fiddle with $name');
+        world.emit('You recklessly fiddle with $name', fromEntity: thisEntity);
       });
     });
   }

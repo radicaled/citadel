@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class Hvac extends EntityBuilder {
+class Hvac extends CEntityBuilder {
   setup() {
     has(Position);
     has(TileGraphics);
@@ -25,7 +25,7 @@ class Hvac extends EntityBuilder {
     reaction('disable', (thisEntity, thatEntity) {
       // FIXME: This is hard-coded
       thisEntity[TileGraphics].tilePhrases[0] = 'Monitors|133';
-      thisEntity.emitNear('The HVAC console makes a strange buzzing noise.');
+      world.emit('The HVAC console makes a strange buzzing noise.', nearEntity: thisEntity);
       thisEntity.attach(new Disabled()..text= 'The console sparks at you.');
       EntityManager.changed(thisEntity);
     });

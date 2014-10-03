@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'components.dart';
 import 'package:citadel/game/entities.dart';
+import 'package:citadel/game/world.dart';
 
 part 'entities/wall.dart';
 part 'entities/placeholder.dart';
@@ -16,17 +17,17 @@ part 'entities/locker.dart';
 part 'entities/arcade_machine.dart';
 part 'entities/donut.dart';
 
-var entityDefinitions = new Map<String, EntityBuilder>();
+var entityDefinitions = new Map<String, CEntityBuilder>();
 var _registered = false;
 
-Entity buildEntity(String name) {
+Entity buildEntity(String name, World world) {
   if (!_registered) { _registerAll(); }
   var eb = entityDefinitions[name];
   if (eb == null) {
     throw new ArgumentError('Entity $name not found.');
   }
 
-  return eb.build(name);
+  return eb.build(name, world);
 }
 
 _registerAll() {
@@ -52,5 +53,11 @@ _registerTypes() {
   _register('plain_donut', Donut);
 }
 
-
+abstract class CEntityBuilder extends EntityBuilder {
+  World world;
+  Entity build(String entityType, [World world]) {
+    this.world = world;
+    return super.build(entityType);
+  }
+}
 

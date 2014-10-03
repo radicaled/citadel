@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class Locker extends EntityBuilder {
+class Locker extends CEntityBuilder {
   setup() {
     has(Position);
     has(Collidable);
@@ -11,7 +11,7 @@ class Locker extends EntityBuilder {
     has(Description, ['A locker full of goodies']);
 
     reaction('use', (thisEntity, thatEntity) {
-      thatEntity.emitNear('The locker rustles');
+      world.emit('The locker rustles', nearEntity: thatEntity);
       Openable o = thisEntity[Openable];
       if (!o.isTransitioning) { o.transition(); }
     });

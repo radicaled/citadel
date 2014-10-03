@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class Floor extends EntityBuilder {
+class Floor extends CEntityBuilder {
   setup() {
     has(Position);
     has(TileGraphics);

@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class Donut extends EntityBuilder {
+class Donut extends CEntityBuilder {
   setup() {
     has(Position);
     has(Collidable);

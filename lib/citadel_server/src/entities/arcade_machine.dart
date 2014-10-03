@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class ArcadeMachine extends EntityBuilder {
+class ArcadeMachine extends CEntityBuilder {
   setup() {
     has(Position);
     has(Collidable);

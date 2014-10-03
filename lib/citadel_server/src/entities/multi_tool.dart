@@ -1,6 +1,6 @@
 part of citadel_server.entities;
 
-class MultiTool extends EntityBuilder {
+class MultiTool extends CEntityBuilder {
   setup() {
     has(Position);
     has(TileGraphics);
@@ -11,7 +11,9 @@ class MultiTool extends EntityBuilder {
     behavior('disable', (b) {
       b.require(Power, (power) => power.level > 15);
       b.before((thisEntity, thatEntity) => thisEntity[Power].level -= 15);
-      b.after((thisEntity, thatEntity) => thisEntity.emit('The theme from Ghost Busters begins to play.'));
+      b.after((thisEntity, thatEntity) {
+        world.emit('The locker rustles', fromEntity: thatEntity);
+      });
     });
   }
 

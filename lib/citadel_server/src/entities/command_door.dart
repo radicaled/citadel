@@ -11,8 +11,8 @@ class CommandDoor extends CEntityBuilder {
 
     reaction('collide', (thisEntity, thatEntity) {
       // FIXME: assumed everyone has access.
-      world.emit('You crash into the command door!', fromEntity: thatEntity);
-      world.emit('CLANK!!', nearEntity: thisEntity);
+      world.emit('You crash into the command door!', fromEntity: thisEntity, toEntity: thatEntity);
+      world.emit('CLANK!!', nearEntity: thisEntity, fromEntity: thisEntity);
       Openable o = thisEntity[Openable];
       if (o.isTransitioning) { return; }
       o.transition();
@@ -33,8 +33,8 @@ class CommandDoor extends CEntityBuilder {
       // vs (so long!!!)
       // But...
       // thatEntity.with(Emittable, (emittable) => emittable.emit('The door scansy our ID and chirps happily'));
-      world.emit('The door scans your ID and chirps happily', fromEntity: thatEntity);
-      world.emit('Swoosh!', nearEntity: thisEntity);
+      world.emit('The door scans your ID and chirps happily', fromEntity: thisEntity, toEntity: thatEntity);
+      world.emit('Swoosh!', nearEntity: thisEntity, fromEntity: thisEntity);
       o.transition();
     });
 

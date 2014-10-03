@@ -11,8 +11,8 @@ class World {
     onEmit = _emitController.stream;
   }
 
-  void emit(String text, {Entity nearEntity, Entity fromEntity}) {
-    _emitController.add(new EmitEvent(text, nearEntity: nearEntity, fromEntity: fromEntity));
+  void emit(String text, {Entity nearEntity, Entity fromEntity, Entity toEntity}) {
+    _emitController.add(new EmitEvent(text, nearEntity: nearEntity, fromEntity: fromEntity, toEntity: toEntity));
   }
 }
 
@@ -20,5 +20,6 @@ class EmitEvent {
   String message;
   Entity nearEntity;
   Entity fromEntity;
-  EmitEvent(this.message, {this.nearEntity, this.fromEntity});
+  Entity toEntity;
+  EmitEvent(this.message, {this.nearEntity, this.fromEntity, this.toEntity});
 }

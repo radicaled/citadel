@@ -114,7 +114,9 @@ class CitadelServer {
     });
 
 
-    world.onEmit.listen((emitEvent) => _emitNear(emitEvent.nearEntity, emitEvent.message));
+    world.onEmit
+      .where((emitEvent) => emitEvent.nearEntity != null)
+      .listen((emitEvent) => _emitNear(emitEvent.nearEntity, emitEvent.message));
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('intent', handlePlayerIntent());
@@ -247,7 +249,7 @@ class CitadelServer {
       var gc = new GameConnection(ws, player);
       gameConnections.add(gc);
 
-      world.onEmit.where((ee) => ee.fromEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, gc));
+      world.onEmit.where((ee) => ee.toEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, gc));
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
         onDone: () => _removeConnection(gc));

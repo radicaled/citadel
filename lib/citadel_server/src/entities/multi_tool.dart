@@ -11,9 +11,7 @@ class MultiTool extends CEntityBuilder {
     behavior('disable', (b) {
       b.require(Power, (power) => power.level > 15);
       b.before((thisEntity, thatEntity) => thisEntity[Power].level -= 15);
-      b.after((thisEntity, thatEntity) {
-        world.emit('The locker rustles', fromEntity: thatEntity);
-      });
+      b.after((thisEntity, thatEntity) => world.emit('The theme to Ghostbusters plays', fromEntity: thisEntity, nearEntity: thatEntity));
     });
   }
 

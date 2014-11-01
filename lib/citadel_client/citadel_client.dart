@@ -1,6 +1,7 @@
 library citadel_client;
 
 // Dependencies
+import 'dart:html';
 import 'dart:async';
 import 'package:stagexl/stagexl.dart';
 import 'package:citadel/game_ui/game_ui.dart';
@@ -19,51 +20,8 @@ void constructGui(DisplayObjectContainer layer) {
   gui.build();
 }
 
-// Good lord forgive me!!!!
-class GuiContainer {
-  Button lookButton;
-  Button useButton;
-  Button pickupButton;
-  Button attackButton;
-
-  Button heldItem;
-
-  Label targetLabel;
-
-  Vbox actionContainer;
-  Vbox statusContainer;
-
-  DisplayObjectContainer container;
-
-  GuiContainer(this.container);
-
-  void build() {
-    GameGui.construct((dsl) {
-      lookButton = dsl.button('Look');
-      useButton = dsl.button('Use');
-      attackButton = dsl.button('Attack');
-      pickupButton = dsl.button('Pickup');
-      heldItem = dsl.button('Held Item');
-
-      targetLabel = dsl.label('');
-
-      actionContainer = dsl.vbox(100, 100, (vbox) {
-        vbox.x = 200;
-        vbox.y = 400;
-        vbox.addAll([lookButton, useButton, attackButton, pickupButton]);
-        // TODO: move somewhere else
-        vbox.add(targetLabel);
-      });
-
-      statusContainer = dsl.vbox(100, 100, (vbox) {
-        vbox.x = 710;
-        vbox.y = 50;
-        vbox.add(heldItem);
-        vbox.backgroundColor = Color.Red;
-      });
-    });
-
-    container.addChild(actionContainer);
-    container.addChild(statusContainer);
-  }
+void constructHtmlGui() {
+//  Element temp = query('#action_template');
+//  Element actual = new Element.html(temp.innerHtml);
+//  query('#container').append(actual);
 }

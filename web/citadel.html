@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Citadel</title>
     <link rel="stylesheet" href="citadel.css">
+    <link rel="stylesheet" href="gui.css">
   </head>
   <body>
     <h1>Citadel (<span id='ws-status'></span>)</h1>
@@ -18,18 +19,32 @@
         border: 1px solid gray;
       }
       
-      #log {
-        height: 300px;
-        overflow-y: scroll;
-        overflow-x: hidden;        
-      }
+
     </style>
-    
-    <canvas id='stage' width='800' height='600' tabindex='1'></canvas>
+    <div id="container" class="gui">
+      <canvas id='stage' width='800' height='600' tabindex='1'></canvas>
+      <div class="action-menu">
+        <button id="look-action">Look</button>
+        <button id="use-action">Use</button>
+        <button id="attack-action">Attack</button>
+        <button id="pickup-action">Pickup</button>
+        <span id="looking-at"></span>
+      </div>
+
+      <div class="inventory-menu">
+        <div id="currently-holding">
+
+        </div>
+      </div>
+    </div>
     <div class='sidebar' style='float:right'>
 	    <div id='log'>
         Stuff appears here.
       </div>
+    </div>
+
+    <div class="template">
+      <canvas id="temp-canvas"></canvas>
     </div>
     
     <script type="application/dart" src="citadel.dart"></script>

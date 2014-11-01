@@ -1,4 +1,6 @@
 import 'dart:html';
+import 'dart:typed_data';
+import 'package:crypto/crypto.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:tmx/tmx.dart' as tmx;
@@ -32,7 +34,7 @@ c.GameSprite get currentTarget => _currentTarget;
                  _currentTarget.applyCache(0, 0, gs.width.toInt(), gs.height.toInt());
                  // ... hm. Are my tiles too close together?
                  //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
-                 c.gui.targetLabel.text = 'Looking at ${gs.entityId}';
+                 query('#container #looking-at').text = 'Looking at ${gs.entityId}';
                }
              }
 
@@ -118,7 +120,12 @@ void main() {
   renderLoop.addStage(stage);
 
   setupLayers(canvas.width, canvas.height);
-  setupGuiEvents();
+
+  c.constructHtmlGui();
+
+  document.onReadyStateChange.first.then((_) {
+    setupHtmlGuiEvents();
+  });
 
   var url = "packages/citadel/assets/maps/shit_station-1.tmx";
   HttpRequest.getString(url)
@@ -245,10 +252,18 @@ void _pickedUpEntity(Message message) {
 
   // TODO: What are you holding?
   var entity = entities[entityId];
-  var clone = entity.clone()
-    ..selectable = false;
-  // GameGui.voicesInHead: etc
-  c.gui.heldItem.setIcon(clone);
+
+  CanvasElement canvas = query('#temp-canvas');
+  var imageData = entity.bitmapData.renderTextureQuad.getImageData();
+
+  canvas.context2D.putImageData(imageData, 0, 0);
+  var dataUri = canvas.toDataUrl('image/png');
+
+  query('#currently-holding')
+    ..innerHtml = ''
+    ..append(new ImageElement(src: dataUri))
+    ..append(new Element.br())
+    ..append(new Element.span()..text = entity.entityId.toString());
 
   payload['actions'].forEach((action) {
     // TODO: ??
@@ -317,32 +332,30 @@ SpriteSheet getSpriteSheet(tmx.Tileset ts) {
 void setupLayers(width, height) {
   stage.addChild(gameLayer);
   stage.addChild(guiLayer);
-
-  c.constructGui(guiLayer);
 }
 
-void setupGuiEvents() {
-  var gui = c.gui;
+void setupHtmlGuiEvents() {
+  var find = (String action) => query("#container #$action-action");
 
-  gui.lookButton.onMouseClick.listen((me) {
+  find('look').onClick.listen((me) {
     if (currentTarget != null) {
       lookEntity(currentTarget.entityId);
-      }
+    }
   });
 
-  gui.useButton.onMouseClick.listen((me) {
+  find('use').onClick.listen((me) {
     if (currentTarget != null) {
       interactWith(currentTarget.entityId, 'use');
     }
   });
 
-  gui.pickupButton.onMouseClick.listen((me) {
+  find('pickup').onClick.listen((me) {
     if (currentTarget != null) {
       pickupEntity(currentTarget.entityId);
     }
   });
 
-  gui.attackButton.onMouseClick.listen((me) {
+  find('attack').onClick.listen((me) {
     if (currentTarget != null) {
       intent('ATTACK', targetEntityId: currentTarget.entityId);
     }

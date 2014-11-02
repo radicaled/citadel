@@ -8,6 +8,8 @@ void pickupIntentSystem(Intent intent) {
   var targetName = target.has([Name]) ? target[Name].text : 'Something';
 
   invoker.require(Container);
+  // TODO: maximum 4 items hard-coded
+  if (invoker[Container].entityIds.length >= 4) { return; }
 
   world.emit('$actionName picks up the $targetName');
   // FIXME: what if the object is clothing?

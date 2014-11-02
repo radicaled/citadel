@@ -259,10 +259,10 @@ void _pickedUpEntity(Message message) {
   var dataUri = canvas.toDataUrl('image/png');
 
   query('#currently-holding')
-    ..innerHtml = ''
     ..append(new ImageElement(src: dataUri))
     ..append(new Element.br())
-    ..append(new Element.span()..text = entity.entityId.toString());
+    ..append(new Element.span()..text = entity.entityId.toString())
+    ..append(new Element.br());
 
   payload['actions'].forEach((action) {
     // TODO: ??

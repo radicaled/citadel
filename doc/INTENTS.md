@@ -15,3 +15,6 @@ Misc
 ----
 
 LOOK
+
+SPEAK:
+    text: text to speak.

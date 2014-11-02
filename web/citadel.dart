@@ -147,12 +147,13 @@ void interactWith(entityId, actionName, {withEntityId}) {
   intent('INTERACT', targetEntityId: entityId, withEntityId: withEntityId, actionName: actionName);
 }
 
-void intent(intentName, {targetEntityId, withEntityId, actionName}) {
+void intent(intentName, {targetEntityId, withEntityId, actionName, Map details}) {
   var payload = {
                   'intent_name': intentName,
                   'target_entity_id': targetEntityId,
                   'with_entity_id': withEntityId,
-                  'action_name': actionName
+                  'action_name': actionName,
+                  'details': details
                 };
   send('intent', payload);
 
@@ -323,6 +324,10 @@ void _moveEntity(Message message) {
   entity.y = payload['y'] * 32;
 }
 
+void speak(String text) {
+  intent('SPEAK', details: { 'text': text });
+}
+
 SpriteSheet getSpriteSheet(tmx.Tileset ts) {
   return new SpriteSheet(resourceManager.getBitmapData(ts.name), ts.width, ts.height);
 }
@@ -356,6 +361,13 @@ void setupHtmlGuiEvents() {
   find('attack').onClick.listen((me) {
     if (currentTarget != null) {
       intent('ATTACK', targetEntityId: currentTarget.entityId);
+    }
+  });
+
+  query('#player-chat-input').onKeyPress.listen((ke) {
+    if (ke.keyCode == 13) {
+      speak(ke.target.value);
+      ke.target.value = '';
     }
   });
 }

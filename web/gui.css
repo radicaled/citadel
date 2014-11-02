@@ -1,6 +1,7 @@
 #log {
   float: right;
   height: 300px;
+  width: 300px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -28,4 +29,9 @@
   position: absolute;
   top: 100px;
   left: 750px;
+}
+
+
+input[type="text"] {
+
 }

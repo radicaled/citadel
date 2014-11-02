@@ -53,6 +53,7 @@ The player intends to perform an action. A full list of intents is available in 
   * payload.target_entity_id: (OPTIONAL) if the intent targets an entity, the id of that entity
   * payload.with_entity_id: (OPTIONAL) if the player is using an entity for this intent
   * payload.action_name: (OPTIONAL) contextual action possible (eg, 'SHOOT', 'DISABLE')
+  * payload.details: (OPTIONAL) a map holding data for additional information
 
 Server -> Client Protocol
 ===

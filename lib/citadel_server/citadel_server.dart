@@ -35,7 +35,7 @@ part 'src/systems/move_intent_system.dart';
 part 'src/systems/look_intent_system.dart';
 part 'src/systems/interact_intent_system.dart';
 part 'src/systems/harm_intent_system.dart';
-
+part 'src/systems/speak_intent_system.dart';
 
 part 'src/entity_utils.dart';
 
@@ -131,7 +131,8 @@ class CitadelServer {
         ..invokingEntityId = ge.gameConnection.entity.id
         ..targetEntityId = ge.payload['target_entity_id']
         ..withEntityId = ge.payload['with_entity_id']
-        ..actionName = ge.payload['action_name'];
+        ..actionName = ge.payload['action_name']
+        ..details.addAll(ge.payload['details']);
       intentSystem.intentQueue.add(intent);
     };
   }
@@ -147,6 +148,8 @@ class CitadelServer {
     intentSystem.register('INTERACT', interactIntentSystem);
 
     intentSystem.register('ATTACK', harmIntentSystem);
+
+    intentSystem.register('SPEAK', speakIntentSystem);
   }
 
   void start() {

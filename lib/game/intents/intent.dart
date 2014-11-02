@@ -11,5 +11,7 @@ class Intent {
   // The action being performed via the entity specified by withEntityId.
   String actionName;
 
+  Map details = {};
+
   Intent(this.name);
 }

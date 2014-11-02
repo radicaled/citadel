@@ -121,8 +121,6 @@ void main() {
 
   setupLayers(canvas.width, canvas.height);
 
-  c.constructHtmlGui();
-
   document.onReadyStateChange.first.then((_) {
     setupHtmlGuiEvents();
   });

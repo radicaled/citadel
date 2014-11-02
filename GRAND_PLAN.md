@@ -12,3 +12,8 @@ along-side the game logic.
     - Building of objects
     - Scripting of objects
     - Animating of objects
+    - Inventory System
+
+- Improved Client Support:
+    - Re-useable user interface
+    

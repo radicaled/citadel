@@ -31,6 +31,16 @@
   left: 750px;
 }
 
+#currently-holding {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#currently-holding li.selected {
+
+}
+
 
 input[type="text"] {
 

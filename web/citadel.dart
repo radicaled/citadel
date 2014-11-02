@@ -43,6 +43,12 @@ c.ContextMenu currentContextMenu;
 int currentActionIndex = 0;
 int leftHand, rightHand;
 
+int _currentlySelectedInventoryEntityId;
+int get currentlySelectedInventoryEntityId => _currentlySelectedInventoryEntityId;
+    set currentlySelectedInventoryEntityId(int entityId) {
+      query('#container #using').text = 'Using $entityId';
+    }
+
 NetworkHub networkHub;
 
 void main() {
@@ -258,11 +264,16 @@ void _pickedUpEntity(Message message) {
   canvas.context2D.putImageData(imageData, 0, 0);
   var dataUri = canvas.toDataUrl('image/png');
 
-  query('#currently-holding')
+  var li = new Element.li()
     ..append(new ImageElement(src: dataUri))
     ..append(new Element.br())
     ..append(new Element.span()..text = entity.entityId.toString())
-    ..append(new Element.br());
+    ..append(new Element.br())
+    ..dataset['entity-id'] = entity.entityId.toString();
+
+
+  query('#currently-holding').append(li);
+
 
   payload['actions'].forEach((action) {
     // TODO: ??
@@ -368,6 +379,18 @@ void setupHtmlGuiEvents() {
     if (ke.keyCode == 13) {
       speak(ke.target.value);
       ke.target.value = '';
+    }
+  });
+
+  query('#currently-holding').onClick.listen((e) {
+    queryAll('#currently-holding li').forEach((n) => n.classes.remove('selected'));
+    // Bullshit
+    var parent = e.target.parent;
+    if(parent is LIElement) {
+      parent.classes.add('selected');
+
+//      currentTarget = entities[int.parse(parent.dataset['entity-id'])];
+      currentlySelectedInventoryEntityId = int.parse(parent.dataset['entity-id']);
     }
   });
 }

@@ -6,10 +6,14 @@ void pickupIntentSystem(Intent intent) {
 
   var actionName = invoker.has([Name]) ? invoker[Name].text : 'Someone';
   var targetName = target.has([Name]) ? target[Name].text : 'Something';
+
+  invoker.require(Container);
+
   world.emit('$actionName picks up the $targetName');
   // FIXME: what if the object is clothing?
   target.detach(Visible);
   target.attach(new Position.from(invoker[Position]));
+  invoker[Container].entityIds.add(target.id);
   EntityManager.hidden(target);
 
   commandQueue.add(_makeCommand('picked_up', {

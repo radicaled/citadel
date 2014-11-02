@@ -7,7 +7,8 @@ class Human extends CEntityBuilder {
     has(Collidable);
     has(TileGraphics);
     has(Vision);
-    has(Inventory);
+//    has(Inventory);
+    has(Container);
     has(Health, [100]);
     has(Description, ['A generic human being']);
     has(Name, ['Steve']);

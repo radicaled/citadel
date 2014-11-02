@@ -21,6 +21,13 @@ void harmIntentSystem(Intent intent) {
       if (health.currentHP <= 0) {
         world.emit('${name} dies!', fromEntity: target, nearEntity: target);
         EntityManager.hidden(target);
+        // TODO: this assume... I don't know, something.
+        // Drop all inventory items
+        target.use(Container, (container) {
+          container.entityIds.map(findEntity)
+            ..forEach((e) => e.attach(new Visible()))
+            ..forEach(EntityManager.created);
+        });
       }
     }
   }

@@ -8,6 +8,14 @@ class ContainerSystem {
   void execute() {
     entitiesWith([Openable, Container], message: Openable.OPENED).forEach((e) => showContents(e));
     entitiesWith([Openable, Container], message: Openable.CLOSED).forEach((e) => hideContents(e));
+    entitiesWith([Container]).forEach(updatePosition);
+  }
+
+  void updatePosition(Entity entity) {
+    var c = entity[Container];
+    var p = entity[Position];
+    var entities = c.entityIds.map(findEntity);
+    entities.forEach((e) => e.attach(new Position.from(p)));
   }
 
   // FIXME: sync with animation

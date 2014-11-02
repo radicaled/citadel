@@ -64,6 +64,10 @@ class Entity {
     if (has([type])) { f(this[type]); }
   }
 
+  void require(Type type) {
+    if (!has([type])) { throw 'Required component ($type) not found.'; }
+  }
+
   Component operator [](Type componentType) {
     return components[componentType];
   }

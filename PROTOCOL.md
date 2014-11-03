@@ -55,6 +55,12 @@ The player intends to perform an action. A full list of intents is available in 
   * payload.action_name: (OPTIONAL) contextual action possible (eg, 'SHOOT', 'DISABLE')
   * payload.details: (OPTIONAL) a map holding data for additional information
 
+get_actions
+==
+
+Get actions for an entity.
+  * payload.entity_id: entity to get actions for
+
 Server -> Client Protocol
 ===
 
@@ -134,3 +140,12 @@ The player is now holding an entity.
 * payload.name: name of the entity the player is holding
 * payload.hand: what hand the player is holding aforementioned entity
 * payload.actions: (array) a list of actions now available.
+
+set_actions
+==
+
+Get actions for current selected item.
+
+* payload.entity_id: entity_id
+* payload.actions: list of actions
+

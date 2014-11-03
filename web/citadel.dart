@@ -48,6 +48,7 @@ int get currentlySelectedInventoryEntityId => _currentlySelectedInventoryEntityI
     set currentlySelectedInventoryEntityId(int entityId) {
       query('#container #using').text = 'Using $entityId';
       _currentlySelectedInventoryEntityId = entityId;
+      getActions(entityId);
     }
 
 NetworkHub networkHub;
@@ -141,6 +142,10 @@ void main() {
 void movePlayer(direction) {
   intent(direction);
 }
+
+void getActions(entityId) {
+  send('get_actions', { 'entity_id': entityId });
+}
 // FIXME: this should be an interaction, right?
 void pickupEntity(entityId) {
   intent('PICKUP', targetEntityId: entityId);
@@ -221,6 +226,7 @@ void listenForEvents(Stream stream) {
   networkHub.on('remove_entity').listen(_removeEntity);
   networkHub.on('emit').listen(_emit);
   networkHub.on('picked_up').listen(_pickedUpEntity);
+  networkHub.on('set_actions').listen(_setActions);
 }
 
 // TODO: I forgot what the Uint8 type is in JS. Uint8?
@@ -274,17 +280,9 @@ void _pickedUpEntity(Message message) {
 
 
   query('#currently-holding').append(li);
-  query('.selected-item-action-menu').classes.remove('hidden');
+//  query('.selected-item-action-menu').classes.remove('hidden');
 
-//  payload['actions'].forEach((action) {
-//    var button = new ButtonElement()
-//      ..text = action;
-//    var li = new Element.li()
-//      ..append(button);
-//
-//    query('.selected-item-action-menu').classes.remove('hidden');
-//    query('.selected-item-action-menu ul').append(li);
-//  });
+  _setupSelectedItemActions(entityId, payload['actions']);
 
   ['attack', 'throw', 'drop'].forEach((action) {
     // TODO: ??
@@ -404,5 +402,26 @@ void setupHtmlGuiEvents() {
 
   query('#use-item').onClick.listen((e) {
     interactWith(currentTarget.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
+  });
+}
+
+void _setActions(Message message) {
+  _setupSelectedItemActions(message.payload['entity_id'], message.payload['actions']);
+}
+
+
+
+_setupSelectedItemActions(int entityId, List actions) {
+  if (actions == null) return;
+  query('.selected-item-action-menu ul').innerHtml = '';
+  actions.forEach((action) {
+    var button = new ButtonElement()
+      ..text = action;
+    var li = new Element.li()
+      ..append(button)
+      ..onClick.listen((_) =>  interactWith(currentTarget.entityId, action, withEntityId: entityId));
+
+    query('.selected-item-action-menu').classes.remove('hidden');
+    query('.selected-item-action-menu ul').append(li);
   });
 }

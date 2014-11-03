@@ -121,6 +121,7 @@ class CitadelServer {
     gameStream.listen((ge) => log.info("Received Event: $ge"));
     subscribe('intent', handlePlayerIntent());
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
+    subscribe('get_actions', _sendActions);
   }
 
   // Handle a player intent
@@ -300,6 +301,11 @@ class CitadelServer {
       }));
     });
     _sendTo(_makeCommand('set_gamestate', payload), [gc]);
+  }
+
+  void _sendActions(GameEvent ge) {
+    var entity = findEntity(ge.payload['entity_id']);
+    _sendTo(_makeCommand('set_actions', { 'entity_id': entity.id, 'actions': entity.behaviors.keys.toList() }), [ge.gameConnection]);
   }
 
   void _send(cmd) {

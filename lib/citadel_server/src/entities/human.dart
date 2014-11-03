@@ -18,6 +18,8 @@ class Human extends CEntityBuilder {
         var name = ei.target.has([Name]) ? ei.current[Name].text : 'something';
         world.emit('You recklessly fiddle with $name', fromEntity: ei.current, toEntity: ei.current);
       });
+
+      b.activated((ei) => ei.target.react('use', ei.current, ei.invoker));
     });
   }
 }

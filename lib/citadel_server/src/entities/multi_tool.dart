@@ -5,13 +5,13 @@ class MultiTool extends CEntityBuilder {
     has(Position);
     has(TileGraphics);
     has(Electronic);
-    has(Power, [15 * 99]);
+    has(Power, [100]);
     has(Name, ['A multi-tool']);
     has(Description, ['A tool for hacking and cracking gibsons']);
 
     behavior('use', (b) {
-      b.require(Power, test: (power) => power.level > 15, onFail: (thisEntity) {
-        world.emit('The multi-tool makes a beep-boop noise, then falls silent.');
+      b.require(Power, test: (power) => power.level > 15, onFail: (ei) {
+        world.emit('The multi-tool makes a beep-boop noise, then falls silent.', nearEntity: ei.current);
       });
 
       b.before((ei) => ei.current[Power].level -= 15);

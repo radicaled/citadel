@@ -47,6 +47,7 @@ int _currentlySelectedInventoryEntityId;
 int get currentlySelectedInventoryEntityId => _currentlySelectedInventoryEntityId;
     set currentlySelectedInventoryEntityId(int entityId) {
       query('#container #using').text = 'Using $entityId';
+      _currentlySelectedInventoryEntityId = entityId;
     }
 
 NetworkHub networkHub;
@@ -273,11 +274,18 @@ void _pickedUpEntity(Message message) {
 
 
   query('#currently-holding').append(li);
+  query('.selected-item-action-menu').classes.remove('hidden');
 
+//  payload['actions'].forEach((action) {
+//    var button = new ButtonElement()
+//      ..text = action;
+//    var li = new Element.li()
+//      ..append(button);
+//
+//    query('.selected-item-action-menu').classes.remove('hidden');
+//    query('.selected-item-action-menu ul').append(li);
+//  });
 
-  payload['actions'].forEach((action) {
-    // TODO: ??
-  });
   ['attack', 'throw', 'drop'].forEach((action) {
     // TODO: ??
   });
@@ -392,5 +400,9 @@ void setupHtmlGuiEvents() {
 //      currentTarget = entities[int.parse(parent.dataset['entity-id'])];
       currentlySelectedInventoryEntityId = int.parse(parent.dataset['entity-id']);
     }
+  });
+
+  query('#use-item').onClick.listen((e) {
+    interactWith(currentTarget.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
   });
 }

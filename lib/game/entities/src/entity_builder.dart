@@ -19,8 +19,8 @@ abstract class EntityBuilder {
     // made the method 'unreadable.'
   }
 
-  void reaction(String name, EntityInteraction reaction) {
-    _entity.reactions[name] = reaction;
+  void reaction(String name, react(EntityInteraction ei)) {
+    _entity.reactions[name] = react;
   }
 
   /**
@@ -31,8 +31,8 @@ abstract class EntityBuilder {
   }
 
   void behavior(String name, setup(EntityBehavior b)) {
-    _entity.behaviors[name] = (thisEntity, thatEntity) {
-      var behavior = new EntityBehavior(name, thisEntity, thatEntity);
+    _entity.behaviors[name] = (thisEntity, thatEntity, invokingEntity) {
+      var behavior = new EntityBehavior(name, thisEntity, thatEntity, invokingEntity);
       setup(behavior);
       behavior.perform();
     };

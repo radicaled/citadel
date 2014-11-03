@@ -10,9 +10,9 @@ class Locker extends CEntityBuilder {
     has(Name, ['Locker']);
     has(Description, ['A locker full of goodies']);
 
-    reaction('use', (thisEntity, thatEntity) {
-      world.emit('The locker rustles', nearEntity: thatEntity);
-      Openable o = thisEntity[Openable];
+    reaction('use', (ei) {
+      world.emit('The locker rustles', nearEntity: ei.current);
+      Openable o = ei.current[Openable];
       if (!o.isTransitioning) { o.transition(); }
     });
   }

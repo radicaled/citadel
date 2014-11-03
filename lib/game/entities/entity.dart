@@ -1,6 +1,5 @@
 part of entities;
 
-typedef void EntityInteraction(Entity thisEntity, Entity thatEntity);
 typedef void EntityScript(Entity entity);
 
 class Entity {
@@ -29,9 +28,10 @@ class Entity {
    *
    * Returns true if Entity reacted.
    */
-  bool react(String name, Entity instigator, {orElse()}) {
+  bool react(String name, Entity invokerEntity, Entity withEntity, {orElse()}) {
     var reaction = reactions[name];
-    if (reaction != null) { reaction(this, instigator); }
+    // EntityInteraction(this.current, this.target, this.invoker);
+    if (reaction != null) { reaction(new EntityInteraction(this, withEntity, invokerEntity)); }
     else if (orElse != null) { orElse(); }
     return reaction != null;
   }
@@ -60,7 +60,8 @@ class Entity {
     return types.every( (type) => components.containsKey(type) );
   }
 
-  void use(Type type, void f(Component)) {
+  void use(Type type, void f(Component component)) {
+    print('This is: ${this[type]}');
     if (has([type])) { f(this[type]); }
   }
 

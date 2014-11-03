@@ -14,9 +14,9 @@ class Human extends CEntityBuilder {
     has(Name, ['Steve']);
 
     behavior('use', (b) {
-      b.after((thisEntity, thatEntity) {
-        var name = thatEntity.has([Name]) ? thatEntity[Name].text : 'something';
-        world.emit('You recklessly fiddle with $name', fromEntity: thisEntity, toEntity: thisEntity);
+      b.after((ei) {
+        var name = ei.target.has([Name]) ? ei.current[Name].text : 'something';
+        world.emit('You recklessly fiddle with $name', fromEntity: ei.current, toEntity: ei.current);
       });
     });
   }

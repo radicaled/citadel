@@ -20,7 +20,7 @@ void collisionSystem() {
     var collidingEntity = collidables.firstWhere((oe) => oe[Position].isSame2d(expectedPosition), orElse: () => null);
 
     if (collidingEntity != null) {
-      collidingEntity.react('collide', entity);
+      collidingEntity.react('collide', entity, null);
       vel.halt();
     }
   });

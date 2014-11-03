@@ -21,3 +21,4 @@ part 'components/visible.dart';
 part 'components/damage.dart';
 part 'components/openable.dart';
 part 'components/inventory.dart';
+part 'components/electronic.dart';

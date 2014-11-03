@@ -9,18 +9,18 @@ class CommandDoor extends CEntityBuilder {
     has(Name, ['Command Door']);
     has(Description, ['A massive reinforced door']);
 
-    reaction('collide', (thisEntity, thatEntity) {
+    reaction('collide', (ei) {
       // FIXME: assumed everyone has access.
-      world.emit('You crash into the command door!', fromEntity: thisEntity, toEntity: thatEntity);
-      world.emit('CLANK!!', nearEntity: thisEntity, fromEntity: thisEntity);
-      Openable o = thisEntity[Openable];
+      world.emit('You crash into the command door!', fromEntity: ei.current, toEntity: ei.target);
+      world.emit('CLANK!!', nearEntity: ei.current, fromEntity: ei.current);
+      Openable o = ei.current[Openable];
       if (o.isTransitioning) { return; }
       o.transition();
     });
 
-    reaction('use', (thisEntity, thatEntity) {
+    reaction('use', (ei) {
       // FIXME: assumed everyone has access.
-      Openable o = thisEntity[Openable];
+      Openable o = ei.current[Openable];
       if (o.isTransitioning) { return; }
       // Need to detach emits from Entities.
       // Don't want entities to NEED access to the "World" class.
@@ -32,9 +32,9 @@ class CommandDoor extends CEntityBuilder {
       // thatEntity[Emittable].emit(); // No null check?
       // vs (so long!!!)
       // But...
-      // thatEntity.with(Emittable, (emittable) => emittable.emit('The door scansy our ID and chirps happily'));
-      world.emit('The door scans your ID and chirps happily', fromEntity: thisEntity, toEntity: thatEntity);
-      world.emit('Swoosh!', nearEntity: thisEntity, fromEntity: thisEntity);
+      // ei.target.with(Emittable, (emittable) => emittable.emit('The door scansy our ID and chirps happily'));
+      world.emit('The door scans your ID and chirps happily', fromEntity: ei.current, toEntity: ei.target);
+      world.emit('Swoosh!', nearEntity: ei.current, fromEntity: ei.current);
       o.transition();
     });
 

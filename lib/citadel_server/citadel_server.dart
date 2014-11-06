@@ -133,7 +133,7 @@ class CitadelServer {
         ..targetEntityId = ge.payload['target_entity_id']
         ..withEntityId = ge.payload['with_entity_id']
         ..actionName = ge.payload['action_name']
-        ..details.addAll(ge.payload['details'] ? ge.payload['details'] : {});
+        ..details.addAll(ge.payload['details'] != null ? ge.payload['details'] : {});
       intentSystem.intentQueue.add(intent);
     };
   }

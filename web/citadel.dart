@@ -57,6 +57,8 @@ void main() {
   stage = new Stage(canvas);
   stage.focus = stage;
 
+  gameLayer.doubleClickEnabled = true;
+
   canvas.onContextMenu.listen((event) => event.preventDefault() );
 
   stage.onMouseRightClick.listen((event) {
@@ -85,6 +87,14 @@ void main() {
       }
     }
 
+  });
+
+  gameLayer.onMouseDoubleClick.listen((event) {
+    if (currentContextMenu != null) { return; }
+    var gs = stage.hitTestInput(event.stageX, event.stageY);
+    if (gs is c.GameSprite) {
+      interactWith(gs.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
+    }
   });
 
   c.ContextMenu.onSelection.listen((cmi) {
@@ -351,24 +361,28 @@ void setupHtmlGuiEvents() {
     if (currentTarget != null) {
       lookEntity(currentTarget.entityId);
     }
+    focusStage();
   });
 
   find('use').onClick.listen((me) {
     if (currentTarget != null) {
       interactWith(currentTarget.entityId, 'use');
     }
+    focusStage();
   });
 
   find('pickup').onClick.listen((me) {
     if (currentTarget != null) {
       pickupEntity(currentTarget.entityId);
     }
+    focusStage();
   });
 
   find('attack').onClick.listen((me) {
     if (currentTarget != null) {
       intent('ATTACK', targetEntityId: currentTarget.entityId);
     }
+    focusStage();
   });
 
   query('#player-chat-input').onKeyPress.listen((ke) {
@@ -388,10 +402,12 @@ void setupHtmlGuiEvents() {
 //      currentTarget = entities[int.parse(parent.dataset['entity-id'])];
       currentlySelectedInventoryEntityId = int.parse(parent.dataset['entity-id']);
     }
+    focusStage();
   });
 
   query('#use-item').onClick.listen((e) {
     interactWith(currentTarget.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
+    focusStage();
   });
 }
 
@@ -426,4 +442,9 @@ String _bitmapDataToDataUri(BitmapData bd) {
   var imageData = bd.renderTextureQuad.getImageData();
   canvas.context2D.putImageData(imageData, 0, 0);
   return canvas.toDataUrl('image/png');
+}
+
+focusStage() {
+  var canvas = querySelector('#stage');
+  canvas.focus();
 }

@@ -5,17 +5,21 @@
 .sidebar {
   border: 1px solid black;
   padding: 5px;
+  box-shadow: 10px 10px 5px #888888;
 }
 
 #log {
   height: 300px;
   width: 300px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: auto;
+
+  border: 3px double;
+
+
 }
 
 #log ~ input {
-  margin-top: 5px;
+  margin-top: 15px;
 }
 
 .template {

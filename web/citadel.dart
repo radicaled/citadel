@@ -191,13 +191,13 @@ void initWebSocket([int retrySeconds = 2]) {
   }
 
   ws.onOpen.listen((e) {
-    print('Connected');
+    _processChatMessage('You are now connected to the server!');
     querySelector('#ws-status').text = 'ONLINE';
     listenForEvents(ws.onMessage);
   });
 
   ws.onClose.listen((e) {
-    print('Websocket closed, retrying in $retrySeconds seconds');
+    _processChatMessage('You have been disconnected.');
     querySelector('#ws-status').text = 'OFFLINE';
     scheduleReconnect();
   });
@@ -205,10 +205,6 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onError.listen((e) {
     print("Error connecting to ws");
     scheduleReconnect();
-  });
-
-  ws.onMessage.listen((MessageEvent e) {
-
   });
 
 }
@@ -252,9 +248,8 @@ Future loadMap(String xml) {
 }
 
 void _emit(Message message) {
-  var payload = message.payload;
-  querySelector('#log').appendHtml('<p>${payload['text']}');
-  querySelector('#log p:last-child').scrollIntoView();
+  var msg = message.payload['text'];
+  _processChatMessage(msg);
 }
 
 void _pickedUpEntity(Message message) {
@@ -424,4 +419,9 @@ _setupSelectedItemActions(int entityId, List actions) {
     query('.selected-item-action-menu').classes.remove('hidden');
     query('.selected-item-action-menu ul').append(li);
   });
+}
+
+_processChatMessage(String text) {
+  querySelector('#log').appendHtml('<p>$text</p>');
+  querySelector('#log p:last-child').scrollIntoView();
 }

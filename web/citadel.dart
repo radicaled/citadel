@@ -30,11 +30,9 @@ c.GameSprite get currentTarget => _currentTarget;
                if (gs.selectable) {
                  _currentTarget = gs;
 
-                 _currentTarget.filters.add(new ColorMatrixFilter.invert());
-                 _currentTarget.applyCache(0, 0, gs.width.toInt(), gs.height.toInt());
-                 // ... hm. Are my tiles too close together?
-                 //currentTarget.shadow = new Shadow(Color.Yellow, 0, 0, 10.0);
-                 query('#container #looking-at').text = 'Looking at ${gs.entityId}';
+                 query('#container #looking-at')..innerHtml = ''
+                  ..appendText('Looking at ${gs.entityId}')
+                  ..append(new ImageElement(src: _bitmapDataToDataUri(gs.bitmapData)));
                }
              }
 
@@ -260,11 +258,8 @@ void _pickedUpEntity(Message message) {
   // TODO: What are you holding?
   var entity = entities[entityId];
 
-  CanvasElement canvas = query('#temp-canvas');
-  var imageData = entity.bitmapData.renderTextureQuad.getImageData();
 
-  canvas.context2D.putImageData(imageData, 0, 0);
-  var dataUri = canvas.toDataUrl('image/png');
+  var dataUri = _bitmapDataToDataUri(entity.bitmapData);
 
   var li = new Element.li()
     ..append(new ImageElement(src: dataUri))
@@ -424,4 +419,11 @@ _setupSelectedItemActions(int entityId, List actions) {
 _processChatMessage(String text) {
   querySelector('#log').appendHtml('<p>$text</p>');
   querySelector('#log p:last-child').scrollIntoView();
+}
+
+String _bitmapDataToDataUri(BitmapData bd) {
+  CanvasElement canvas = query('#temp-canvas');
+  var imageData = bd.renderTextureQuad.getImageData();
+  canvas.context2D.putImageData(imageData, 0, 0);
+  return canvas.toDataUrl('image/png');
 }

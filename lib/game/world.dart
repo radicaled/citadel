@@ -6,6 +6,7 @@ import 'dart:async';
 class World {
   StreamController<EmitEvent> _emitController = new StreamController.broadcast();
   Stream onEmit;
+  List<EntitySystem> entitySystems = [];
 
   World() {
     onEmit = _emitController.stream;
@@ -13,6 +14,11 @@ class World {
 
   void emit(String text, {Entity nearEntity, Entity fromEntity, Entity toEntity}) {
     _emitController.add(new EmitEvent(text, nearEntity: nearEntity, fromEntity: fromEntity, toEntity: toEntity));
+  }
+
+  // TODO: refine method so that entities are contained within worlds.
+  void process(List<Entity> entities) {
+    entitySystems.forEach((s) => s.processEntities(entities));
   }
 }
 

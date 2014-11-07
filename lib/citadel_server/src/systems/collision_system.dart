@@ -4,11 +4,11 @@ part of citadel_server;
 // If a collision is about to occur, we...
 // set velocity to 0.
 // TODO: super naive system.
-void collisionSystem() {
-  var filtered = entitiesWithComponents([Position, Collidable, Velocity]);
-  // TODO: velocity is currently -1 per tick.
-  // TODO: need to account for different velocity.
-  filtered.forEach( (entity) {
+class CollisionSystem extends EntitySystem {
+  Iterable<Entity> filter(Iterable<Entity> entities) =>
+    entities.where((e) => e.has([Position, Velocity]));
+
+  void process(Entity entity) {
     var pos = entity[Position];
     var vel = entity[Velocity];
 
@@ -23,5 +23,5 @@ void collisionSystem() {
       collidingEntity.react('collide', entity, null);
       vel.halt();
     }
-  });
+  }
 }

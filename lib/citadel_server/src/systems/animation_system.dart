@@ -1,8 +1,11 @@
 part of citadel_server;
 
-void animationSystem() {
+class AnimationSystem extends EntitySystem {
+  filter(Iterable<Entity> entities) =>
+    entities.where((e) => e.has([Animation]));
+
   // TODO: client side rendering should alleviate some traffic, but then new clients have to be kept in sync with the animation...
-  entitiesWithComponents([Animation]).forEach((entity) {
+  void process(Entity entity) {
     var ani = entity[Animation];
     AnimationStep currentStep = ani.steps.first;
 
@@ -19,5 +22,5 @@ void animationSystem() {
     }
 
     if (ani.steps.isEmpty) entity.components.remove(Animation);
-  });
+  }
 }

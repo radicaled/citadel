@@ -61,7 +61,6 @@ class Entity {
   }
 
   void use(Type type, void f(Component component)) {
-    print('This is: ${this[type]}');
     if (has([type])) { f(this[type]); }
   }
 

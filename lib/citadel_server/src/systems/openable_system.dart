@@ -1,13 +1,10 @@
 part of citadel_server;
 
-openableSystem() {
-  new OpenableSystem().execute();
-}
+class OpenableSystem extends EntitySystem {
+  filter(entities) => entities.where((e) => e.has([Openable]));
 
-class OpenableSystem {
-
-  void execute() {
-    entitiesWithComponents([Openable]).forEach((e) => workOn(e));
+  process(Entity entity) {
+    workOn(entity);
   }
 
   void workOn(Entity entity) {
@@ -27,7 +24,6 @@ class OpenableSystem {
     Openable o = entity[Openable];
     if (o.isTransitioning) {
       o.transition();
-      EntityManager.addMessage(entity, o.currentState);
     }
   }
 }

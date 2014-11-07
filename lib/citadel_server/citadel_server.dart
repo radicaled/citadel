@@ -151,6 +151,16 @@ class CitadelServer {
     intentSystem.register('ATTACK', harmIntentSystem);
 
     intentSystem.register('SPEAK', speakIntentSystem);
+
+    world.entitySystems.addAll([
+        new CollisionSystem(),
+        new MovementSystem(),
+        new ContainerSystem(),
+        new OpenableSystem(),
+        // Should always be last
+        new AnimationBufferSystem(),
+        new AnimationSystem()
+    ]);
   }
 
   void start() {
@@ -324,14 +334,7 @@ class CitadelServer {
 
   _executeSystems() {
     intentSystem.execute();
-    collisionSystem();
-    movementSystem();
-    openableSystem();
-    containerSystem();
-
-    // Should always be last.
-    animationBufferSystem();
-    animationSystem();
+    world.process(liveEntities);
 
     EntityManager.clearMessages();
 

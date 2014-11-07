@@ -8,6 +8,7 @@ part 'entities/src/entity_builder.dart';
 part 'entities/src/entity_manager.dart';
 part 'entities/src/entity_behavior.dart';
 part 'entities/src/entity_interaction.dart';
+part 'entities/src/entity_system.dart';
 
 part 'entities/src/events/entity_event.dart';
 

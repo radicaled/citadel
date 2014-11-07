@@ -1,9 +1,9 @@
 part of citadel_server;
 
-void movementSystem() {
-  var matching = entitiesWithComponents([Position, Velocity]);
+class MovementSystem extends EntitySystem {
+  filter(entities) => entities.where((e) => e.has([Position, Velocity]));
 
-  matching.forEach( (entity) {
+  process(Entity entity) {
     var pos = entity[Position];
     var vel = entity[Velocity];
 
@@ -20,6 +20,5 @@ void movementSystem() {
           'payload': { 'x': pos.x, 'y': pos.y, 'entity_id': entity.id },
       });
     }
-  });
-
+  }
 }

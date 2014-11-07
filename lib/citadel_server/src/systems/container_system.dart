@@ -1,14 +1,21 @@
 part of citadel_server;
 
-containerSystem() {
-  new ContainerSystem().execute();
-}
+class ContainerSystem extends EntitySystem {
+  Iterable<Entity> filter(Iterable<Entity> entities) =>
+    entities.where((e) => e.has([Container]));
 
-class ContainerSystem {
-  void execute() {
-    entitiesWith([Openable, Container], message: Openable.OPENED).forEach((e) => showContents(e));
-    entitiesWith([Openable, Container], message: Openable.CLOSED).forEach((e) => hideContents(e));
-    entitiesWith([Container]).forEach(updatePosition);
+  void process(Entity entity) {
+    entity.use(Openable, (openable) {
+      // This is goddamn bullshit wizardy
+      // We use transitioning states to show / hide entities.
+      // Need a _much_ better system than that.
+      // TODO: need to resolve issues with ContainerSystem relying on Openable.currentState to add / remove visible entities.
+      if (openable.isTransitioning) {
+        openable.currentState == Openable.OPENING  ? showContents(entity) : hideContents(entity);
+      }
+    });
+
+    updatePosition(entity);
   }
 
   void updatePosition(Entity entity) {
@@ -29,6 +36,7 @@ class ContainerSystem {
   // FIXME: sync with animation
   void hideContents(Entity entity) {
     var p = entity[Position];
+    var o = entity[Openable];
     var entities = _nearbyEntities(p);
     entities.forEach((e) => e.detach(Visible));
     entities.forEach((e) => EntityManager.hidden(e));

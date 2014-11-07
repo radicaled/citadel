@@ -8,6 +8,11 @@ class World {
   Stream onEmit;
   List<EntitySystem> entitySystems = [];
 
+  Set<Entity> entities = new Set();
+
+  // TODO: Could probably be refined?
+  Map<String, dynamic> attributes = {};
+
   World() {
     onEmit = _emitController.stream;
   }
@@ -16,8 +21,7 @@ class World {
     _emitController.add(new EmitEvent(text, nearEntity: nearEntity, fromEntity: fromEntity, toEntity: toEntity));
   }
 
-  // TODO: refine method so that entities are contained within worlds.
-  void process(List<Entity> entities) {
+  void process() {
     entitySystems.forEach((s) => s.processEntities(entities));
   }
 }

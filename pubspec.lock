@@ -68,7 +68,7 @@ packages:
   tmx:
     description: tmx
     source: hosted
-    version: "0.11.3"
+    version: "0.11.7"
   unittest:
     description: unittest
     source: hosted

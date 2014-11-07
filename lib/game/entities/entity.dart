@@ -71,4 +71,9 @@ class Entity {
   Component operator [](Type componentType) {
     return components[componentType];
   }
+
+  bool operator ==(Entity other) {
+    if (other == null) return false;
+    return this.id == other.id;
+  }
 }

@@ -218,6 +218,17 @@ class CitadelServer {
           }
         });
       });
+      // Locate spawn zones
+      world.attributes.putIfAbsent('spawn_zones', () => new List());
+      map.objectGroups.expand((og) => og.tmxObjects).where((to) => to.type == 'spawn_zone').forEach((to) {
+        var spawnZones = world.attributes['spawn_zones'];
+        spawnZones.add({
+            'x': to.x ~/ 32,
+            'y': to.y ~/ 32,
+            'width': to.width ~/ 32,
+            'height': to.height ~/ 32
+        });
+      });
     });
   }
 
@@ -242,6 +253,7 @@ class CitadelServer {
   }
 
   void _gameConnection(HttpRequest req) {
+//    var player = new PlayerSpawner(world).spawnPlayer(new Position(8, 15));
     var player = new PlayerSpawner(world).spawnPlayer();
     trackEntity(player);
 

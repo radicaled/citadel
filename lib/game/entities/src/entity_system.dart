@@ -5,7 +5,7 @@ abstract class EntitySystem {
   void process(Entity entity);
 
   /// Filter a list of entities via [filter] and then apply the result to [process].
-  void processEntities(List<Entity> entities) {
+  void processEntities(Iterable<Entity> entities) {
     filter(entities).forEach(process);
   }
 }

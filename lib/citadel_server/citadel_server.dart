@@ -52,8 +52,7 @@ final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
-// TODO: feel like this should be a map
-List<Entity> liveEntities = new List<Entity>();
+
 List<Map> commandQueue = new List<Map>();
 List<GameConnection> gameConnections = new List<GameConnection>();
 
@@ -70,7 +69,7 @@ Map _makeCommand(String type, payload) {
 
 Entity trackEntity(Entity e) {
   e.id = currentEntityId++;
-  liveEntities.add(e);
+  world.entities.add(e);
   return e;
 }
 
@@ -269,7 +268,7 @@ class CitadelServer {
 
   _removeConnection(GameConnection ge) {
     gameConnections.remove(ge);
-    liveEntities.remove(ge.entity);
+    world.entities.remove(ge.entity);
     _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
   }
 
@@ -336,7 +335,7 @@ class CitadelServer {
 
   _executeSystems() {
     intentSystem.execute();
-    world.process(liveEntities);
+    world.process();
 
     EntityManager.clearMessages();
 

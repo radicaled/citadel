@@ -45,6 +45,9 @@ part 'src/game_connection.dart';
 part 'src/tile_manager.dart';
 part 'src/helpers/animation_builder.dart';
 
+// Player stuff?
+part 'src/player/player_spawner.dart';
+
 final logging.Logger log = new logging.Logger('CitadelServer')
   ..onRecord.listen((logging.LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
@@ -240,24 +243,10 @@ class CitadelServer {
   }
 
   void _gameConnection(HttpRequest req) {
-    Entity player = trackEntity(buildEntity('human', world)..attach(new Player()));
+    var player = new PlayerSpawner(world).spawnPlayer();
+    trackEntity(player);
 
-    Position pos = player[Position];
-    TileGraphics tgs = player[TileGraphics];
-    pos
-      ..x = 8
-      ..y = 8
-      ..z = 16;
-    tgs.tilePhrases = ['Humans|1'];
-
-    _send(_makeCommand('create_entity', {
-        'x': pos.x,
-        'y': pos.y,
-        'z': pos.z,
-        'entity_id': player.id,
-        'tile_phrases': tgs.tilePhrases,
-    }));
-    player.attach(new Visible());
+    _sendCreateEntity(player);
 
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
       var gc = new GameConnection(ws, player);
@@ -295,6 +284,19 @@ class CitadelServer {
   void _emitTo(String text, GameConnection gc) {
     _sendTo(_makeCommand('emit', { 'text': text }),
         [gc]);
+  }
+
+  void _sendCreateEntity(Entity entity) {
+    var pos = entity[Position];
+    var tgs = entity[TileGraphics];
+
+    _send(_makeCommand('create_entity', {
+        'x': pos.x,
+        'y': pos.y,
+        'z': pos.z,
+        'entity_id': entity.id,
+        'tile_phrases': tgs.tilePhrases,
+    }));
   }
 
   void _sendGamestate(GameConnection gc) {

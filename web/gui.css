@@ -2,6 +2,23 @@
   display: none;
 }
 
+.unselectable {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.selectable {
+  -webkit-user-select: initial;
+  -khtml-user-select: initial;
+  -moz-user-select: initial;
+  -o-user-select: initial;
+  user-select: initial;
+}
+
+
 .sidebar {
   border: 1px solid black;
   padding: 5px;

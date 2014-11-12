@@ -6,7 +6,9 @@ lookIntentSystem(Intent intent) {
   var invoker = findEntity(intent.invokingEntityId);
   var target  = findEntity(intent.targetEntityId);
   var usi     = findEntity(intent.withEntityId);
-  if (target.has([Description])) {
-    target.react('look', invoker, usi, orElse: () => world.emit(target[Description].text, fromEntity: invoker));
-  }
+
+  target.react('look', invoker, usi, orElse: () {
+    target.use(Description, (description) => world.emit(description.text, toEntity: invoker));
+  });
+
 }

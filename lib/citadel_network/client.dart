@@ -24,9 +24,13 @@ class ClientNetworkHub extends NetworkHub {
     send('intent', payload);
   }
 
+  // Connection commands
+
   void login(String name) {
     send('login', { 'name': name });
   }
+
+  // Character commands
 
   void speak(String text) {
     sendIntent('speak', details: { 'text': text });
@@ -44,11 +48,13 @@ class ClientNetworkHub extends NetworkHub {
     sendIntent('attack', targetEntityId: entityId, withEntityId: withEntityId);
   }
 
-  void getActions(int entityId) {
-    send('get_actions', { 'entity_id': entityId });
-  }
-
   void move(String directionCommand) {
     sendIntent(directionCommand);
+  }
+
+  // Utility commands
+
+  void getActions(int entityId) {
+    send('get_actions', { 'entity_id': entityId });
   }
 }

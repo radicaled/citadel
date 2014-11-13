@@ -113,16 +113,16 @@ void main() {
     // w = 119
     switch(ke.keyCode){
       case 97:
-        movePlayer('MOVE_W');
+        networkHub.move('MOVE_W');
         break;
       case 100:
-        movePlayer('MOVE_E');
+        networkHub.move('MOVE_E');
         break;
       case 115:
-        movePlayer('MOVE_S');
+        networkHub.move('MOVE_S');
         break;
       case 119:
-        movePlayer('MOVE_N');
+        networkHub.move('MOVE_N');
         break;
     }
     if (ke.keyCode >= 48 && ke.keyCode <= 57) {
@@ -155,10 +155,6 @@ void main() {
       .then((_) => initWebSocket())
       .then((_) => querySelector('#game-window').classes.remove('hidden'));
   });
-}
-
-void movePlayer(direction) {
-  intent(direction);
 }
 
 void interactWith(entityId, actionName, {withEntityId}) {

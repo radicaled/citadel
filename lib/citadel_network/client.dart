@@ -47,4 +47,8 @@ class ClientNetworkHub extends NetworkHub {
   void getActions(int entityId) {
     send('get_actions', { 'entity_id': entityId });
   }
+
+  void move(String directionCommand) {
+    sendIntent(directionCommand);
+  }
 }

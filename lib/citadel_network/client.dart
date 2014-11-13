@@ -52,6 +52,10 @@ class ClientNetworkHub extends NetworkHub {
     sendIntent(directionCommand);
   }
 
+  void interactWith(entityId, actionName, {int withEntityId}) {
+    sendIntent('interact', targetEntityId: entityId, withEntityId: withEntityId, actionName: actionName);
+  }
+
   // Utility commands
 
   void getActions(int entityId) {

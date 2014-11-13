@@ -94,7 +94,7 @@ void main() {
     if (currentContextMenu != null) { return; }
     var gs = stage.hitTestInput(event.stageX, event.stageY);
     if (gs is c.GameSprite) {
-      interactWith(gs.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
+      networkHub.interactWith(gs.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
     }
   });
 
@@ -358,7 +358,7 @@ void setupHtmlGuiEvents() {
 
   find('use').onClick.listen((me) {
     if (currentTarget != null) {
-      interactWith(currentTarget.entityId, 'use');
+      networkHub.interactWith(currentTarget.entityId, 'use');
     }
     focusStage();
   });
@@ -402,7 +402,7 @@ void setupHtmlGuiEvents() {
   });
 
   query('#use-item').onClick.listen((e) {
-    interactWith(currentTarget.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
+    networkHub.interactWith(currentTarget.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
     focusStage();
   });
 }
@@ -421,7 +421,7 @@ _setupSelectedItemActions(int entityId, List actions) {
       ..text = action;
     var li = new Element.li()
       ..append(button)
-      ..onClick.listen((_) =>  interactWith(currentTarget.entityId, action, withEntityId: entityId));
+      ..onClick.listen((_) =>  networkHub.interactWith(currentTarget.entityId, action, withEntityId: entityId));
 
     query('.selected-item-action-menu').classes.remove('hidden');
     query('.selected-item-action-menu ul').append(li);

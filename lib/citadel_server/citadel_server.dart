@@ -122,6 +122,7 @@ class CitadelServer {
       .listen((emitEvent) => _emitNear(emitEvent.nearEntity, emitEvent.message));
 
     gameStream.listen((ge) => log.info("Received Event: $ge"));
+    subscribe('login', _loginPlayer);
     subscribe('intent', handlePlayerIntent());
     subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
     subscribe('get_actions', _sendActions);
@@ -254,23 +255,28 @@ class CitadelServer {
   }
 
   void _gameConnection(HttpRequest req) {
-//    var player = new PlayerSpawner(world).spawnPlayer(new Position(8, 15));
-    var player = new PlayerSpawner(world).spawnPlayer();
-    trackEntity(player);
-
-    _sendCreateEntity(player);
-
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
-      var gc = new GameConnection(ws, player);
+      var gc = new GameConnection(ws, null);
       gameConnections.add(gc);
-
-      world.onEmit.where((ee) => ee.toEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, gc));
 
       ws.listen((data) => _handleWebSocketMessage(data, ws),
         onDone: () => _removeConnection(gc));
-      _sendGamestate(gc);
     });
   }
+
+  void _loginPlayer(GameEvent ge) {
+    var player = new PlayerSpawner(world).spawnPlayer();
+    trackEntity(player);
+
+    player.use(Name, (name) => name.text = ge.payload['name']);
+    ge.gameConnection.entity = player;
+
+    world.onEmit.where((ee) => ee.toEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, ge.gameConnection));
+
+    _sendCreateEntity(player);
+    _sendGamestate(ge.gameConnection);
+  }
+
 
   void _handleWebSocketMessage(message, [WebSocket ws]) {
     var request = json.parse(message);
@@ -281,8 +287,12 @@ class CitadelServer {
 
   _removeConnection(GameConnection ge) {
     gameConnections.remove(ge);
-    world.entities.remove(ge.entity);
-    _queueCommand('remove_entity', { 'entity_id': ge.entity.id });
+    if (ge.entity != null) {
+      world.entities.remove(ge.entity);
+      _queueCommand('remove_entity', {
+          'entity_id': ge.entity.id
+      });
+    }
   }
 
   void _emit(String text) {

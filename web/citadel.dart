@@ -8,6 +8,7 @@ import 'package:stagexl/stagexl.dart';
 import 'package:js/js.dart' as js;
 import 'package:citadel/citadel_client/citadel_client.dart' as c;
 import 'package:citadel/citadel_network/citadel_network.dart';
+import 'package:citadel/citadel_network/client.dart';
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
@@ -17,7 +18,7 @@ Sprite gameLayer = new Sprite();
 Sprite guiLayer = new Sprite();
 
 var resourceManager = new ResourceManager();
-WebSocket ws;
+
 int currentPlayerId;
 // TODO: hacky.
 c.GameSprite _currentTarget;
@@ -49,7 +50,7 @@ int get currentlySelectedInventoryEntityId => _currentlySelectedInventoryEntityI
       getActions(entityId);
     }
 
-NetworkHub networkHub;
+ClientNetworkHub networkHub;
 
 void main() {
   var canvas = querySelector('#stage');
@@ -141,10 +142,19 @@ void main() {
     setupHtmlGuiEvents();
   });
 
-  var url = "packages/citadel/assets/maps/shit_station-1.tmx";
-  HttpRequest.getString(url)
-    .then(loadMap)
-    .then((_) => initWebSocket());
+  var loginWindow = new c.LoginWindow()
+    ..show();
+
+  loginWindow.onLogin.listen((me) {
+    me.preventDefault();
+    loginWindow.hide();
+
+    var url = "packages/citadel/assets/maps/shit_station-1.tmx";
+    HttpRequest.getString(url)
+      .then(loadMap)
+      .then((_) => initWebSocket())
+      .then((_) => querySelector('#game-window').classes.remove('hidden'));
+  });
 }
 
 void movePlayer(direction) {
@@ -180,13 +190,13 @@ void intent(intentName, {targetEntityId, withEntityId, actionName, Map details})
 }
 
 void send(type, payload) {
-  ws.send(JSON.encode({ 'type': type, 'payload': payload }));
+  networkHub.send(type, payload);
 }
 
 void initWebSocket([int retrySeconds = 2]) {
   var reconnectScheduled = false;
   print('Current Player ID: $currentPlayerId');
-  ws = new WebSocket('ws://127.0.0.1:8000/ws/game');
+  var ws = new WebSocket('ws://127.0.0.1:8000/ws/game');
 
   print("Connecting to websocket");
 
@@ -201,7 +211,8 @@ void initWebSocket([int retrySeconds = 2]) {
   ws.onOpen.listen((e) {
     _processChatMessage('You are now connected to the server!');
     querySelector('#ws-status').text = 'ONLINE';
-    listenForEvents(ws.onMessage);
+    listenForEvents(ws, ws.onMessage);
+    networkHub.login(querySelector('input[name="player-name"]').value);
   });
 
   ws.onClose.listen((e) {
@@ -217,12 +228,12 @@ void initWebSocket([int retrySeconds = 2]) {
 
 }
 
-void listenForEvents(Stream stream) {
+void listenForEvents(WebSocket ws, Stream stream) {
   var transformer = new StreamTransformer.fromHandlers(handleData: (MessageEvent me, sink) {
     sink.add(me.data);
   });
   stream.listen((MessageEvent me) => print('Received message: ${me.data}'));
-  networkHub = new NetworkHub(stream.transform(transformer));
+  networkHub = new ClientNetworkHub(stream.transform(transformer), ws.send);
 
   networkHub.on('move_entity').listen(_moveEntity);
   networkHub.on('create_entity').listen(_createEntity);
@@ -234,6 +245,7 @@ void listenForEvents(Stream stream) {
 }
 
 // TODO: I forgot what the Uint8 type is in JS. Uint8?
+// TODO: REMOVE ME
 List<int> _inflateZlib(List<int> bytes) {
   var zlib = new js.Proxy(js.context.Zlib.Inflate, js.array(bytes));
   return zlib.decompress();
@@ -383,6 +395,10 @@ void setupHtmlGuiEvents() {
       intent('ATTACK', targetEntityId: currentTarget.entityId);
     }
     focusStage();
+  });
+
+  find('test').onClick.listen((me) {
+
   });
 
   query('#player-chat-input').onKeyPress.listen((ke) {

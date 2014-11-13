@@ -5,7 +5,7 @@ class NetworkHub {
 
   NetworkHub(Stream stream) {
     this.stream = stream.transform(_jsonTransformer)
-      .transform(_setGamestateTransformer);
+    .transform(_setGamestateTransformer);
   }
 
   Stream on(String messageType) {

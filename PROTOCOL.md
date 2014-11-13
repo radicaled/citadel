@@ -12,6 +12,13 @@ Websocket communications are sent in the form of:
 Client -> Server Protocl
 ===
 
+login
+=====
+
+Login to the server.
+
+    * payload.name -- palyer name
+
 get_gamestate
 ===
 

@@ -353,10 +353,6 @@ void _moveEntity(Message message) {
   entity.y = payload['y'] * 32;
 }
 
-void speak(String text) {
-  intent('SPEAK', details: { 'text': text });
-}
-
 SpriteSheet getSpriteSheet(tmx.Tileset ts) {
   return new SpriteSheet(resourceManager.getBitmapData(ts.name), ts.width, ts.height);
 }
@@ -403,7 +399,7 @@ void setupHtmlGuiEvents() {
 
   query('#player-chat-input').onKeyPress.listen((ke) {
     if (ke.keyCode == 13) {
-      speak(ke.target.value);
+      networkHub.speak(ke.target.value);
       ke.target.value = '';
     }
   });

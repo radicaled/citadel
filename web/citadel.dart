@@ -47,7 +47,7 @@ int get currentlySelectedInventoryEntityId => _currentlySelectedInventoryEntityI
     set currentlySelectedInventoryEntityId(int entityId) {
       query('#container #using').text = 'Using $entityId';
       _currentlySelectedInventoryEntityId = entityId;
-      getActions(entityId);
+      networkHub.getActions(entityId);
     }
 
 ClientNetworkHub networkHub;
@@ -159,18 +159,6 @@ void main() {
 
 void movePlayer(direction) {
   intent(direction);
-}
-
-void getActions(entityId) {
-  send('get_actions', { 'entity_id': entityId });
-}
-// FIXME: this should be an interaction, right?
-void pickupEntity(entityId) {
-  intent('PICKUP', targetEntityId: entityId);
-}
-// FIXME: this should be an interaction, right?
-void lookEntity(entityId) {
-  intent('LOOK', targetEntityId: entityId);
 }
 
 void interactWith(entityId, actionName, {withEntityId}) {
@@ -367,7 +355,7 @@ void setupHtmlGuiEvents() {
 
   find('look').onClick.listen((me) {
     if (currentTarget != null) {
-      lookEntity(currentTarget.entityId);
+      networkHub.look(currentTarget.entityId);
     }
     focusStage();
   });
@@ -381,14 +369,14 @@ void setupHtmlGuiEvents() {
 
   find('pickup').onClick.listen((me) {
     if (currentTarget != null) {
-      pickupEntity(currentTarget.entityId);
+      networkHub.pickup(currentTarget.entityId);
     }
     focusStage();
   });
 
   find('attack').onClick.listen((me) {
     if (currentTarget != null) {
-      intent('ATTACK', targetEntityId: currentTarget.entityId);
+      networkHub.attack(currentTarget.entityId);
     }
     focusStage();
   });

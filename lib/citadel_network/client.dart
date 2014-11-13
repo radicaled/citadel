@@ -31,4 +31,20 @@ class ClientNetworkHub extends NetworkHub {
   void speak(String text) {
     sendIntent('speak', details: { 'text': text });
   }
+
+  void look(int entityId) {
+    sendIntent('look', targetEntityId: entityId);
+  }
+
+  void pickup(int entityId) {
+    sendIntent('pickup', targetEntityId: entityId);
+  }
+
+  void attack(int entityId, {int withEntityId}) {
+    sendIntent('attack', targetEntityId: entityId, withEntityId: withEntityId);
+  }
+
+  void getActions(int entityId) {
+    send('get_actions', { 'entity_id': entityId });
+  }
 }

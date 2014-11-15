@@ -16,6 +16,9 @@ class CommandDoor extends CEntityBuilder {
       Openable o = ei.current[Openable];
       if (o.isTransitioning) { return; }
       o.transition();
+      ei.current.use(TileGraphics, (TileGraphics tileGraphics) {
+        tileGraphics.animationQueue.add('Command Door|opening');
+      });
     });
 
     reaction('use', (ei) {
@@ -36,6 +39,9 @@ class CommandDoor extends CEntityBuilder {
       world.emit('The door scans your ID and chirps happily', fromEntity: ei.current, toEntity: ei.target);
       world.emit('Swoosh!', nearEntity: ei.current, fromEntity: ei.current);
       o.transition();
+      ei.current.use(TileGraphics, (TileGraphics tileGraphics) {
+        tileGraphics.animationQueue.add('Command Door|opening');
+      });
     });
 
     script('opened', (thisEntity) {

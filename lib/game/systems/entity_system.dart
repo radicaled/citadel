@@ -1,4 +1,4 @@
-part of entities;
+part of systems;
 
 abstract class EntitySystem {
   Iterable<Entity> filter(Iterable<Entity> entities);

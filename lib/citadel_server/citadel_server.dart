@@ -6,18 +6,20 @@ import 'package:logging/logging.dart' as logging;
 import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
 import 'package:path/path.dart' as path;
-import 'package:yaml/yaml.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:citadel/game/entities.dart';
 import 'package:citadel/game/components.dart';
 import 'package:citadel/game/intents.dart';
+import 'package:citadel/game/systems.dart';
 import 'package:citadel/game/world.dart';
 
 import 'src/components.dart';
 import 'src/entities.dart';
+
 
 
 
@@ -26,7 +28,6 @@ part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/systems/pickup_intent_system.dart';
 part 'src/systems/animation_system.dart';
-part 'src/systems/animation_buffer_system.dart';
 part 'src/systems/container_system.dart';
 part 'src/systems/openable_system.dart';
 
@@ -38,13 +39,22 @@ part 'src/systems/interact_intent_system.dart';
 part 'src/systems/harm_intent_system.dart';
 part 'src/systems/speak_intent_system.dart';
 
+// Message systems
+part 'src/systems/animation_callback_system.dart';
+
 part 'src/entity_utils.dart';
 
 // misc
 part 'src/events/game_event.dart';
 part 'src/game_connection.dart';
 part 'src/tile_manager.dart';
-part 'src/helpers/animation_builder.dart';
+
+
+// Animation Stuff?
+part 'src/animation/animation_set.dart';
+part 'src/animation/animation.dart';
+part 'src/animation/animation_builder.dart';
+part 'src/animation/animation_timer.dart';
 
 // Player stuff?
 part 'src/player/player_spawner.dart';
@@ -162,8 +172,11 @@ class CitadelServer {
         new ContainerSystem(),
         new OpenableSystem(),
         // Should always be last
-        new AnimationBufferSystem(),
-        new AnimationSystem()
+        new AnimationSystem()..tileManager = tileManager
+    ]);
+
+    world.genericSystems.addAll([
+        new AnimationCallbackSystem(),
     ]);
   }
 
@@ -189,7 +202,7 @@ class CitadelServer {
   }
 
   _loadTiles() {
-    tileManager = new TileManager('packages/citadel/config/tiles');
+    tileManager = new TileManager('packages/citadel/assets/animations');
     tileManager.load();
   }
 

@@ -1,26 +1,19 @@
 part of citadel_server;
 
 class AnimationSystem extends EntitySystem {
+  TileManager tileManager;
+
   filter(Iterable<Entity> entities) =>
-    entities.where((e) => e.has([Animation]));
+    entities.where((e) => e.has([TileGraphics]) && e[TileGraphics].animationQueue.isNotEmpty);
 
-  // TODO: client side rendering should alleviate some traffic, but then new clients have to be kept in sync with the animation...
   void process(Entity entity) {
-    var ani = entity[Animation];
-    AnimationStep currentStep = ani.steps.first;
+    TileGraphics tg = entity[TileGraphics];
+    var animationName = tg.animationQueue.removeFirst();
+    var animation = tileManager.getAnimation(animationName);
+    AnimationCallbackSystem acs = world.getGenericSystem(AnimationCallbackSystem);
 
-    switch(currentStep.state) {
-      case AnimationStep.NOT_STARTED:
-        currentStep.start();
-        entity[TileGraphics].tilePhrases = [currentStep.graphicID];
-        EntityManager.changed(entity);
-        break;
-      case AnimationStep.FINISHED:
-        if (currentStep.onDone != null) currentStep.onDone();
-        ani.steps.removeFirst();
-        break;
-    }
-
-    if (ani.steps.isEmpty) entity.components.remove(Animation);
+    acs.animationTimers.add(new AnimationTimer(animation)
+      ..animatingEntity = entity
+      ..start());
   }
 }

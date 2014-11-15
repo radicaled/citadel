@@ -8,5 +8,6 @@ class TileGraphics extends Component {
    */
   String get currentGraphicID => tilePhrases.first;
   List<String> tilePhrases = [];
+  Queue<String> animationQueue = new Queue();
   TileGraphics([this.tilePhrases]);
 }

@@ -1,0 +1,20 @@
+{
+  "name": "Command Door",
+  "tilesheet": "Command Doors",
+  "data": [
+    {
+      "name": "opening",
+      "start_frame": 2,
+      "frame_count": 5,
+      "duration": 5,
+      "on_done": "opened"
+    },
+    {
+      "name": "closing",
+      "start_frame": 7,
+      "frame_count": -5,
+      "duration": 5,
+      "on_done": "closed"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ import 'dart:math';
 import 'dart:convert';
 
 import 'package:citadel/game/entities.dart';
-import 'package:citadel/game/components.dart';
+import 'package:citadel/game/animations.dart';
 import 'package:citadel/game/intents.dart';
 import 'package:citadel/game/systems.dart';
 import 'package:citadel/game/world.dart';
@@ -56,12 +56,10 @@ part 'src/entity_utils.dart';
 part 'src/events/game_event.dart';
 part 'src/game_connection.dart';
 part 'src/tile_manager.dart';
+part 'src/asset_manager.dart';
 
 
 // Animation Stuff?
-part 'src/animation/animation_set.dart';
-part 'src/animation/animation.dart';
-part 'src/animation/animation_builder.dart';
 part 'src/animation/animation_timer.dart';
 
 // Player stuff?
@@ -92,7 +90,7 @@ Entity trackEntity(Entity e) {
 }
 
 IntentSystem intentSystem = new IntentSystem();
-TileManager tileManager;
+AssetManager assetManager;
 
 class CitadelServer {
   tmx.TileMap map;
@@ -168,7 +166,7 @@ class CitadelServer {
         new ContainerSystem(),
         new OpenableSystem(),
         // Should always be last
-        new AnimationSystem()..tileManager = tileManager
+        new AnimationSystem(assetManager)
     ]);
 
     world.messageSystems.addAll([
@@ -185,8 +183,8 @@ class CitadelServer {
     log.info('loading map');
     _loadMap();
 
-    log.info('loading tile information');
-    _loadTiles();
+    log.info('loading asset information');
+    _loadAssets();
 
     log.info('listening for game events');
     _setupEvents();
@@ -201,9 +199,9 @@ class CitadelServer {
     log.info('Server started');
   }
 
-  _loadTiles() {
-    tileManager = new TileManager('packages/citadel/assets/animations');
-    tileManager.load();
+  _loadAssets() {
+    assetManager = new AssetManager();
+    assetManager.loadAnimations('packages/citadel/assets/animations');
   }
 
   _loadMap() {
@@ -286,6 +284,7 @@ class CitadelServer {
 
     _sendCreateEntity(player);
     _sendGamestate(ce.connection);
+    _sendAssets(ce.connection);
   }
 
   _removeConnection(GameConnection ge) {
@@ -337,6 +336,11 @@ class CitadelServer {
       }));
     });
     hub.send('set_gamestate', payload, gc);
+  }
+
+  void _sendAssets(GameConnection gc) {
+    var animationUrls = assetManager.animationUrls.toList();
+    hub.loadAssets(gc, animationUrls: animationUrls);
   }
 
   void _sendActions(ClientMessage ce) {

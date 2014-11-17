@@ -7,7 +7,10 @@ import 'package:citadel/citadel_network/citadel_network.dart';
 class ClientNetworkHub extends NetworkHub {
   Function sender;
 
-  ClientNetworkHub(Stream stream, this.sender) : super(stream);
+  ClientNetworkHub(Stream stream, this.sender) : super(stream) {
+    onLoadAssets    = on('load_assets');
+    onAnimate       = on('animate');
+  }
 
   void send(String type, Map payload) {
     sender(JSON.encode({ 'type': type, 'payload': payload }));
@@ -61,4 +64,9 @@ class ClientNetworkHub extends NetworkHub {
   void getActions(int entityId) {
     send('get_actions', { 'entity_id': entityId });
   }
+
+  // Events
+
+  Stream onLoadAssets;
+  Stream onAnimate;
 }

@@ -9,6 +9,7 @@ import 'package:js/js.dart' as js;
 import 'package:citadel/citadel_client/citadel_client.dart' as c;
 import 'package:citadel/citadel_network/citadel_network.dart';
 import 'package:citadel/citadel_network/client.dart';
+import 'package:citadel/game/animations.dart' as animations;
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
@@ -51,6 +52,8 @@ int get currentlySelectedInventoryEntityId => _currentlySelectedInventoryEntityI
     }
 
 ClientNetworkHub networkHub;
+
+List<animations.AnimationSet> animationSets = [];
 
 void main() {
   var canvas = querySelector('#stage');
@@ -219,6 +222,9 @@ void listenForEvents(WebSocket ws, Stream stream) {
   stream.listen((MessageEvent me) => print('Received message: ${me.data}'));
   networkHub = new ClientNetworkHub(stream.transform(transformer), ws.send);
 
+  networkHub.onLoadAssets.listen(_loadAssets);
+  networkHub.onAnimate.listen(_animate);
+
   networkHub.on('move_entity').listen(_moveEntity);
   networkHub.on('create_entity').listen(_createEntity);
   networkHub.on('update_entity').listen(_updateEntity);
@@ -337,6 +343,28 @@ void _moveEntity(NetworkMessage message) {
   entity.y = payload['y'] * 32;
 }
 
+void _animate(NetworkMessage message) {
+  var entityId = message.payload['entity_id'];
+  var animatioName = message.payload['animation_name'];
+
+  var entity = entities[entityId];
+  var anim   = getAnimation(animatioName);
+  var ss = getSpriteSheet(map.getTileset(anim.animationSet.tileset));
+
+  stage.juggler.add(new c.SpriteAnimation(entity, anim, ss));
+}
+
+animations.Animation getAnimation(String animationName) {
+  var ns = animationName.split('|').first;
+  var anim = animationName.split('|').last;
+  var as = animationSets.firstWhere((as) => as.name == ns, orElse: () => throw 'AnimationSet not found: $animationname');
+  var an = as.animations[anim];
+
+  if (an == null) { throw 'Animation not found: $animationName'; }
+
+  return an;
+}
+
 SpriteSheet getSpriteSheet(tmx.Tileset ts) {
   return new SpriteSheet(resourceManager.getBitmapData(ts.name), ts.width, ts.height);
 }
@@ -411,7 +439,15 @@ void _setActions(NetworkMessage message) {
   _setupSelectedItemActions(message.payload['entity_id'], message.payload['actions']);
 }
 
-
+void _loadAssets(NetworkMessage message) {
+  List<String> animUrls = message.payload['animation_urls'];
+  animUrls.forEach((url) {
+    HttpRequest.getString(url).then((data) {
+      var animationSet = new animations.AnimationSet.fromJSON(JSON.decode(data));
+      animationSets.add(animationSet);
+    });
+  });
+}
 
 _setupSelectedItemActions(int entityId, List actions) {
   if (actions == null) return;

@@ -1,4 +1,4 @@
-part of citadel_server;
+part of game.animations;
 
 class AnimationSet {
   String name;

@@ -47,6 +47,10 @@ class ServerNetworkHub {
     connections.forEach((c) => c.send(message));
   }
 
+  void loadAssets(NetworkConnection connection, {List<String> animationUrls}) {
+    connection.send(_msg('load_assets', { "animation_urls": animationUrls }));
+  }
+
   // Event-related code
 
   Stream<ClientMessage> on(String name) =>
@@ -54,6 +58,11 @@ class ServerNetworkHub {
 
   Stream<ClientMessage> onLogin;
   Stream<ClientMessage> onIntent;
+
+  // Helpers
+
+  String _msg(String type, Map payload) =>
+    JSON.encode({ 'type': type, 'payload': payload });
 }
 
 class ClientMessage extends NetworkMessage {

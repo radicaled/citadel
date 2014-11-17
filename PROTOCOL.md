@@ -156,3 +156,18 @@ Get actions for current selected item.
 * payload.entity_id: entity_id
 * payload.actions: list of actions
 
+animate
+==
+
+Animate an entity
+
+* payload.entity_id: entity_id to animate
+* payload.animation_name: name to animate
+
+load_assets
+==
+
+A collection of assets the client will be needing.
+
+* payload.animation_urls: (array) a list of URLs that should be downloaded and used to track animations
+

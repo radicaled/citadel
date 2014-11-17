@@ -14,7 +14,6 @@ part 'components/name.dart';
 part 'components/vision.dart';
 part 'components/power.dart';
 part 'components/disabled.dart';
-part 'components/animation.dart';
 part 'components/container.dart';
 part 'components/health.dart';
 part 'components/visible.dart';

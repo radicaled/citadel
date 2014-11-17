@@ -1,6 +1,6 @@
 {
   "name": "Gray Locker",
-  "tilesheet": "Closets",
+  "tileset": "Closets",
   "data": [
     {
       "name": "opening",

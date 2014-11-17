@@ -171,6 +171,10 @@ class CitadelServer {
         new AnimationSystem()..tileManager = tileManager
     ]);
 
+    world.messageSystems.addAll([
+      new ClientMessageSystem(hub)
+    ]);
+
     world.genericSystems.addAll([
         new AnimationCallbackSystem(),
     ]);

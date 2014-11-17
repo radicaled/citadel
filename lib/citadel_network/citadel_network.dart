@@ -6,11 +6,11 @@ import 'dart:convert';
 part 'network_hub.dart';
 part 'stream_transformers.dart';
 
-class Message {
+class NetworkMessage {
   String name;
   Map payload;
 
-  Message.fromJson(Map json) {
+  NetworkMessage.fromJson(Map json) {
     name = json['type'];
     payload = json['payload'];
   }
@@ -18,4 +18,10 @@ class Message {
   toString() {
     return "GameEvent($name: $payload)";
   }
+}
+
+
+abstract class NetworkConnection {
+  Stream get incoming;
+  void send(String message);
 }

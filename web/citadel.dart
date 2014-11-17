@@ -251,12 +251,12 @@ Future loadMap(String xml) {
   return resourceManager.load();
 }
 
-void _emit(Message message) {
+void _emit(NetworkMessage message) {
   var msg = message.payload['text'];
   _processChatMessage(msg);
 }
 
-void _pickedUpEntity(Message message) {
+void _pickedUpEntity(NetworkMessage message) {
   var payload = message.payload;
   var entityId = payload['entity_id'];
   var hand = payload['hand'];
@@ -287,7 +287,7 @@ void _pickedUpEntity(Message message) {
 
 // TODO: check to see if redundant entites have been created?
 // EG, we already have an entity with ID=1, but now there are more?
-void _createEntity(Message message) {
+void _createEntity(NetworkMessage message) {
   var s = new c.GameSprite();
   var payload = message.payload;
   s.entityId = payload['entity_id'];
@@ -307,7 +307,7 @@ void _createEntity(Message message) {
   entities[s.entityId] = s;
 }
 
-void _updateEntity(Message message) {
+void _updateEntity(NetworkMessage message) {
   var payload = message.payload;
   var gs = entities[payload['entity_id']];
   if (payload.containsKey('x')) { gs.x = payload['x']; }
@@ -324,13 +324,13 @@ void _updateEntity(Message message) {
   }
 }
 
-void _removeEntity(Message message) {
+void _removeEntity(NetworkMessage message) {
   var payload = message.payload;
   var gs = entities.remove(payload['entity_id']);
   gs.removeFromParent();
 }
 
-void _moveEntity(Message message) {
+void _moveEntity(NetworkMessage message) {
   var payload = message.payload;
   var entity = entities[payload['entity_id']];
   entity.x = payload['x'] * 32;
@@ -407,7 +407,7 @@ void setupHtmlGuiEvents() {
   });
 }
 
-void _setActions(Message message) {
+void _setActions(NetworkMessage message) {
   _setupSelectedItemActions(message.payload['entity_id'], message.payload['actions']);
 }
 

@@ -16,6 +16,8 @@ import 'package:citadel/game/components.dart';
 import 'package:citadel/game/intents.dart';
 import 'package:citadel/game/systems.dart';
 import 'package:citadel/game/world.dart';
+import 'package:citadel/citadel_network/citadel_network.dart';
+import 'package:citadel/citadel_network/server.dart';
 
 import 'src/components.dart';
 import 'src/entities.dart';
@@ -39,8 +41,14 @@ part 'src/systems/interact_intent_system.dart';
 part 'src/systems/harm_intent_system.dart';
 part 'src/systems/speak_intent_system.dart';
 
-// Message systems
+// Generic systems
 part 'src/systems/animation_callback_system.dart';
+
+// Message systems
+part 'src/systems/client_message_system.dart';
+
+// Messages
+part 'src/messages/all_clients_message.dart';
 
 part 'src/entity_utils.dart';
 
@@ -65,7 +73,6 @@ final logging.Logger log = new logging.Logger('CitadelServer')
   });
 
 List<Map> commandQueue = new List<Map>();
-List<GameConnection> gameConnections = new List<GameConnection>();
 
 final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
@@ -84,29 +91,21 @@ Entity trackEntity(Entity e) {
   return e;
 }
 
-StreamController<GameEvent> gameStreamController = new StreamController.broadcast();
-Stream<GameEvent> gameStream = gameStreamController.stream;
-
-Stream<GameEvent> subscribe(event_name, [onData(GameEvent ge)]) {
-  var stream = gameStream.where((gv) => gv.name == event_name);
-  if (onData != null) { stream.listen(onData); }
-  return stream;
-}
-
 IntentSystem intentSystem = new IntentSystem();
 TileManager tileManager;
 
 class CitadelServer {
   tmx.TileMap map;
+  ServerNetworkHub hub = new ServerNetworkHub();
 
   void _setupEvents() {
     EntityManager.onChanged.listen((entityEvent) {
       var entity = entityEvent.entity;
-      _send(_makeCommand('update_entity', {
-        // FIXME: send the rest of the 'changed' attributes
-        'entity_id': entity.id,
-        'tile_phrases': entity[TileGraphics].tilePhrases
-      }));
+      hub.broadcast('update_entity', {
+          // FIXME: send the rest of the 'changed' attributes
+          'entity_id': entity.id,
+          'tile_phrases': entity[TileGraphics].tilePhrases
+      });
     });
 
     EntityManager.onHidden.listen((entityEvent) {
@@ -131,25 +130,22 @@ class CitadelServer {
       .where((emitEvent) => emitEvent.nearEntity != null)
       .listen((emitEvent) => _emitNear(emitEvent.nearEntity, emitEvent.message));
 
-    gameStream.listen((ge) => log.info("Received Event: $ge"));
-    subscribe('login', _loginPlayer);
-    subscribe('intent', handlePlayerIntent());
-    subscribe('get_gamestate', (ge) => _sendGamestate(ge.gameConnection));
-    subscribe('get_actions', _sendActions);
+    hub.masterStream.listen((ge) => log.info("Received Event: $ge"));
+    hub.onLogin.listen(_loginPlayer);
+    hub.onIntent.map(_parsePlayerIntent).listen(intentSystem.intentQueue.add);
+    hub.on('get_gamestate').listen((ge) => _sendGamestate(ge.connection));
+    hub.on('get_actions').listen(_sendActions);
   }
 
-  // Handle a player intent
-  handlePlayerIntent() {
-    return (GameEvent ge) {
-      var intentName = ge.payload['intent_name'];
-      var intent = new Intent(intentName)
-        ..invokingEntityId = ge.gameConnection.entity.id
-        ..targetEntityId = ge.payload['target_entity_id']
-        ..withEntityId = ge.payload['with_entity_id']
-        ..actionName = ge.payload['action_name']
-        ..details.addAll(ge.payload['details'] != null ? ge.payload['details'] : {});
-      intentSystem.intentQueue.add(intent);
-    };
+  // Parse player intents
+  Intent _parsePlayerIntent(ClientMessage ce) {
+    var intentName = ce.payload['intent_name'];
+    return new Intent(intentName)
+      ..invokingEntityId = (ce.connection as GameConnection).entity.id
+      ..targetEntityId = ce.payload['target_entity_id']
+      ..withEntityId = ce.payload['with_entity_id']
+      ..actionName = ce.payload['action_name']
+      ..details.addAll(ce.payload['details'] != null ? ce.payload['details'] : {});
   }
 
   void _setupSystems() {
@@ -270,36 +266,26 @@ class CitadelServer {
   void _gameConnection(HttpRequest req) {
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
       var gc = new GameConnection(ws, null);
-      gameConnections.add(gc);
-
-      ws.listen((data) => _handleWebSocketMessage(data, ws),
-        onDone: () => _removeConnection(gc));
+      hub.addConnection(gc);
+      ws.done.then((_) => _removeConnection(gc));
     });
   }
 
-  void _loginPlayer(GameEvent ge) {
+  void _loginPlayer(ClientMessage ce) {
     var player = new PlayerSpawner(world).spawnPlayer();
     trackEntity(player);
 
-    player.use(Name, (name) => name.text = ge.payload['name']);
-    ge.gameConnection.entity = player;
+    player.use(Name, (name) => name.text = ce.payload['name']);
+    (ce.connection as GameConnection).entity = player;
 
-    world.onEmit.where((ee) => ee.toEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, ge.gameConnection));
+    world.onEmit.where((ee) => ee.toEntity == player).listen((emitEvent) => _emitTo(emitEvent.message, ce.connection));
 
     _sendCreateEntity(player);
-    _sendGamestate(ge.gameConnection);
-  }
-
-
-  void _handleWebSocketMessage(message, [WebSocket ws]) {
-    var request = json.parse(message);
-    var ge = gameConnections.firstWhere((ge) => ge.ws == ws);
-
-    gameStreamController.add(new GameEvent(request, ge));
+    _sendGamestate(ce.connection);
   }
 
   _removeConnection(GameConnection ge) {
-    gameConnections.remove(ge);
+    hub.removeConnection(ge);
     if (ge.entity != null) {
       world.entities.remove(ge.entity);
       _queueCommand('remove_entity', {
@@ -309,7 +295,7 @@ class CitadelServer {
   }
 
   void _emit(String text) {
-    _send(_makeCommand('emit', { 'text': text }));
+    hub.broadcast('emit', { 'text': text });
   }
 
   void _emitNear(Entity entity, String text) {
@@ -317,21 +303,20 @@ class CitadelServer {
   }
 
   void _emitTo(String text, GameConnection gc) {
-    _sendTo(_makeCommand('emit', { 'text': text }),
-        [gc]);
+    hub.send('emit', { 'text': text }, gc);
   }
 
   void _sendCreateEntity(Entity entity) {
     var pos = entity[Position];
     var tgs = entity[TileGraphics];
 
-    _send(_makeCommand('create_entity', {
+    hub.broadcast('create_entity', {
         'x': pos.x,
         'y': pos.y,
         'z': pos.z,
         'entity_id': entity.id,
         'tile_phrases': tgs.tilePhrases,
-    }));
+    });
   }
 
   void _sendGamestate(GameConnection gc) {
@@ -347,16 +332,12 @@ class CitadelServer {
           'name': entity[Name] != null ? entity[Name].text : 'Something'
       }));
     });
-    _sendTo(_makeCommand('set_gamestate', payload), [gc]);
+    hub.send('set_gamestate', payload, gc);
   }
 
-  void _sendActions(GameEvent ge) {
-    var entity = findEntity(ge.payload['entity_id']);
-    _sendTo(_makeCommand('set_actions', { 'entity_id': entity.id, 'actions': entity.behaviors.keys.toList() }), [ge.gameConnection]);
-  }
-
-  void _send(cmd) {
-    _sendTo(cmd, gameConnections);
+  void _sendActions(ClientMessage ce) {
+    var entity = findEntity(ce.payload['entity_id']);
+    hub.send('set_actions', { 'entity_id': entity.id, 'actions': entity.behaviors.keys.toList() }, ce.connection);
   }
 
   void _sendTo(cmd, List<GameConnection> connections) {
@@ -379,7 +360,7 @@ class CitadelServer {
 
   _processCommands() {
     commandQueue.forEach((Map cmd) {
-      _send(cmd);
+      hub.broadcast(cmd['type'], cmd['payload']);
     });
 
     commandQueue.clear();

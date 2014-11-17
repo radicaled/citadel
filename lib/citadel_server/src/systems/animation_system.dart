@@ -15,5 +15,11 @@ class AnimationSystem extends EntitySystem {
     acs.animationTimers.add(new AnimationTimer(animation)
       ..animatingEntity = entity
       ..start());
+
+    world.messages.add(new AllClientsMessage('animate', {
+        'entity_id': entity.id,
+        'animation_name': animationName
+    }));
+
   }
 }

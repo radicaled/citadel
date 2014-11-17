@@ -10,7 +10,7 @@ class Hvac extends CEntityBuilder {
 
     reaction('use', (ei) {
       if (ei.current.has([Disabled])) {
-        ei.current.emit(ei.current[Disabled].text);
+        world.emit(ei.current[Disabled].text, toEntity: ei.current);
         return;
       }
       // FIXME: this is hard-coded.

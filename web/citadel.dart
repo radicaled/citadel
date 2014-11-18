@@ -428,11 +428,6 @@ void setupHtmlGuiEvents() {
     }
     focusStage();
   });
-
-  query('#use-item').onClick.listen((e) {
-    networkHub.interactWith(currentTarget.entityId, 'use', withEntityId: currentlySelectedInventoryEntityId);
-    focusStage();
-  });
 }
 
 void _setActions(NetworkMessage message) {

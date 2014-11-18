@@ -11,7 +11,13 @@ class SpriteAnimation extends Animatable {
 
   bool advanceTime(num time) {
     _totalTime += time;
-    var frame = (animation.frameCount * (_totalTime / animation.duration)).floor();
+    var frame;
+    if (animation.isInstant) {
+      frame = animation.startFrame + animation.frameCount;
+    } else {
+      frame = (animation.frameCount * (_totalTime / animation.duration)).floor();
+    }
+
     if (currentFrame != frame) {
       currentFrame = frame;
 

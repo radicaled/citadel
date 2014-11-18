@@ -8,6 +8,8 @@ class Animation {
   String onDone;
   AnimationSet animationSet;
 
+  bool get isInstant => duration == 0;
+
   Animation(this.name, this.animationSet);
   Animation.fromJSON(Map json, this.animationSet) : name = json["name"] {
     startFrame = json['start_frame'];

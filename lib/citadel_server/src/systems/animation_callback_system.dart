@@ -14,10 +14,16 @@ class AnimationCallbackSystem extends GenericSystem {
     animationTimers.forEach((at) {
       TileGraphics tg = at.animatingEntity[TileGraphics];
       var animation = at.animation;
-      var delta = new DateTime.now().difference(at.endTime);
-      var frame = (animation.frameCount * ((delta.inMilliseconds / 1000) / animation.duration)).floor();
-      var targetFrame = animation.startFrame - frame;
-      var currentTile = at.animation.animationSet.tileset + '|' + targetFrame.toString();
+      var currentTile;
+      if (animation.isInstant) {
+        currentTile = animation.startFrame + animation.frameCount;
+      } else {
+        var delta = new DateTime.now().difference(at.endTime);
+        var frame = (animation.frameCount * ((delta.inMilliseconds / 1000) / animation.duration)).floor();
+        var targetFrame = animation.startFrame - frame;
+        currentTile = at.animation.animationSet.tileset + '|' + targetFrame.toString();
+      }
+
 
       print('Updated to $currentTile');
       // TODO: destructive; sort me out

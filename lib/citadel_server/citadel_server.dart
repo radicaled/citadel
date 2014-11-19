@@ -328,21 +328,16 @@ class CitadelServer {
   }
 
   void _sendGamestate(GameConnection gc) {
-    var messages = [];
-    var payload = { 'messages': messages };
     entitiesWithComponents([Visible, TileGraphics, Position]).forEach( (entity) {
-      messages.add(_makeCommand('create_entity', {
-          'x': entity[Position].x,
-          'y': entity[Position].y,
-          'z': entity[Position].z,
-          'tile_phrases': entity[TileGraphics].tilePhrases,
-          'entity_id': entity.id,
-          'name': entity[Name] != null ? entity[Name].text : 'Something'
-      }));
+      hub.createEntity(entity.id,
+        x: entity[Position].x,
+        y: entity[Position].y,
+        z: entity[Position].z,
+        tilePhrases: entity[TileGraphics].tilePhrases,
+        name: entity[Name] != null ? entity[Name].text : 'Something'
+      );
     });
-    hub
-      ..custom('set_gamestate', payload)
-      ..send(gc);
+    hub.send(gc);
   }
 
   void _sendAssets(GameConnection gc) {

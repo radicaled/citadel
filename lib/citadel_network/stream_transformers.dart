@@ -5,8 +5,8 @@ StreamTransformer _jsonTransformer = new StreamTransformer.fromHandlers(handleDa
   sink.add(new NetworkMessage.fromJson(json));
 });
 
-StreamTransformer _setGamestateTransformer = new StreamTransformer.fromHandlers(handleData: (message, sink) {
-  if(message.name == 'set_gamestate') {
+StreamTransformer _batchedTransformer = new StreamTransformer.fromHandlers(handleData: (message, sink) {
+  if(message.name == 'batched') {
     message.payload['messages'].forEach((submsg) => sink.add(new NetworkMessage.fromJson(submsg)));
   } else {
     sink.add(message);

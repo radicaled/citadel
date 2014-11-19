@@ -71,14 +71,14 @@ Get actions for an entity.
 Server -> Client Protocol
 ===
 
-set_gamestate
+batched
 ===
 
-A batched set of commands that set the current gamestate.
+A batched set of commands.
 payload.messages is an array of commands.
 ```json
 {
-    type: set_gamestate,
+    type: batched,
     payload: {
       messages: [
         { type: 'set_entity', payload: { /* ... */ }

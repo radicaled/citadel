@@ -359,12 +359,6 @@ class CitadelServer {
       ..send(ce.connection);
   }
 
-  void _sendTo(cmd, List<GameConnection> connections) {
-    var msg = json.stringify(cmd);
-    connections.forEach((ge) => ge.ws.add(msg));
-    log.info('Sent: $msg');
-  }
-
   void _queueCommand(String type, Map payload) {
     commandQueue.add(_makeCommand(type, payload));
   }

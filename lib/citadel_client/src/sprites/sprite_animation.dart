@@ -4,14 +4,14 @@ class SpriteAnimation extends Animatable {
   GameSprite sprite;
   animations.Animation animation;
   SpriteSheet spriteSheet;
-  SpriteAnimation(this.sprite, this.animation, this.spriteSheet);
+  SpriteAnimation(this.sprite, this.animation, this.spriteSheet, {this.elapsed: 0.0});
 
-  num _totalTime = 0.0;
+  num elapsed = 0.0;
   int currentFrame;
 
   bool advanceTime(num time) {
-    _totalTime += time;
-    var frame = animation.getFrame(_totalTime);
+    elapsed += time;
+    var frame = animation.getFrame(elapsed);
 
     if (currentFrame != frame) {
       currentFrame = frame;
@@ -20,6 +20,6 @@ class SpriteAnimation extends Animatable {
       sprite.bitmapData = spriteSheet.frameAt(frame);
       sprite.addChild(new Bitmap(sprite.bitmapData));
     }
-    return !animation.shouldFinish(_totalTime);
+    return !animation.shouldFinish(elapsed);
   }
 }

@@ -11,6 +11,8 @@ class Animation {
   bool get isInstant => duration == 0;
   int get endFrame => startFrame + frameCount;
 
+  String get fullName => animationSet.name + '|' + name;
+
   Animation(this.name, this.animationSet);
   Animation.fromJSON(Map json, this.animationSet) : name = json["name"] {
     startFrame = json['start_frame'];
@@ -19,10 +21,11 @@ class Animation {
     onDone     = json['on_done'];
   }
 
-  int getFrame(num secondsSinceAnimationStart) {
-    if (shouldFinish(secondsSinceAnimationStart)) { return endFrame; }
+  int getFrame(num secondsElapsed) {
+    if (secondsElapsed < 0) { throw 'secondsElapsed cannot be < 0 ($secondsElapsed)'; }
+    if (shouldFinish(secondsElapsed)) { return endFrame; }
     if (isInstant) { return endFrame; }
-    return startFrame + (frameCount * (secondsSinceAnimationStart / duration)).floor();
+    return startFrame + (frameCount * (secondsElapsed / duration)).floor();
   }
 
   bool shouldFinish(num secondsSinceAnimationStart) =>

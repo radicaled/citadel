@@ -163,6 +163,7 @@ Animate an entity
 
 * payload.entity_id: entity_id to animate
 * payload.animation_name: name to animate
+* payload.elapsed: (double) seconds elapsed since animation began
 
 load_assets
 ==

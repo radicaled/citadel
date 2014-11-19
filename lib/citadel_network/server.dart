@@ -51,6 +51,14 @@ class ServerNetworkHub {
     connection.send(_msg('load_assets', { "animation_urls": animationUrls }));
   }
 
+  void animate(int entityId, String animationName, {List<NetworkConnection> connections, elapsed: 0}) {
+    if (connections == null) { connections = []; }
+    if (connections.isEmpty) { connections = this.connections; }
+    connections.forEach((connection) {
+      connection.send(_msg('animate', { 'entity_id': entityId, 'animation_name': animationName, 'elapsed': elapsed }));
+    });
+  }
+
   // Event-related code
 
   Stream<ClientMessage> on(String name) =>
@@ -71,4 +79,19 @@ class ClientMessage extends NetworkMessage {
 
   String toString() =>
     "ClientMessage($name: $payload)";
+}
+
+class MessageQueue {
+  List<ClientMessage> messages = [];
+  ServerNetworkHub hub;
+
+  MessageQueue(this.hub);
+
+  void broadcast() {
+    messages.forEach((m) => hub.broadcast(m.name, m.payload));
+  }
+
+  void send(NetworkConnection connection) {
+    messages.forEach((m) => hub.send(m.name, m.payload, connection));
+  }
 }

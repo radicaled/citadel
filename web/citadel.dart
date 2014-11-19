@@ -55,6 +55,8 @@ ClientNetworkHub networkHub;
 
 List<animations.AnimationSet> animationSets = [];
 
+Future assetsLoaded = new Future.value(true);
+
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
@@ -346,12 +348,13 @@ void _moveEntity(NetworkMessage message) {
 void _animate(NetworkMessage message) {
   var entityId = message.payload['entity_id'];
   var animatioName = message.payload['animation_name'];
+  var elapsed = message.payload['elapsed'];
 
   var entity = entities[entityId];
   var anim   = getAnimation(animatioName);
   var ss = getSpriteSheet(map.getTileset(anim.animationSet.tileset));
 
-  stage.juggler.add(new c.SpriteAnimation(entity, anim, ss));
+  stage.juggler.add(new c.SpriteAnimation(entity, anim, ss, elapsed: elapsed));
 }
 
 animations.Animation getAnimation(String animationName) {

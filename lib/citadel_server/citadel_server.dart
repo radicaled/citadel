@@ -29,7 +29,7 @@ import 'src/entities.dart';
 part 'src/systems/collision_system.dart';
 part 'src/systems/movement_system.dart';
 part 'src/systems/pickup_intent_system.dart';
-part 'src/systems/animation_system.dart';
+part 'src/systems/animations/animation_system.dart';
 part 'src/systems/container_system.dart';
 part 'src/systems/openable_system.dart';
 
@@ -42,13 +42,15 @@ part 'src/systems/harm_intent_system.dart';
 part 'src/systems/speak_intent_system.dart';
 
 // Generic systems
-part 'src/systems/animation_callback_system.dart';
+part 'src/systems/animations/animation_callback_system.dart';
 
 // Message systems
 part 'src/systems/client_message_system.dart';
+part 'src/systems/animations/animation_sync_system.dart';
 
 // Messages
 part 'src/messages/all_clients_message.dart';
+part 'src/messages/login_message.dart';
 
 part 'src/entity_utils.dart';
 
@@ -170,7 +172,8 @@ class CitadelServer {
     ]);
 
     world.messageSystems.addAll([
-      new ClientMessageSystem(hub)
+        new ClientMessageSystem(hub),
+        new AnimationSyncSystem(hub),
     ]);
 
     world.genericSystems.addAll([
@@ -269,6 +272,7 @@ class CitadelServer {
     WebSocketTransformer.upgrade(req).then((WebSocket ws) {
       var gc = new GameConnection(ws, null);
       hub.addConnection(gc);
+      _sendAssets(gc);
       ws.done.then((_) => _removeConnection(gc));
     });
   }
@@ -284,7 +288,8 @@ class CitadelServer {
 
     _sendCreateEntity(player);
     _sendGamestate(ce.connection);
-    _sendAssets(ce.connection);
+//    _sendAssets(ce.connection);
+    world.messages.add(new LoginMessage(ce.connection));
   }
 
   _removeConnection(GameConnection ge) {

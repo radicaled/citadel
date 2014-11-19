@@ -13,14 +13,15 @@ class AnimationSystem extends EntitySystem {
     var animationName = tg.animationQueue.removeFirst();
     var animation = assetManager.getAnimation(animationName);
     AnimationCallbackSystem acs = world.getGenericSystem(AnimationCallbackSystem);
-
-    acs.animationTimers.add(new AnimationTimer(animation)
+    var at = new AnimationTimer(animation)
       ..animatingEntity = entity
-      ..start());
+      ..start();
 
+    acs.animationTimers.add(at);
     world.messages.add(new AllClientsMessage('animate', {
         'entity_id': entity.id,
-        'animation_name': animationName
+        'animation_name': animationName,
+        'elapsed': at.elapsed,
     }));
 
   }

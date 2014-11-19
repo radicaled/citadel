@@ -14,8 +14,8 @@ class AnimationCallbackSystem extends GenericSystem {
     animationTimers.forEach((at) {
       TileGraphics tg = at.animatingEntity[TileGraphics];
       var animation = at.animation;
-      var delta = new DateTime.now().difference(at.endTime);
-      var targetFrame = animation.getFrame(delta.inMilliseconds / 1000);
+      var elapsed = at.elapsed;
+      var targetFrame = animation.getFrame(elapsed);
       var currentTile = at.animation.animationSet.tileset + '|' + targetFrame.toString();
 
       // TODO: destructive; sort me out

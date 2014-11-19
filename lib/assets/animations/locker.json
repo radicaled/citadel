@@ -10,8 +10,8 @@
     },
     {
       "name": "closing",
-      "start_frame": 0,
-      "frame_count": 1,
+      "start_frame": 1,
+      "frame_count": -1,
       "duration": 0
     }
   ]

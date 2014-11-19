@@ -14,6 +14,10 @@ class Locker extends CEntityBuilder {
       world.emit('The locker rustles', nearEntity: ei.current);
       Openable o = ei.current[Openable];
       if (!o.isTransitioning) { o.transition(); }
+      ei.current.use(TileGraphics, (TileGraphics tileGraphics) {
+        var transition = o.currentState == Openable.CLOSING ? 'closing' : 'opening';
+        tileGraphics.animationQueue.add('Gray Locker|$transition');
+      });
     });
   }
 }

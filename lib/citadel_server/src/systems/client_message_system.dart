@@ -12,6 +12,9 @@ class ClientMessageSystem extends MessageSystem {
   }
 
   void _processAllClients(AllClientsMessage msg) {
-    hub.broadcast(msg.type, msg.payload);
+    hub
+      ..custom(msg.type, msg.payload)
+      ..broadcast();
+
   }
 }

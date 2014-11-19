@@ -101,11 +101,13 @@ class CitadelServer {
   void _setupEvents() {
     EntityManager.onChanged.listen((entityEvent) {
       var entity = entityEvent.entity;
-      hub.broadcast('update_entity', {
+      hub
+        ..custom('update_entity', {
           // FIXME: send the rest of the 'changed' attributes
           'entity_id': entity.id,
           'tile_phrases': entity[TileGraphics].tilePhrases
-      });
+        })
+        ..broadcast();
     });
 
     EntityManager.onHidden.listen((entityEvent) {
@@ -303,7 +305,7 @@ class CitadelServer {
   }
 
   void _emit(String text) {
-    hub.broadcast('emit', { 'text': text });
+    hub..custom('emit', { 'text': text })..broadcast();
   }
 
   void _emitNear(Entity entity, String text) {
@@ -311,20 +313,22 @@ class CitadelServer {
   }
 
   void _emitTo(String text, GameConnection gc) {
-    hub.send('emit', { 'text': text }, gc);
+    hub..custom('emit', { 'text': text })..send(gc);
   }
 
   void _sendCreateEntity(Entity entity) {
     var pos = entity[Position];
     var tgs = entity[TileGraphics];
 
-    hub.broadcast('create_entity', {
+    hub
+      ..custom('create_entity', {
         'x': pos.x,
         'y': pos.y,
         'z': pos.z,
         'entity_id': entity.id,
         'tile_phrases': tgs.tilePhrases,
-    });
+      })
+      ..broadcast();
   }
 
   void _sendGamestate(GameConnection gc) {
@@ -340,17 +344,23 @@ class CitadelServer {
           'name': entity[Name] != null ? entity[Name].text : 'Something'
       }));
     });
-    hub.send('set_gamestate', payload, gc);
+    hub
+      ..custom('set_gamestate', payload)
+      ..send(gc);
   }
 
   void _sendAssets(GameConnection gc) {
     var animationUrls = assetManager.animationUrls.toList();
-    hub.loadAssets(gc, animationUrls: animationUrls);
+    hub
+      ..loadAssets(animationUrls: animationUrls)
+      ..send(gc);
   }
 
   void _sendActions(ClientMessage ce) {
     var entity = findEntity(ce.payload['entity_id']);
-    hub.send('set_actions', { 'entity_id': entity.id, 'actions': entity.behaviors.keys.toList() }, ce.connection);
+    hub
+      ..custom('set_actions', { 'entity_id': entity.id, 'actions': entity.behaviors.keys.toList() })
+      ..send(ce.connection);
   }
 
   void _sendTo(cmd, List<GameConnection> connections) {
@@ -373,7 +383,9 @@ class CitadelServer {
 
   _processCommands() {
     commandQueue.forEach((Map cmd) {
-      hub.broadcast(cmd['type'], cmd['payload']);
+      hub
+        ..custom(cmd['type'], cmd['payload'])
+        ..broadcast();
     });
 
     commandQueue.clear();

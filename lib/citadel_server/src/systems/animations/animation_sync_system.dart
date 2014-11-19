@@ -19,8 +19,10 @@ class AnimationSyncSystem extends MessageSystem {
     acs.animationTimers.forEach((at) {
       // TODO: should we be deferring to another system to send messages?
       var elapsed = new DateTime.now().difference(at.startTime).inMilliseconds / 1000;
-      hub.animate(at.animatingEntity.id, at.animation.fullName,
-        elapsed: elapsed);
+      hub
+      ..animate(at.animatingEntity.id, at.animation.fullName,
+        elapsed: elapsed)
+      ..broadcast();
     });
 
   }

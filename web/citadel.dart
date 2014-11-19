@@ -357,7 +357,7 @@ void _animate(NetworkMessage message) {
 animations.Animation getAnimation(String animationName) {
   var ns = animationName.split('|').first;
   var anim = animationName.split('|').last;
-  var as = animationSets.firstWhere((as) => as.name == ns, orElse: () => throw 'AnimationSet not found: $animationname');
+  var as = animationSets.firstWhere((as) => as.name == ns, orElse: () => throw 'AnimationSet not found: $animationName');
   var an = as.animations[anim];
 
   if (an == null) { throw 'Animation not found: $animationName'; }

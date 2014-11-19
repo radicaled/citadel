@@ -2,8 +2,9 @@ part of citadel_server;
 
 class AnimationSystem extends EntitySystem {
   AssetManager assetManager;
+  ServerNetworkHub hub;
 
-  AnimationSystem(this.assetManager);
+  AnimationSystem(this.assetManager, this.hub);
 
   filter(Iterable<Entity> entities) =>
     entities.where((e) => e.has([TileGraphics]) && e[TileGraphics].animationQueue.isNotEmpty);
@@ -18,11 +19,10 @@ class AnimationSystem extends EntitySystem {
       ..start();
 
     acs.animationTimers.add(at);
-    world.messages.add(new AllClientsMessage('animate', {
-        'entity_id': entity.id,
-        'animation_name': animationName,
-        'elapsed': at.elapsed,
-    }));
 
+    // TODO: should I be directly sending messages?
+    hub
+      ..animate(entity.id, animationName, elapsed: at.elapsed)
+      ..broadcast();
   }
 }

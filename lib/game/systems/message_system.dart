@@ -1,6 +1,6 @@
 part of systems;
 
-abstract class MessageSystem {
+abstract class EventSystem {
   Iterable<SystemMessage> filter(Iterable<SystemMessage> messages);
   void process(SystemMessage message);
 

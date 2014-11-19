@@ -1,18 +1,18 @@
 part of citadel_server;
 
-class AnimationSyncSystem extends MessageSystem {
+class AnimationSyncSystem extends EventSystem {
   ServerNetworkHub hub;
 
   AnimationSyncSystem(this.hub);
 
   Iterable<SystemMessage> filter(Iterable<SystemMessage> messages) =>
-    messages.where((m) => m is LoginMessage);
+    messages.where((m) => m is LoginEvent);
 
   void process(SystemMessage message) {
     // TODO: could potentially send duplicate messages
     // EG, if a user logs in the moment an animation starts,
     // this system will also send an animate message.
-    LoginMessage lm = message;
+    LoginEvent lm = message;
 
     AnimationCallbackSystem acs = world.getGenericSystem(AnimationCallbackSystem);
 

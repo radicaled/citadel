@@ -8,7 +8,7 @@ class World {
   StreamController<EmitEvent> _emitController = new StreamController.broadcast();
   Stream onEmit;
   List<EntitySystem> entitySystems = [];
-  List<MessageSystem> messageSystems = [];
+  List<EventSystem> eventSystems = [];
   List<GenericSystem> genericSystems = [];
 
   Set<Entity> entities = new Set();
@@ -27,14 +27,14 @@ class World {
 
   void process() {
     entitySystems.forEach((s) => s.processEntities(entities));
-    messageSystems.forEach((s) => s.processMessages(messages));
+    eventSystems.forEach((s) => s.processMessages(messages));
     genericSystems.where((s) => s.shouldExecute).forEach((s) => s.execute());
 
     messages.clear();
   }
 
-  MessageSystem getMessageSystem(Type type) {
-    return messageSystems.firstWhere((ms) => ms.runtimeType == type, orElse: () => throw "Unable to find $type");
+  EventSystem getMessageSystem(Type type) {
+    return eventSystems.firstWhere((ms) => ms.runtimeType == type, orElse: () => throw "Unable to find $type");
   }
 
   GenericSystem getGenericSystem(Type type) {

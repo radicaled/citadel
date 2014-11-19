@@ -44,18 +44,15 @@ part 'src/systems/speak_intent_system.dart';
 // Generic systems
 part 'src/systems/animations/animation_callback_system.dart';
 
-// Message systems
-part 'src/systems/client_message_system.dart';
+// Event systems
 part 'src/systems/animations/animation_sync_system.dart';
 
-// Messages
-part 'src/messages/all_clients_message.dart';
-part 'src/messages/login_message.dart';
+// Events
+part 'src/events/login_message.dart';
 
 part 'src/entity_utils.dart';
 
 // misc
-part 'src/events/game_event.dart';
 part 'src/game_connection.dart';
 part 'src/tile_manager.dart';
 part 'src/asset_manager.dart';
@@ -170,11 +167,10 @@ class CitadelServer {
         new ContainerSystem(),
         new OpenableSystem(),
         // Should always be last
-        new AnimationSystem(assetManager)
+        new AnimationSystem(assetManager, hub)
     ]);
 
-    world.messageSystems.addAll([
-        new ClientMessageSystem(hub),
+    world.eventSystems.addAll([
         new AnimationSyncSystem(hub),
     ]);
 
@@ -291,7 +287,7 @@ class CitadelServer {
     _sendCreateEntity(player);
     _sendGamestate(ce.connection);
 //    _sendAssets(ce.connection);
-    world.messages.add(new LoginMessage(ce.connection));
+    world.messages.add(new LoginEvent(ce.connection));
   }
 
   _removeConnection(GameConnection ge) {

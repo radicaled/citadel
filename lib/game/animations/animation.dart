@@ -9,6 +9,7 @@ class Animation {
   AnimationSet animationSet;
 
   bool get isInstant => duration == 0;
+  int get endFrame => startFrame + frameCount;
 
   Animation(this.name, this.animationSet);
   Animation.fromJSON(Map json, this.animationSet) : name = json["name"] {
@@ -17,4 +18,14 @@ class Animation {
     duration   = json['duration'];
     onDone     = json['on_done'];
   }
+
+  int getFrame(num secondsSinceAnimationStart) {
+    if (shouldFinish(secondsSinceAnimationStart)) { return endFrame; }
+    if (isInstant) { return endFrame; }
+    return startFrame + (frameCount * (secondsSinceAnimationStart / duration)).floor();
+  }
+
+  bool shouldFinish(num secondsSinceAnimationStart) =>
+    secondsSinceAnimationStart >= duration;
+
 }

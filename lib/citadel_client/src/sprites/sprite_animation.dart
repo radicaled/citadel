@@ -7,24 +7,19 @@ class SpriteAnimation extends Animatable {
   SpriteAnimation(this.sprite, this.animation, this.spriteSheet);
 
   num _totalTime = 0.0;
-  int currentFrameIndex;
+  int currentFrame;
 
   bool advanceTime(num time) {
     _totalTime += time;
-    var frameIndex;
-    if (animation.isInstant) {
-      frameIndex = animation.frameCount;
-    } else {
-      frameIndex = (animation.frameCount * (_totalTime / animation.duration)).floor();
-    }
+    var frame = animation.getFrame(_totalTime);
 
-    if (currentFrameIndex != frameIndex) {
-      currentFrameIndex = frameIndex;
+    if (currentFrame != frame) {
+      currentFrame = frame;
 
       sprite.removeChildren();
-      sprite.bitmapData = spriteSheet.frameAt(animation.startFrame + frameIndex);
+      sprite.bitmapData = spriteSheet.frameAt(frame);
       sprite.addChild(new Bitmap(sprite.bitmapData));
     }
-    return _totalTime <= animation.duration;
+    return !animation.shouldFinish(_totalTime);
   }
 }

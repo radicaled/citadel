@@ -10,6 +10,7 @@ dependencies:
   json: any
   logging: any
   path: any
+  quiver: any
   route: any
   stagexl: any
   tmx: any

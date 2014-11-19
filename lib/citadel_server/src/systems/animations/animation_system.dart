@@ -18,6 +18,9 @@ class AnimationSystem extends EntitySystem {
       ..animatingEntity = entity
       ..start();
 
+    // Hack to prevent duplicate animations?
+    if (acs.animationTimers.contains(at)) { return; }
+
     acs.animationTimers.add(at);
 
     // TODO: should I be directly sending messages?

@@ -1,7 +1,7 @@
 part of citadel_server;
 
 class AnimationCallbackSystem extends GenericSystem {
-  List<AnimationTimer> animationTimers = [];
+  Set<AnimationTimer> animationTimers = new Set();
   bool get shouldExecute =>
     animationTimers.isNotEmpty;
 

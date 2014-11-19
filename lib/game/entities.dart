@@ -2,6 +2,7 @@ library entities;
 
 import 'dart:mirrors';
 import 'dart:async';
+import 'package:quiver/core.dart';
 import 'components.dart';
 
 part 'entities/src/entity_builder.dart';

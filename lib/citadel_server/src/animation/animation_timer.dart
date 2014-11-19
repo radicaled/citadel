@@ -19,4 +19,17 @@ class AnimationTimer {
     startTime = new DateTime.now();
     st.start();
   }
+
+  // Operators
+
+  bool operator ==(AnimationTimer other) =>
+    other != null && (other.animatingEntity == animatingEntity && other.animation == animation);
+
+  // overrides
+
+  String toString() =>
+    "AnimationTimer<${animation.fullName} for Entity ${animatingEntity.id}>";
+
+  int get hashCode =>
+    hashObjects([animatingEntity, animation]);
 }

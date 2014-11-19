@@ -31,4 +31,9 @@ class Animation {
   bool shouldFinish(num secondsSinceAnimationStart) =>
     secondsSinceAnimationStart >= duration;
 
+  bool operator==(Animation other) =>
+    other != null && other.fullName == fullName;
+
+  int get hashCode =>
+    fullName.hashCode;
 }

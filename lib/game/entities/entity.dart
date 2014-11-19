@@ -76,4 +76,7 @@ class Entity {
     if (other == null) return false;
     return this.id == other.id;
   }
+
+  int get hashCode =>
+    hashObjects([id]);
 }

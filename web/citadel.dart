@@ -55,7 +55,7 @@ ClientNetworkHub networkHub;
 
 List<animations.AnimationSet> animationSets = [];
 
-Future assetsLoaded = new Future.value(true);
+Future ready = new Future.value(true);
 
 void main() {
   var canvas = querySelector('#stage');
@@ -346,15 +346,17 @@ void _moveEntity(NetworkMessage message) {
 }
 
 void _animate(NetworkMessage message) {
-  var entityId = message.payload['entity_id'];
-  var animatioName = message.payload['animation_name'];
-  var elapsed = message.payload['elapsed'];
+  ready.then((_) {
+    var entityId = message.payload['entity_id'];
+    var animatioName = message.payload['animation_name'];
+    var elapsed = message.payload['elapsed'];
 
-  var entity = entities[entityId];
-  var anim   = getAnimation(animatioName);
-  var ss = getSpriteSheet(map.getTileset(anim.animationSet.tileset));
+    var entity = entities[entityId];
+    var anim   = getAnimation(animatioName);
+    var ss = getSpriteSheet(map.getTileset(anim.animationSet.tileset));
 
-  stage.juggler.add(new c.SpriteAnimation(entity, anim, ss, elapsed: elapsed));
+    stage.juggler.add(new c.SpriteAnimation(entity, anim, ss, elapsed: elapsed));
+  });
 }
 
 animations.Animation getAnimation(String animationName) {
@@ -439,12 +441,15 @@ void _setActions(NetworkMessage message) {
 
 void _loadAssets(NetworkMessage message) {
   List<String> animUrls = message.payload['animation_urls'];
-  animUrls.forEach((url) {
-    HttpRequest.getString(url).then((data) {
+  var futures = animUrls.map((url) {
+    return HttpRequest.getString(url).then((data) {
       var animationSet = new animations.AnimationSet.fromJSON(JSON.decode(data));
       animationSets.add(animationSet);
     });
   });
+
+  ready = ready.then((_) => Future.wait(futures));
+
 }
 
 _setupSelectedItemActions(int entityId, List actions) {

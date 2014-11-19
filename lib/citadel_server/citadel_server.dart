@@ -48,7 +48,7 @@ part 'src/systems/animations/animation_callback_system.dart';
 part 'src/systems/animations/animation_sync_system.dart';
 
 // Events
-part 'src/events/login_message.dart';
+part 'src/events/login_event.dart';
 
 part 'src/entity_utils.dart';
 

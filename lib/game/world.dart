@@ -14,6 +14,8 @@ class World {
   Set<Entity> entities = new Set();
   List<SystemMessage> messages = new List();
 
+  Map<String, EntityBuilder> _entityBuilders = {};
+
   // TODO: Could probably be refined?
   Map<String, dynamic> attributes = {};
 
@@ -39,6 +41,18 @@ class World {
 
   GenericSystem getGenericSystem(Type type) {
     return genericSystems.firstWhere((gs) => gs.runtimeType == type, orElse: () => throw "Unable to find $type");
+  }
+
+  // Entity-related code
+
+  void registerEntity(String entityType, EntityBuilder builder) {
+    _entityBuilders[entityType] = builder;
+  }
+
+  Entity fetchEntity(String entityType) {
+    var builder = _entityBuilders[entityType];
+    if (builder == null) { throw "Cannot find builder for $entityType"; }
+    return builder.build(entityType);
   }
 }
 

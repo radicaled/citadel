@@ -13,7 +13,7 @@ class PlayerSpawner {
    * and use a free zone.
    */
   Entity spawnPlayer([Position position]) {
-    var entity = buildEntity('human', world)
+    var entity = world.fetchEntity('human')
       ..attach(new Player())
       ..attach(new Visible());
 

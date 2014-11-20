@@ -1,6 +1,4 @@
 library citadel_server.entities;
-import 'dart:mirrors';
-import 'dart:async';
 
 import 'components.dart';
 import 'package:citadel/game/entities.dart';
@@ -17,47 +15,7 @@ part 'entities/locker.dart';
 part 'entities/arcade_machine.dart';
 part 'entities/donut.dart';
 
-var entityDefinitions = new Map<String, CEntityBuilder>();
-var _registered = false;
-
-Entity buildEntity(String name, World world) {
-  if (!_registered) { _registerAll(); }
-  var eb = entityDefinitions[name];
-  if (eb == null) {
-    throw new ArgumentError('Entity $name not found.');
-  }
-
-  return eb.build(name, world);
-}
-
-_registerAll() {
-  _registerTypes();
-  _registered = true;
-}
-
-_register(name, type) {
-  entityDefinitions[name] = reflectClass(type).newInstance(new Symbol(''), []).reflectee;
-}
-
-_registerTypes() {
-  _register('wall', Wall);
-  _register('human', Human);
-  _register('placeholder', Placeholder);
-  _register('floor', Floor);
-  _register('hvac', Hvac);
-  _register('multi_tool', MultiTool);
-  _register('command_door', CommandDoor);
-  _register('locker', Locker);
-  _register('gray_locker', Locker);
-  _register('arcade_machine', ArcadeMachine);
-  _register('plain_donut', Donut);
-}
-
 abstract class CEntityBuilder extends EntityBuilder {
   World world;
-  Entity build(String entityType, [World world]) {
-    this.world = world;
-    return super.build(entityType);
-  }
 }
 

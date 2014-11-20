@@ -23,7 +23,7 @@ import 'package:citadel/citadel_network/server.dart';
 import 'src/components.dart';
 import 'src/entities.dart';
 
-
+part 'src/entity_setup.dart';
 
 
 // Component Systems
@@ -182,6 +182,10 @@ class CitadelServer {
 
   void start() {
     // TODO: make sure these run in order.
+
+    log.info('loading entities');
+    setupEntities(world);
+
     log.info('loading map');
     _loadMap();
 
@@ -223,7 +227,7 @@ class CitadelServer {
                               tile.tileset.properties['entity'],
                               'placeholder'
                              ].firstWhere((et) => et != null);
-            var entity = buildEntity(entityType, world);
+            var entity = world.fetchEntity(entityType);
             entity[Position].x = x;
             entity[Position].y = y;
             entity[Position].z = z;

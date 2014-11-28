@@ -16,4 +16,6 @@ along-side the game logic.
 
 - Improved Client Support:
     - Re-useable user interface
-    
+    - Proper "login" screen:
+        - Pick / customize character.
+        - Pick job (do nothing for now)

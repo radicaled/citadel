@@ -73,8 +73,12 @@ void main() {
 
   stage.onMouseRightClick.listen((event) {
     if (currentContextMenu != null) { currentContextMenu.dismiss(); }
+
+    var hitX = event.stageX + (camera.transformationMatrix.tx * -1);
+    var hitY = event.stageY + (camera.transformationMatrix.ty * -1);
+
     var cmis = entities.values
-        .where((gs) => gs.hitTestPoint(event.stageX, event.stageY))
+        .where((gs) => gs.hitTestPoint(hitX, hitY))
         .map((gs) => new c.ContextMenuItem(gs.name, gs) )
         .toList();
 
@@ -91,7 +95,9 @@ void main() {
       }
     } else {
       // There was no context menu to interact with; they were trying to click on an entity.
-      var gs = stage.hitTestInput(event.stageX, event.stageY);
+      var hitX = event.stageX + (camera.transformationMatrix.tx * -1);
+      var hitY = event.stageY + (camera.transformationMatrix.ty * -1);
+      var gs = gameLayer.hitTestInput(hitX, hitY);
       if (gs is c.GameSprite) {
         currentTarget = gs;
       }

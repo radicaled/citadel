@@ -8,11 +8,11 @@ Then once all that is core we can move to doing straight game logic without worr
 along-side the game logic.
 
 - Improved Engine Support:
-    - Player-tracking camera
     - Building of objects
     - Scripting of objects
     - Animating of objects
     - Inventory System
+    - Specifying the contents of an entity.
 
 - Improved Client Support:
     - Re-useable user interface

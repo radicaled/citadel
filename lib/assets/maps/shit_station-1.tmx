@@ -82,22 +82,22 @@
  </tileset>
  <layer name="Floor Layer" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1DEKgDAQRcFoGbz/eS0NQohGML+YgS3T7GNTCjBSt/fTe893emTRI8tMjyedmKNHFv9VFj2y6JFFj2z2m0WPLMd+Deu0He7D//TI0u6/6rGc+8iiRxY9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADKcBo8JKQ==
+   eJzt1csKgCAQQNGKVtL/f2/LHhClaQ50DsxSgrlowwDcSWP+XJ3nPT1i0SOWkh5fzR/13rkeR1Xfq7neN/Ro9//Q4zk9YtEjthb70KOcHrEs0za16JFv3+E8b+mRT49Y9vtPenTnfsSiRywtewAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADw3AqyNRId
   </data>
  </layer>
  <layer name="Wall Layer" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2UEKgCAURdEGLq/9r6eGQVbSD3nEOeDI2b9oSMtCnFZYu7WdFwVv53focaRHkR5ZCj1695MeRR/PT48iPbK4r7L4nmfRI4seWS7e3bf73ufz9How38j5YJ6neesxlx5Z9MiiRxY9suiRZfD/LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPBPG3ofCeE=
+   eJzt2EsKg0AQRVEHLs/9rycZBSESP1WaJ54DDruxvaSCDgNxxsL1No3fFwVHn9+sx5weRXpkKfRYmk9TZf79mIuPkX7e9Pvrln7e9Pvr1jyvPnt2zRw9dq3b9H+ux3Z6ZNEjy9qs73g/1+O4pR7de1619s62/D4qe/9j7Z2tnVuPa+mRRY8semTRI8vZPXxv38dzAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgEd7AQtdCfk=
   </data>
  </layer>
  <layer name="Structures" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1LsJgEAQBNBNNBAtz+I08FOB2JkleHCpgSan4HuwTDowsBHAU2sXsbc5r4xN2T5/t6Qdjjon75vSDkO62R7FbX7P5/XV2w0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC44wTwgAge
+   eJzt1DEKhEAMBdBptBD3eB5Oi9W11EK8mUcwMO2C2KjgexBSJvBJUgLO+n1SWuvc/+mqa/d5uyFy2Mrcud83cmijenlcbvF7Hq8p7ps9xU2OUbPbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLQDtu8KPA==
   </data>
  </layer>
  <layer name="Items" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1rEJgEAMBdBrThR0DDdyLwsHsncBtxEREREbr9FD3oNPIKQIpEkIQKqxSZvvYghD3CtAbqbmWnnPUt577gHPtNXXG0C+5uIM/N32Mx0BgBR9/fUGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkbgUWGgxe
+   eJzt1jEKwkAQBdBpIjGYPiCW3sh7WXig9LlAbhMSEZGQakHdJbwHn4FlGQammQggVd+m/b9VEY/qVQFKM7Tryv9M9fbtV/vomojLknPz3b6Qy/WYewIo13j4BPbueTO9AwAp7qfcEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAULoZ9IIMzA==
   </data>
  </layer>
  <layer name="People" width="100" height="100">
@@ -105,22 +105,8 @@
    eJztzjENAAAIACDzWNqqPibwcXOQgAhgo64DAADP5HUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGAz2dAMo=
   </data>
  </layer>
- <layer name="Container Layer 6" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztxaENAAAIA7BJ/j+YoDmABNGaJsC1rj0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8NcAgHcCDQ==
-  </data>
- </layer>
- <layer name="Container Layer 7" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
-  </data>
- </layer>
- <layer name="Container Layer 8" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
-  </data>
- </layer>
- <objectgroup name="Object Layer 1" width="100" height="100">
-  <object name="greenlands spawn area" type="spawn_zone" x="131" y="451" width="222" height="188"/>
+ <objectgroup name="Spawn Areas" width="100" height="100">
+  <object name="greenlands spawn area" type="spawn_zone" x="128" y="448" width="224" height="192"/>
  </objectgroup>
+ <objectgroup name="Containers" width="100" height="100"/>
 </map>

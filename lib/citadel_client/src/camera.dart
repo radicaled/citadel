@@ -17,13 +17,16 @@ class Camera extends DisplayObject {
     if (followedObject == null) { return; }
     // TODO: specify region elsewhere
     // For now, player can see 10 tiles in every direction.
-    int distance = toPixels(3);
+    int distance = toPixels(10);
     var x = followedObject.x.toInt() - distance;
     var y = followedObject.y.toInt() - distance;
     var width  = (distance * 2) + followedObject.width;
     var height = (distance * 2) + followedObject.height;
 
     viewingRect = new Rectangle(x, y, width, height);
+
+    // We need to orient the camera so that our viewable region is in the upper left corner.
+    setTransform(viewingRect.left * -1, viewingRect.top * -1);
 
     regenerateMask();
   }
@@ -35,16 +38,13 @@ class Camera extends DisplayObject {
   }
 
   void render(RenderState renderState) {
-    var rs = new RenderState(renderState.renderContext, renderState.globalMatrix);
-    var rc = rs.renderContext;
-
     updateCameraLocation();
+
+    var rs = new RenderState(renderState.renderContext, transformationMatrix);
+    var rc = rs.renderContext;
 
     rc.beginRenderMask(rs, mask);
     viewable.render(rs);
     rc.endRenderMask(rs, mask);
-
-    renderState.copyFrom(rs);
   }
-
 }

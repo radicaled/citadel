@@ -57,11 +57,15 @@ List<animations.AnimationSet> animationSets = [];
 
 Future ready = new Future.value(true);
 
+c.Camera camera;
+
 void main() {
   var canvas = querySelector('#stage');
   canvas.focus();
   stage = new Stage(canvas);
   stage.focus = stage;
+
+
 
   gameLayer.doubleClickEnabled = true;
 
@@ -231,6 +235,7 @@ void listenForEvents(WebSocket ws, Stream stream) {
   networkHub.on('create_entity').listen(_createEntity);
   networkHub.on('update_entity').listen(_updateEntity);
   networkHub.on('remove_entity').listen(_removeEntity);
+  networkHub.on('follow_entity').listen(_followEntity);
   networkHub.on('emit').listen(_emit);
   networkHub.on('picked_up').listen(_pickedUpEntity);
   networkHub.on('set_actions').listen(_setActions);
@@ -332,6 +337,11 @@ void _updateEntity(NetworkMessage message) {
   }
 }
 
+void _followEntity(NetworkMessage message) {
+  var gs = entities[message.payload['entity_id']];
+  camera.follow(gs);
+}
+
 void _removeEntity(NetworkMessage message) {
   var payload = message.payload;
   var gs = entities.remove(payload['entity_id']);
@@ -377,6 +387,17 @@ SpriteSheet getSpriteSheet(tmx.Tileset ts) {
 void setupLayers(width, height) {
   stage.addChild(gameLayer);
   stage.addChild(guiLayer);
+
+  var blackness = new Sprite();
+  blackness.graphics
+    ..rect(0, 0, 1000, 1000)
+    ..fillColor(Color.Black);
+  stage.addChild(blackness);
+
+  camera = new c.Camera(gameLayer, new Rectangle(50, 50, 50, 50));
+  camera.x = 0;
+  camera.y = 0;
+  stage.addChild(camera);
 }
 
 void setupHtmlGuiEvents() {

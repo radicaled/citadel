@@ -291,6 +291,7 @@ class CitadelServer {
 
     _sendCreateEntity(player);
     _sendGamestate(ce.connection);
+    _followEntity(player.id, ce.connection);
 //    _sendAssets(ce.connection);
     world.messages.add(new LoginEvent(ce.connection));
   }
@@ -343,6 +344,12 @@ class CitadelServer {
       );
     });
     hub.send(gc);
+  }
+
+  void _followEntity(int entityId, GameConnection gc) {
+    hub
+      ..followEntity(entityId)
+      ..send(gc);
   }
 
   void _sendAssets(GameConnection gc) {

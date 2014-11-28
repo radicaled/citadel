@@ -85,6 +85,12 @@ class ServerNetworkHub {
     });
   }
 
+  void followEntity(int entityId) {
+    _queue('follow_entity', {
+      'entity_id': entityId
+    });
+  }
+
   // Event-related code
 
   Stream<ClientMessage> on(String name) =>

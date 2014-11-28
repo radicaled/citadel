@@ -131,6 +131,13 @@ Remove an entity from the game.
   * payload.entity_id: entity id to remove
 
 
+follow_entity
+===
+
+Follow an entity as it moves around.
+
+  * payload.entity_id: entity id to follow
+
 emit
 ==
 

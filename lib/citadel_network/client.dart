@@ -10,6 +10,7 @@ class ClientNetworkHub extends NetworkHub {
   ClientNetworkHub(Stream stream, this.sender) : super(stream) {
     onLoadAssets    = on('load_assets');
     onAnimate       = on('animate');
+    onFollowEntity  = on('follow_entity');
   }
 
   void send(String type, Map payload) {
@@ -69,4 +70,5 @@ class ClientNetworkHub extends NetworkHub {
 
   Stream onLoadAssets;
   Stream onAnimate;
+  Stream onFollowEntity;
 }

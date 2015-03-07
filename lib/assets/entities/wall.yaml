@@ -1,0 +1,7 @@
+name: wall
+components:
+  Position:
+  Collidable:
+  TileGraphics:
+  Name: A wall
+  Description: A generic wall

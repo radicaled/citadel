@@ -1,0 +1,11 @@
+name: human
+components:
+  Position:
+  Velocity:
+  Collidable:
+  TileGraphics:
+  Vision:
+  Container:
+  Health: 100
+  Description: 'A generic human being'
+  Name: 'Steve'

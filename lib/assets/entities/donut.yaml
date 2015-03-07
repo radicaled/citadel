@@ -1,0 +1,8 @@
+name: donut
+components:
+  Position:
+  Collidable:
+  TileGraphics:
+  Health: 100
+  Damage: 30
+  Description: A Plain Donut

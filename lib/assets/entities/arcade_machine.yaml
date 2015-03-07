@@ -1,0 +1,8 @@
+name: arcade_machine
+components:
+  Position:
+  Collidable:
+  TileGraphics:
+  Health: 100
+  Name: 'Arcade Machine'
+  Description: 'A blinking arcade machine'

@@ -51,7 +51,7 @@
   <image source="../icons/obj/food.png" width="512" height="480"/>
   <tile id="0">
    <properties>
-    <property name="entity" value="plain_donut"/>
+    <property name="entity" value="donut"/>
    </properties>
   </tile>
  </tileset>

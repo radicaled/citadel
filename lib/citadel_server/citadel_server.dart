@@ -2,6 +2,7 @@ library citadel_server;
 
 import 'package:game_loop/game_loop_isolate.dart';
 import 'package:json/json.dart' as json;
+import 'package:yaml/yaml.dart';
 import 'package:logging/logging.dart' as logging;
 import 'package:tmx/tmx.dart' as tmx;
 import 'package:route/server.dart';
@@ -22,8 +23,6 @@ import 'package:citadel/citadel_network/server.dart';
 
 import 'src/components.dart';
 import 'src/entities.dart';
-
-part 'src/entity_setup.dart';
 
 
 // Component Systems
@@ -76,7 +75,7 @@ final loginUrl = '/login';
 final wsGameUrl = '/ws/game';
 int currentEntityId = 1;
 
-final world = new World();
+final world = new World(entityParser);
 
 Map _makeCommand(String type, payload) {
   return { 'type': type, 'payload': payload };
@@ -182,15 +181,13 @@ class CitadelServer {
 
   void start() {
     // TODO: make sure these run in order.
-
-    log.info('loading entities');
-    setupEntities(world);
+    log.info('loading assets');
+    _loadAssets();
 
     log.info('loading map');
     _loadMap();
 
-    log.info('loading asset information');
-    _loadAssets();
+
 
     log.info('listening for game events');
     _setupEvents();
@@ -208,6 +205,7 @@ class CitadelServer {
   _loadAssets() {
     assetManager = new AssetManager();
     assetManager.loadAnimations('packages/citadel/assets/animations');
+    assetManager.loadEntities('packages/citadel/assets/entities');
   }
 
   _loadMap() {

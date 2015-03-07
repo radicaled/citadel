@@ -14,12 +14,13 @@ class World {
   Set<Entity> entities = new Set();
   List<SystemMessage> messages = new List();
 
-  Map<String, EntityBuilder> _entityBuilders = {};
+  final Map<String, Map> _entityDefinitions = {};
+  EntityParser entityParser;
 
   // TODO: Could probably be refined?
   Map<String, dynamic> attributes = {};
 
-  World() {
+  World(this.entityParser) {
     onEmit = _emitController.stream;
   }
 
@@ -45,14 +46,14 @@ class World {
 
   // Entity-related code
 
-  void registerEntity(String entityType, EntityBuilder builder) {
-    _entityBuilders[entityType] = builder;
+  void registerEntity(String entityType, Map data) {
+    _entityDefinitions[entityType] = data;
   }
 
   Entity fetchEntity(String entityType) {
-    var builder = _entityBuilders[entityType];
-    if (builder == null) { throw "Cannot find builder for $entityType"; }
-    return builder.build(entityType);
+    var data = _entityDefinitions[entityType];
+    if (data == null) { throw "Cannot find builder for $entityType"; }
+    return entityParser.build(data);
   }
 }
 

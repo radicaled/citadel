@@ -24,6 +24,19 @@ class AssetManager {
     });
   }
 
+  void loadEntities(String directory) {
+    var dir = new Directory(directory);
+    var files = dir.listSync(recursive: true).where((fe) => fe is File).where((fe) => path.extension(fe.path) == '.yaml');
+
+    files.forEach((file) {
+      var yaml = loadYaml(file.readAsStringSync());
+      var names = [yaml['name']];
+      if (yaml['aka'] != null)
+        names.addAll(yaml['aka']);
+      names.forEach((name) => world.registerEntity(name, yaml));
+    });
+  }
+
   Animation getAnimation(String animationName) {
     var result = animations[animationName];
     if (result == null) { throw 'Animation not found: $animationName'; }

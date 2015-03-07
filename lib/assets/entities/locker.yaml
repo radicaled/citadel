@@ -1,0 +1,10 @@
+name: locker
+aka: ['gray_locker']
+components:
+  Position:
+  Collidable:
+  TileGraphics:
+  Openable: closing
+  Container:
+  Name: 'Locker'
+  Description: 'A locker full of goodies'

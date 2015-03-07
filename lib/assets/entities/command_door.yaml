@@ -1,0 +1,12 @@
+name: command_door
+components:
+  Position:
+  Collidable:
+  TileGraphics:
+  Openable: opening
+  Name: Command Door
+  Description: A massive reinforced door
+
+reactions:
+  - use
+  - collide

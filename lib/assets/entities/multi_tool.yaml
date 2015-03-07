@@ -1,0 +1,8 @@
+name: multi_tool
+components:
+  Position:
+  TileGraphics:
+  Electronic:
+  Power: 100
+  Name: A multi-tool
+  Description: A tool for hacking and cracking gibsons

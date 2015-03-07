@@ -1,0 +1,11 @@
+name: hvac
+components:
+  Position:
+  Electronic:
+  TileGraphics:
+  Name: HVAC
+  Description:
+    A Wall-Mounted HVAC unit
+reactions:
+  - use
+  - disable

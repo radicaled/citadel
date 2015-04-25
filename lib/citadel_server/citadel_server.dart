@@ -230,7 +230,7 @@ class CitadelServer {
             entity[Position].y = y;
             entity[Position].z = z;
             entity[TileGraphics].tilePhrases = ["${tile.tileset.name}|${tile.tileId}"];
-            entity.attach(new Visible());
+            entity.attachComponent(new Visible());
             trackEntity(entity);
           }
         });
@@ -359,8 +359,8 @@ class CitadelServer {
 
   void _sendActions(ClientMessage ce) {
     var entity = findEntity(ce.payload['entity_id']);
-    hub
-      ..custom('set_actions', { 'entity_id': entity.id, 'actions': entity.behaviors.keys.toList() })
+    hub // FIXME: hardcoded
+      ..custom('set_actions', { 'entity_id': entity.id, 'actions': [] })
       ..send(ce.connection);
   }
 

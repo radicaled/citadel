@@ -14,8 +14,8 @@ class PlayerSpawner {
    */
   Entity spawnPlayer([Position position]) {
     var entity = world.fetchEntity('human')
-      ..attach(new Player())
-      ..attach(new Visible());
+      ..attachComponent(new Player())
+      ..attachComponent(new Visible());
 
     if(position == null) {
       List<Map> spawnZones = world.attributes['spawn_zones'];
@@ -23,7 +23,7 @@ class PlayerSpawner {
       position = _findAvailableSpawn(spawnZones);
     }
 
-    entity.attach(position);
+    entity.attachComponent(position);
     TileGraphics tgs = entity[TileGraphics];
     // TODO: this is just for uniqueness
     var tile = new Random().nextInt(64);

@@ -28,7 +28,7 @@ class AnimationCallbackSystem extends GenericSystem {
     var readyToEnd = animationTimers.where((at) => at.isFinished).toList();
     readyToEnd.forEach((at) {
       if (at.animation.onDone != null) {
-        at.animatingEntity.execute(at.animation.onDone);
+        at.animatingEntity.receive(at.animation.onDone, null);
       }
       TileGraphics tg = at.animatingEntity[TileGraphics];
       var frame = at.animation.startFrame + at.animation.frameCount;

@@ -20,7 +20,7 @@ class CollisionSystem extends EntitySystem {
     var collidingEntity = collidables.firstWhere((oe) => oe[Position].isSame2d(expectedPosition), orElse: () => null);
 
     if (collidingEntity != null) {
-      collidingEntity.react('collide', entity, null);
+      collidingEntity.receive('collide', entity);
       vel.halt();
     }
   }

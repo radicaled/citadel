@@ -3,8 +3,9 @@ library entities;
 import 'dart:mirrors';
 import 'dart:async';
 import 'package:quiver/core.dart';
+import 'package:events/events.dart';
 import 'components.dart';
-import 'dart:mirrors';
+import 'behaviors.dart';
 
 part 'entities/src/entity_builder.dart';
 part 'entities/src/entity_manager.dart';

@@ -9,3 +9,5 @@ components:
   Health: 100
   Description: 'A generic human being'
   Name: 'Steve'
+behaviors:
+  - HumanUseBehavior

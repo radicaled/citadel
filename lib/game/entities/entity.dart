@@ -2,9 +2,9 @@ part of entities;
 
 typedef void EntityScript(Entity entity);
 
-class Entity {
+class Entity extends Events {
   Map<Type, Component> components = new Map<Type, Component>();
-  Map<String, EntityInteraction> behaviors = new Map();
+  Map<Type, Behavior> behaviors = new Map();
   Map<String, EntityInteraction> reactions = new Map();
   Map<String, EntityScript> scripts = new Map();
 
@@ -15,36 +15,27 @@ class Entity {
 
   Entity(this.entityType);
 
-  void attach(Component component) {
+  void attachComponent(Component component) {
     components[component.runtimeType] = component;
   }
 
-  Component detach(Type componentType) {
+  Component detachComponent(Type componentType) {
     return components.remove(componentType);
   }
 
-  /**
-   * React to an event [name]. If not found, the optional [orElse] function can be called.
-   *
-   * Returns true if Entity reacted.
-   */
-  bool react(String name, Entity invokerEntity, Entity withEntity, {orElse()}) {
-    var reaction = reactions[name];
-    // EntityInteraction(this.current, this.target, this.invoker);
-    if (reaction != null) { reaction(new EntityInteraction(this, withEntity, invokerEntity)); }
-    else if (orElse != null) { orElse(); }
-    return reaction != null;
+  void attachBehavior(Behavior behavior) {
+    behaviors[behavior.runtimeType] = behavior;
   }
 
-  /**
-   * Executes a script on this entity.
-   *
-   * Raises an [ArgumentError] if the script is not present.
-   */
-  void execute(String scriptName) {
-    var script = scripts[scriptName];
-    if(script == null) throw new ArgumentError('Script $scriptName is not present on $this!');
-    script(this);
+  Behavior detachBehavior(Type behaviorType) {
+    return behaviors.remove(behaviorType);
+  }
+
+  receive(message, entity, {orElse()}) {
+    emit(message, entity);
+    // TODO: kind of rough.
+    if (!behaviors.values.any((b) => b.triggers.contains(message)) && orElse != null)
+      orElse();
   }
 
   /**

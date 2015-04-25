@@ -8,3 +8,5 @@ components:
   Container:
   Name: 'Locker'
   Description: 'A locker full of goodies'
+behaviors:
+  - LockerUseBehavior

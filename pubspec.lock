@@ -17,6 +17,10 @@ packages:
     description: crypto
     source: hosted
     version: "0.9.0"
+  events:
+    description: events
+    source: hosted
+    version: "0.1.0"
   game_loop:
     description: game_loop
     source: hosted

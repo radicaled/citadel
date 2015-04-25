@@ -53,7 +53,11 @@ class World {
   Entity fetchEntity(String entityType) {
     var data = _entityDefinitions[entityType];
     if (data == null) { throw "Cannot find builder for $entityType"; }
-    return entityParser.build(data);
+    // TODO: cleanup
+    var entity = entityParser.build(data);
+    entity.behaviors.forEach((type, instance) => instance.setup(this, entity));
+    return entity;
+//    return entityParser.build(data);
   }
 }
 

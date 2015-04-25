@@ -7,10 +7,8 @@ interactIntentSystem(Intent intent) {
   var withEntity   = intent.withEntityId == null ? invoker : findEntity(intent.withEntityId);
   var actionName = intent.actionName;
 
-  var behavior = withEntity.behaviors[actionName];
-  if (behavior == null) {
+  target.receive(actionName, invoker, orElse: () {
     world.emit('You have tried to do the impossible ($actionName).', fromEntity: invoker);
-  } else {
-    behavior(withEntity, target, invoker);
-  }
+  });
+
 }

@@ -6,6 +6,6 @@ components:
   Name: HVAC
   Description:
     A Wall-Mounted HVAC unit
-reactions:
-  - use
-  - disable
+behaviors:
+  - HvacUseBehavior
+  - HvacDisableBehavior

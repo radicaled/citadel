@@ -1,43 +1,42 @@
 library citadel_server.entities;
 
 import 'components.dart';
+import 'behaviors.dart';
 import 'package:citadel/game/entities.dart';
 import 'package:citadel/game/world.dart';
 
-part 'entities/placeholder.dart';
-part 'entities/hvac.dart';
-part 'entities/human.dart';
-part 'entities/multi_tool.dart';
-part 'entities/command_door.dart';
-part 'entities/locker.dart';
-
-abstract class CEntityBuilder extends EntityBuilder {
-  World world;
-}
-
 final EntityParser entityParser = setupEntityParser();
-final Map<String, Map> entityDefinitions = {};
 
 EntityParser setupEntityParser() {
   var ep = new EntityParser();
 
-  ep.register("Collidable", Collidable);
-  ep.register("Container", Container);
-  ep.register("Damage", Damage);
-  ep.register("Description", Description);
-  ep.register("Disabled", Disabled);
-  ep.register("Electronic", Electronic);
-  ep.register("Health", Health);
-  ep.register("Inventory", Inventory);
-  ep.register("Name", Name);
-  ep.register("Openable", Openable);
-  ep.register("Player", Player);
-  ep.register("Position", Position);
-  ep.register("Power", Power);
-  ep.register("TileGraphics", TileGraphics);
-  ep.register("Velocity", Velocity);
-  ep.register("Visible", Visible);
-  ep.register("Vision", Vision);
+  ep.registerComponent("Collidable", Collidable);
+  ep.registerComponent("Container", Container);
+  ep.registerComponent("Damage", Damage);
+  ep.registerComponent("Description", Description);
+  ep.registerComponent("Disabled", Disabled);
+  ep.registerComponent("Electronic", Electronic);
+  ep.registerComponent("Health", Health);
+  ep.registerComponent("Inventory", Inventory);
+  ep.registerComponent("Name", Name);
+  ep.registerComponent("Openable", Openable);
+  ep.registerComponent("Player", Player);
+  ep.registerComponent("Position", Position);
+  ep.registerComponent("Power", Power);
+  ep.registerComponent("TileGraphics", TileGraphics);
+  ep.registerComponent("Velocity", Velocity);
+  ep.registerComponent("Visible", Visible);
+  ep.registerComponent("Vision", Vision);
 
+  ep.registerBehavior("HumanUseBehavior", HumanUseBehavior);
+  ep.registerBehavior("LockerUseBehavior", LockerUseBehavior);
+  ep.registerBehavior("MultiToolUseBehavior", MultiToolUseBehavior);
+  ep.registerBehavior("PlaceholderLookBehavior", PlaceholderLookBehavior);
+  ep.registerBehavior("HvacUseBehavior", HvacUseBehavior);
+  ep.registerBehavior("HvacDisableBehavior", HvacDisableBehavior);
+  ep.registerBehavior("CommandDoorCollideBehavior", CommandDoorCollideBehavior);
+  ep.registerBehavior("CommandDoorUseBehavior", CommandDoorUseBehavior);
+  ep.registerBehavior("CommandDoorOpenBehavior", CommandDoorOpenBehavior);
+  ep.registerBehavior("CommandDoorCloseBehavior", CommandDoorCloseBehavior);
   return ep;
 }

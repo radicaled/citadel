@@ -5,6 +5,7 @@ version: 0.0.1
 dependencies:
   browser: any
   crypto: any
+  events: any
   game_loop: any
   js: any
   json: any

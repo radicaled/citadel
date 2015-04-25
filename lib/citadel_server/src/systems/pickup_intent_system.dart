@@ -13,8 +13,8 @@ void pickupIntentSystem(Intent intent) {
 
   world.emit('$actionName picks up the $targetName');
   // FIXME: what if the object is clothing?
-  target.detach(Visible);
-  target.attach(new Position.from(invoker[Position]));
+  target.detachComponent(Visible);
+  target.attachComponent(new Position.from(invoker[Position]));
   invoker[Container].entityIds.add(target.id);
   EntityManager.hidden(target);
 
@@ -22,7 +22,7 @@ void pickupIntentSystem(Intent intent) {
     'entity_id': target.id,
     'name': targetName,
     'hand': 'left', // FIXME: hard-coded
-    'actions': target.behaviors.keys.toList()
+    'actions': [] // FIXME: hard-coded
   }));
 
 }

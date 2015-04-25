@@ -2,3 +2,5 @@ name: placeholder
 components:
   Position:
   TileGraphics:
+behaviors:
+  - PlaceholderLookBehavior

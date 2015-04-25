@@ -7,6 +7,8 @@ components:
   Name: Command Door
   Description: A massive reinforced door
 
-reactions:
-  - use
-  - collide
+behaviors:
+  - CommandDoorCollideBehavior
+  - CommandDoorUseBehavior
+  - CommandDoorOpenBehavior
+  - CommandDoorCloseBehavior

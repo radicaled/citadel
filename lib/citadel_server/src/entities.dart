@@ -3,7 +3,6 @@ library citadel_server.entities;
 import 'components.dart';
 import 'behaviors.dart';
 import 'package:citadel/game/entities.dart';
-import 'package:citadel/game/world.dart';
 
 final EntityParser entityParser = setupEntityParser();
 

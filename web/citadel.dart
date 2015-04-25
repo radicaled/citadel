@@ -1,15 +1,18 @@
-import 'dart:html';
-import 'dart:typed_data';
-import 'package:crypto/crypto.dart';
+import 'dart:html' hide Rectangle;
 import 'dart:async';
 import 'dart:convert';
 import 'package:tmx/tmx.dart' as tmx;
 import 'package:stagexl/stagexl.dart';
-import 'package:js/js.dart' as js;
 import 'package:citadel/citadel_client/citadel_client.dart' as c;
 import 'package:citadel/citadel_network/citadel_network.dart';
 import 'package:citadel/citadel_network/client.dart';
 import 'package:citadel/game/animations.dart' as animations;
+
+// Goddamn it, shut up, Dart.
+// You've been telling me for 8 versions now query and queryAll are deprecated.
+// Either remove them or STFU
+final query = querySelector;
+final queryAll = querySelectorAll;
 
 tmx.TileMapParser parser = new tmx.TileMapParser();
 tmx.TileMap map;
@@ -245,13 +248,6 @@ void listenForEvents(WebSocket ws, Stream stream) {
   networkHub.on('emit').listen(_emit);
   networkHub.on('picked_up').listen(_pickedUpEntity);
   networkHub.on('set_actions').listen(_setActions);
-}
-
-// TODO: I forgot what the Uint8 type is in JS. Uint8?
-// TODO: REMOVE ME
-List<int> _inflateZlib(List<int> bytes) {
-  var zlib = new js.Proxy(js.context.Zlib.Inflate, js.array(bytes));
-  return zlib.decompress();
 }
 
 Future loadMap(String xml) {

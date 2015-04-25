@@ -1,7 +1,7 @@
 library citadel_client;
 
 // Dependencies
-import 'dart:html';
+import 'dart:html' hide Rectangle;
 import 'dart:async';
 import 'package:stagexl/stagexl.dart';
 import 'package:citadel/game/animations.dart' as animations;

@@ -99,11 +99,6 @@ class ServerNetworkHub {
   Stream<ClientMessage> onLogin;
   Stream<ClientMessage> onIntent;
 
-  // Helpers
-
-  String _msg(String type, Map payload) =>
-    JSON.encode({ 'type': type, 'payload': payload });
-
   void _queue(String type, Map payload) =>
     _queuedMessages.add({ 'type': type, 'payload': payload });
 

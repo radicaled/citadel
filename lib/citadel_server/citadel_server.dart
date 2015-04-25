@@ -1,7 +1,6 @@
 library citadel_server;
 
 import 'package:game_loop/game_loop_isolate.dart';
-import 'package:json/json.dart' as json;
 import 'package:yaml/yaml.dart';
 import 'package:logging/logging.dart' as logging;
 import 'package:tmx/tmx.dart' as tmx;

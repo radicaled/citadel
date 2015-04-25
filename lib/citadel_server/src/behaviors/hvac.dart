@@ -1,5 +1,6 @@
 part of behaviors;
 
+@GameName("HvacUseBehavior")
 class HvacUseBehavior extends Behavior {
   final triggers = ['use'];
 
@@ -19,6 +20,7 @@ class HvacUseBehavior extends Behavior {
   }
 }
 
+@GameName("HvacDisableBehavior")
 class HvacDisableBehavior extends Behavior {
   final triggers = ['disable'];
 

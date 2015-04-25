@@ -41,5 +41,14 @@ class EntityParser {
   }
 
   registerComponent(String name, Type type) => knownComponents[name] = type;
-  registerBehavior(String name, Type type) => knownBehaviors[name] = type;
+  registerBehavior(Type type) => knownBehaviors[lookupGameName(type)] = type;
+
+  String lookupGameName(Type type) {
+    var classMirror = reflectClass(type);
+    var instanceMirror = classMirror.metadata.firstWhere((im) => im.reflectee is GameName, orElse: () => null);
+    if (instanceMirror == null)
+      throw 'No GameName annotation on $type';
+    GameName gn = instanceMirror.reflectee;
+    return gn.name;
+  }
 }

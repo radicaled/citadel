@@ -1,5 +1,6 @@
 part of behaviors;
 
+@GameName("HumanUseBehavior")
 class HumanUseBehavior extends Behavior {
   final triggers = ['use'];
 

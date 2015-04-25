@@ -6,6 +6,7 @@ import 'package:quiver/core.dart';
 import 'package:events/events.dart';
 import 'components.dart';
 import 'behaviors.dart';
+import 'annotations.dart';
 
 part 'entities/src/entity_builder.dart';
 part 'entities/src/entity_manager.dart';

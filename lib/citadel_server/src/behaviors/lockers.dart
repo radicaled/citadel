@@ -1,5 +1,6 @@
 part of behaviors;
 
+@GameName("LockerUseBehavior")
 class LockerUseBehavior extends Behavior {
   final triggers = ['use'];
 

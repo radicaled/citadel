@@ -28,15 +28,15 @@ EntityParser setupEntityParser() {
   ep.registerComponent("Visible", Visible);
   ep.registerComponent("Vision", Vision);
 
-  ep.registerBehavior("HumanUseBehavior", HumanUseBehavior);
-  ep.registerBehavior("LockerUseBehavior", LockerUseBehavior);
-  ep.registerBehavior("MultiToolUseBehavior", MultiToolUseBehavior);
-  ep.registerBehavior("PlaceholderLookBehavior", PlaceholderLookBehavior);
-  ep.registerBehavior("HvacUseBehavior", HvacUseBehavior);
-  ep.registerBehavior("HvacDisableBehavior", HvacDisableBehavior);
-  ep.registerBehavior("CommandDoorCollideBehavior", CommandDoorCollideBehavior);
-  ep.registerBehavior("CommandDoorUseBehavior", CommandDoorUseBehavior);
-  ep.registerBehavior("CommandDoorOpenBehavior", CommandDoorOpenBehavior);
-  ep.registerBehavior("CommandDoorCloseBehavior", CommandDoorCloseBehavior);
+  ep.registerBehavior(HumanUseBehavior);
+  ep.registerBehavior(LockerUseBehavior);
+  ep.registerBehavior(MultiToolUseBehavior);
+  ep.registerBehavior(PlaceholderLookBehavior);
+  ep.registerBehavior(HvacUseBehavior);
+  ep.registerBehavior(HvacDisableBehavior);
+  ep.registerBehavior(CommandDoorCollideBehavior);
+  ep.registerBehavior(CommandDoorUseBehavior);
+  ep.registerBehavior(CommandDoorOpenBehavior);
+  ep.registerBehavior(CommandDoorCloseBehavior);
   return ep;
 }

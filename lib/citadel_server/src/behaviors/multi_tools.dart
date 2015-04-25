@@ -1,5 +1,6 @@
 part of behaviors;
 
+@GameName("MultiToolUseBehavior")
 class MultiToolUseBehavior extends Behavior {
   final triggers = ['use'];
 

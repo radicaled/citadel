@@ -1,5 +1,6 @@
 part of behaviors;
 
+@GameName("CommandDoorCollideBehavior")
 class CommandDoorCollideBehavior extends Behavior {
   final triggers = ['collide'];
 
@@ -15,6 +16,7 @@ class CommandDoorCollideBehavior extends Behavior {
   }
 }
 
+@GameName("CommandDoorUseBehavior")
 class CommandDoorUseBehavior extends Behavior {
   final triggers = ['use'];
 
@@ -32,6 +34,7 @@ class CommandDoorUseBehavior extends Behavior {
   }
 }
 
+@GameName("CommandDoorOpenBehavior")
 class CommandDoorOpenBehavior extends Behavior {
   final triggers = ['opened'];
 
@@ -40,6 +43,7 @@ class CommandDoorOpenBehavior extends Behavior {
   }
 }
 
+@GameName("CommandDoorCloseBehavior")
 class CommandDoorCloseBehavior extends Behavior {
   final triggers = ['closed'];
 

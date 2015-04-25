@@ -1,5 +1,6 @@
 part of behaviors;
 
+@GameName("PlaceholderLookBehavior")
 class PlaceholderLookBehavior extends Behavior {
   final triggers = ['look'];
 

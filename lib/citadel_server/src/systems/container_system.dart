@@ -22,14 +22,14 @@ class ContainerSystem extends EntitySystem {
     var c = entity[Container];
     var p = entity[Position];
     var entities = c.entityIds.map(findEntity);
-    entities.forEach((e) => e.attach(new Position.from(p)));
+    entities.forEach((e) => e.attachComponent(new Position.from(p)));
   }
 
   // FIXME: sync with animation
   void showContents(Entity entity) {
     var p = entity[Position];
     var entities = _nearbyEntities(p);
-    entities.forEach((e) => e.attach(new Visible()));
+    entities.forEach((e) => e.attachComponent(new Visible()));
     entities.forEach((e) => EntityManager.created(e));
   }
 
@@ -38,7 +38,7 @@ class ContainerSystem extends EntitySystem {
     var p = entity[Position];
     var o = entity[Openable];
     var entities = _nearbyEntities(p);
-    entities.forEach((e) => e.detach(Visible));
+    entities.forEach((e) => e.detachComponent(Visible));
     entities.forEach((e) => EntityManager.hidden(e));
   }
 

@@ -26,7 +26,8 @@ class PlayerSpawner {
     entity.attachComponent(position);
     TileGraphics tgs = entity[TileGraphics];
     // TODO: this is just for uniqueness
-    var tile = new Random().nextInt(64);
+    var rand = new Random().nextInt(13);
+    var tile = (rand * 5) + 1;
     tgs.tilePhrases = ['Humans|$tile'];
 
     return entity;

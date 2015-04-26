@@ -21,3 +21,5 @@ part 'components/damage.dart';
 part 'components/openable.dart';
 part 'components/inventory.dart';
 part 'components/electronic.dart';
+part 'components/required_security_clearance.dart';
+part 'components/security_clearance_level.dart';

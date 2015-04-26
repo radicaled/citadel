@@ -3,6 +3,7 @@ components:
   Position:
   Collidable:
   TileGraphics:
+  RequiredSecurityClearance: awesome
   Openable: opening
   Name: Security Door
   Description: >

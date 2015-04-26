@@ -22,6 +22,8 @@ EntityParser setupEntityParser() {
   ep.registerComponent("Player", Player);
   ep.registerComponent("Position", Position);
   ep.registerComponent("Power", Power);
+  ep.registerComponent("RequiredSecurityClearance", RequiredSecurityClearance);
+  ep.registerComponent("SecurityClearanceLevel", SecurityClearanceLevel);
   ep.registerComponent("TileGraphics", TileGraphics);
   ep.registerComponent("Velocity", Velocity);
   ep.registerComponent("Visible", Visible);

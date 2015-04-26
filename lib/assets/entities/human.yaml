@@ -6,6 +6,7 @@ components:
   TileGraphics:
   Vision:
   Container:
+  SecurityClearanceLevel:
   Health: 100
   Description: 'A generic human being'
   Name: 'Steve'

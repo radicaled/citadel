@@ -3,6 +3,7 @@ components:
   Position:
   Collidable:
   TileGraphics:
+  RequiredSecurityClearance: 'everyone'
   Openable: opening
   Name: Command Door
   Description: A massive reinforced door

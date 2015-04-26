@@ -6,7 +6,12 @@ class CommandDoorCollideBehavior extends Behavior with _CommandDoorHelpers {
 
   update(Entity proxy, Entity target) {
     world.emit('CLANK!!', nearEntity: proxy, fromEntity: proxy);
-    open(proxy, target);
+    var opening = open(proxy, target);
+    if (opening) {
+      world.emit('Whoosh!', toEntity: proxy);
+    } else {
+      world.emit('The door does not open... not for you, at least.', toEntity: proxy);
+    }
   }
 }
 
@@ -19,6 +24,8 @@ class CommandDoorUseBehavior extends Behavior with _CommandDoorHelpers {
     if (opening) {
       world.emit('The door scans your ID and chirps happily', fromEntity: target, toEntity: proxy);
       world.emit('Swoosh!', nearEntity: proxy, fromEntity: proxy);
+    } else {
+      world.emit('The door beeps angrily at you', toEntity: proxy);
     }
   }
 }
@@ -48,7 +55,7 @@ class _CommandDoorHelpers {
     RequiredSecurityClearance rsc = target[RequiredSecurityClearance];
     SecurityClearanceLevel scl = proxy[SecurityClearanceLevel];
 
-    if (!shouldOpen(rsc, scl)) return true;
+    if (!shouldOpen(rsc, scl)) return false;
     if (o.isTransitioning) return false;
 
     o.transition();
@@ -67,7 +74,6 @@ class _CommandDoorHelpers {
     if (scl == null)
       return false;
 
-    // TODO: should check security levels based on a tree or something.
-    return true;
+    return scl.betterThan(rsc.securityClearance);
   }
 }

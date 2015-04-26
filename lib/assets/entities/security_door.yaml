@@ -1,0 +1,15 @@
+name: security_door
+components:
+  Position:
+  Collidable:
+  TileGraphics:
+  Openable: opening
+  Name: Security Door
+  Description: >
+    A secure door
+
+behaviors:
+  - CommandDoorCollideBehavior
+  - CommandDoorUseBehavior
+  - CommandDoorOpenBehavior
+  - CommandDoorCloseBehavior

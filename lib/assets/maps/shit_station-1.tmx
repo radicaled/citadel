@@ -80,14 +80,22 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="3586" name="Security Door" tilewidth="32" tileheight="32">
+  <image source="../icons/obj/doors/Doorsecglass.png" width="256" height="224"/>
+  <tile id="0">
+   <properties>
+    <property name="entity" value="security_door"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="Floor Layer" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1csKgCAQQNGKVtL/f2/LHhClaQ50DsxSgrlowwDcSWP+XJ3nPT1i0SOWkh5fzR/13rkeR1Xfq7neN/Ro9//Q4zk9YtEjthb70KOcHrEs0za16JFv3+E8b+mRT49Y9vtPenTnfsSiRywtewAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADw3AqyNRId
+   eJzt1UEKgzAQQFEtXUnvf4/esKtSLTVxNNGBvgezkiDkk2QYgJppjM/aeo7TIxc9ctnT46z5R1fvuR5LTe+re7t/6NHv/dBjOz1y0SO3Hvuhx3565PK4faYVPeLmHb7nKD3iSj2e4/q8lb7pETff/+nH+Sg1qbXSI652Xzkf5/J+5NKzBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADbvQDxKSsl
   </data>
  </layer>
  <layer name="Wall Layer" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2EsKg0AQRVEHLs/9rycZBSESP1WaJ54DDruxvaSCDgNxxsL1No3fFwVHn9+sx5weRXpkKfRYmk9TZf79mIuPkX7e9Pvrln7e9Pvr1jyvPnt2zRw9dq3b9H+ux3Z6ZNEjy9qs73g/1+O4pR7de1619s62/D4qe/9j7Z2tnVuPa+mRRY8semTRI8vZPXxv38dzAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgEd7AQtdCfk=
+   eJzt10EOgyAQBVAXHs/7n6fdtDGprciMdYjvJSyHAD8MYZooZw6Mp2X+HAT0nt8qjzV5BMmjlkAeW/1pifS/H33xNqrvt/r6slXfb/X1ZUvuV+85s3qOPA7VNb3n8mgnj1rkUcter8/4n8uj31Ye2XP+q3ZkLfcjMvcVtSPb2/dVf2x59NV+q5dHn5b70TuvPI6L5OF+5PN+1HJWv3rVXpHlyJwLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3NoDmaAKgQ==
   </data>
  </layer>
  <layer name="Structures" width="100" height="100">
@@ -97,7 +105,7 @@
  </layer>
  <layer name="Items" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1jEKwkAQBdBpIjGYPiCW3sh7WXig9LlAbhMSEZGQakHdJbwHn4FlGQammQggVd+m/b9VEY/qVQFKM7Tryv9M9fbtV/vomojLknPz3b6Qy/WYewIo13j4BPbueTO9AwAp7qfcEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAULoZ9IIMzA==
+   eJzt1jEKwkAQBdBBiGhIrAVJmRt5rxQ5kL0XyG2CikiQVAF1V30PPgPLsnyYZiOApU71svvHIqIv7hMgN+f6efI542Z+9q597MuI5ppD+dp3IZV2m7oB5GtYT4Ffd/szPQLwbVa71A3+W1elbgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQO4uPzsM3A==
   </data>
  </layer>
  <layer name="People" width="100" height="100">

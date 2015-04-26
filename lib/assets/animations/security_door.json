@@ -1,0 +1,20 @@
+{
+  "name": "Security Door",
+  "tileset": "Security Door",
+  "data": [
+    {
+      "name": "opening",
+      "start_frame": 5,
+      "frame_count": 5,
+      "duration": 1,
+      "on_done": "opened"
+    },
+    {
+      "name": "closing",
+      "start_frame": 5,
+      "frame_count": -5,
+      "duration": 1,
+      "on_done": "closed"
+    }
+  ]
+}

@@ -11,7 +11,8 @@ class CommandDoorCollideBehavior extends Behavior {
     if (o.isTransitioning) { return; }
     o.transition();
     target.use(TileGraphics, (TileGraphics tileGraphics) {
-      tileGraphics.animationQueue.add('Command Door|opening');
+      var name = target[Name].text;
+      tileGraphics.animationQueue.add('$name|opening');
     });
   }
 }
@@ -29,7 +30,8 @@ class CommandDoorUseBehavior extends Behavior {
     world.emit('Swoosh!', nearEntity: proxy, fromEntity: proxy);
     o.transition();
     target.use(TileGraphics, (TileGraphics tileGraphics) {
-      tileGraphics.animationQueue.add('Command Door|opening');
+      var name = target[Name].text;
+      tileGraphics.animationQueue.add('$name|opening');
     });
   }
 }
